@@ -15,6 +15,8 @@ class OfficeAuthMiddleware
         if ($request->bearerToken() && Auth::guard('office_token')->check()) {
             Auth::shouldUse('office_token');
             $user = Auth::guard('office_token')->user();
+            // عيّن المستخدم على الحارس الأصلي لتعمل أكواد auth('office')->user()
+            Auth::guard('office')->setUser($user);
 
             if (!$user->is_active || !$user->office || !$user->office->is_active) {
                 return $this->unauthorized($request, 'حسابك موقوف. تواصل مع الإدارة.');

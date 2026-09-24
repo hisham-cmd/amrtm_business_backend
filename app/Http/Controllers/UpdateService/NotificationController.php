@@ -9,10 +9,29 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    private function recipientUser()
+    {
+        // 1) التوكن (واجهة منفصلة) — guard بادئة _token يحددها AuthenticateApi مسبقاً
+        $tokenUser = auth('business_token')->user() ?? auth('office_token')->user();
+        if ($tokenUser) {
+            return $tokenUser;
+        }
+
+        // 2) الجلسة التقليدية
+        return auth('business')->user() ?? auth('office')->user();
+    }
+
     private function recipientQuery()
     {
-        $user = auth('business')->user();
+        $user = $this->recipientUser();
         $q    = BusinessNotification::query();
+
+        if (!$user) {
+            // لا مستخدم → لا نتائج (بدل خطأ 500)
+            $q->whereRaw('1 = 0');
+
+            return $q;
+        }
 
         if (in_array($user->role ?? '', ['admin', 'supervisor'])) {
             $q->where('recipient_type', 'admin');

@@ -32,6 +32,16 @@ class AuthenticateApi extends Authenticate
                     $tokenGuard = $guard . '_token';
                     if (Auth::guard($tokenGuard)->check()) {
                         Auth::shouldUse($tokenGuard);
+
+                        /*
+                        | عيّن المستخدم التوكني على الحارس الأصلي (جلسة) مباشرة
+                        | عبر setUser — دون حفظ أي جلسة. هذا يضمن أن كل أكواد
+                        | auth('business')->user() داخل الـ controllers تعمل
+                        | مع الواجهة المنفصلة دون تعديل كل نقطة على حدة.
+                        */
+                        $tokenUser = Auth::guard($tokenGuard)->user();
+                        Auth::guard($guard)->setUser($tokenUser);
+
                         return;
                     }
                 }

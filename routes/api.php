@@ -3,7 +3,10 @@
 use App\Http\Controllers\UpdateService\AdminServiceController;
 use App\Http\Controllers\UpdateService\AmrtmAuthController;
 use App\Http\Controllers\UpdateService\ApiAuthController;
+use App\Http\Controllers\UpdateService\ContractsController;
+use App\Http\Controllers\UpdateService\HomepageController;
 use App\Http\Controllers\UpdateService\MessageAttachmentController;
+use App\Http\Controllers\UpdateService\ProviderAccountController;
 use App\Http\Controllers\UpdateService\NotificationController;
 use App\Http\Controllers\UpdateService\OfficeDashboardController;
 use App\Http\Controllers\UpdateService\PaymentController;
@@ -41,6 +44,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     */
     Route::prefix('auth')->name('auth.')->group(function () {
         Route::post('login', [ApiAuthController::class, 'login'])->name('login');
+        Route::post('register', [ApiAuthController::class, 'register'])->name('register');
         Route::post('logout', [ApiAuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
         Route::get('me', [ApiAuthController::class, 'me'])->middleware('auth:sanctum')->name('me');
     });
@@ -51,9 +55,15 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('services', [ServiceCatalogController::class, 'apiServices'])->name('services');
+    Route::get('home', [ServiceCatalogController::class, 'apiHome'])->name('home');
     Route::get('office-types', [ServiceCatalogController::class, 'publicOfficeTypes'])->name('office-types');
     Route::get('consultants', [ServiceCatalogController::class, 'apiConsultants'])->name('consultants');
     Route::get('consultant-specialties', [ServiceCatalogController::class, 'apiConsultantSpecialties'])->name('consultant-specialties');
+    Route::get('consultants/{officeId}', [ServiceCatalogController::class, 'apiOfficeDetail'])->name('consultant-detail');
+    Route::get('catalog/{key}', [ServiceCatalogController::class, 'apiCatalogCategory'])->name('catalog.category');
+    Route::get('catalog/{key}/{entityId}', [ServiceCatalogController::class, 'apiCatalogEntity'])->name('catalog.entity');
+    Route::get('offices/{type}', [ServiceCatalogController::class, 'apiOfficeSpecialties'])->name('offices.directory');
+    Route::get('offices/{type}/{officeId}', [ServiceCatalogController::class, 'apiOfficeDetail'])->name('offices.detail');
 
     /*
     |--------------------------------------------------------------------------
@@ -175,4 +185,45 @@ Route::prefix('v1/office')->name('api.v1.office.')->middleware(['auth.office', '
     Route::get('notifications', [OfficeDashboardController::class, 'notifications'])->name('notifications');
     Route::get('financial', [OfficeDashboardController::class, 'financial'])->name('financial');
     Route::get('settlements', [OfficeDashboardController::class, 'settlements'])->name('settlements');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Contracts API — /api/v1/contracts
+|--------------------------------------------------------------------------
+| عقود المكتب (طرف أول/ثانٍ) — مصادقة توكنية.
+*/
+Route::prefix('v1/contracts')->name('api.v1.contracts.')->middleware('auth:sanctum')->group(function () {
+    Route::get('my', [ContractsController::class, 'apiMyContracts'])->name('my');
+    Route::get('incoming', [ContractsController::class, 'apiIncoming'])->name('incoming');
+    Route::get('create-data', [ContractsController::class, 'apiCreateData'])->name('create-data');
+    Route::get('{id}', [ContractsController::class, 'apiContractShow'])->name('show');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Provider (تسجيل مقدم خدمة) — /api/v1/provider-account
+|--------------------------------------------------------------------------
+| store يدعم JSON بالفعل عبر wantsJson().
+*/
+Route::prefix('v1/provider-account')->name('api.v1.provider.')->group(function () {
+    Route::get('specialties', [ProviderAccountController::class, 'specialties'])->name('specialties');
+    Route::post('/', [ProviderAccountController::class, 'store'])->name('store')->middleware('auth:sanctum');
+    Route::post('', [ProviderAccountController::class, 'store'])->name('store-noslash')->middleware('auth:sanctum');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Homepage admin (إدارة المحتوى) — /api/v1/admin/homepage
+|--------------------------------------------------------------------------
+| إعدادات الواجهة الرئيسية وشرائح السلايدر (للوحة الإدارة).
+*/
+Route::prefix('v1/admin/homepage')->name('api.v1.admin.homepage.')->middleware(['auth:sanctum'])->group(function () {
+    Route::get('settings', [HomepageController::class, 'getSettings'])->name('settings');
+    Route::post('settings', [HomepageController::class, 'saveSettings'])->name('settings.save');
+    Route::get('slides', [HomepageController::class, 'listSlides'])->name('slides');
+    Route::post('slides', [HomepageController::class, 'storeSlide'])->name('slides.store');
+    Route::put('slides/{id}', [HomepageController::class, 'updateSlide'])->name('slides.update');
+    Route::post('slides/{id}/toggle', [HomepageController::class, 'toggleSlide'])->name('slides.toggle');
+    Route::delete('slides/{id}', [HomepageController::class, 'deleteSlide'])->name('slides.delete');
 });

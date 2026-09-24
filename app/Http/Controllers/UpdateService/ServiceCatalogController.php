@@ -1308,6 +1308,413 @@ class ServiceCatalogController extends Controller
         return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح']);
     }
 
+    /**
+     * JSON: بيانات الصفحة الرئيسية كاملة (للواجهة الأمامية المنفصلة).
+     * نفس البيانات التي كانت تصيِّرها view('update_service.index').
+     */
+    public function apiHome(): JsonResponse
+    {
+        $categories   = collect();
+        $officeCounts = [
+            'law'         => 0,
+            'services'    => 0,
+            'customs'     => 0,
+            'accounting'  => 0,
+            'engineering' => 0,
+            'freelance'   => 0,
+            'consultants' => 0,
+        ];
+
+        try {
+            $categories = Category::with([
+                'entities' => fn($q) => $q->where('is_active', true)
+                    ->with(['govServices' => fn($sq) => $sq->where('is_active', true)->orderBy('sort_order')])
+                    ->orderBy('sort_order'),
+            ])
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->get()
+            ->map(fn($cat) => [
+                'id'             => $cat->id,
+                'key'            => $cat->key,
+                'name_ar'        => $cat->name_ar,
+                'name_en'        => $cat->name_en,
+                'icon'           => $cat->icon,
+                'color'          => $cat->color,
+                'bg'             => $cat->bg,
+                'entities_count' => $cat->entities->count(),
+                'services_count' => $cat->entities->sum(fn($ent) => $ent->govServices->count()),
+            ]);
+
+            $dbCounts = Office::where('is_active', true)
+                ->selectRaw('type, count(*) as count')
+                ->groupBy('type')
+                ->pluck('count', 'type')
+                ->toArray();
+            $officeCounts = array_merge($officeCounts, $dbCounts);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiHome categories error: ' . $e->getMessage());
+        }
+
+        try {
+            $officeCounts['consultants'] = Office::consultants()
+                ->where('is_active', true)
+                ->where('is_verified', true)
+                ->visibleInDirectory()
+                ->count();
+        } catch (\Throwable $e) {
+            $officeCounts['consultants'] = 0;
+        }
+
+        try {
+            $homepageSettings = \App\Models\HomepageSetting::query()->pluck('value', 'key');
+            $homepageSlides   = \App\Models\HomepageSlide::active()->get()->map(fn($s) => [
+                'id'        => $s->id,
+                'title'     => $s->title,
+                'image_url' => $s->image_url,
+                'link_url'  => $s->link_url,
+            ]);
+        } catch (\Throwable $e) {
+            $homepageSettings = collect();
+            $homepageSlides   = collect();
+        }
+
+        $homepageMedia = [
+            'video_file'   => $this->resolveMediaUrl($homepageSettings['video_file'] ?? 'videos/0829.mp4'),
+            'video_poster' => $this->resolveMediaUrl($homepageSettings['video_poster'] ?? 'images/logo2.jpg'),
+        ];
+
+        return response()->json([
+            'categories'       => $categories,
+            'officeCounts'     => $officeCounts,
+            'homepageSettings' => $homepageSettings,
+            'homepageSlides'   => $homepageSlides,
+            'homepageMedia'    => $homepageMedia,
+        ]);
+    }
+
+    /**
+     * JSON: صفحة تصنيف الكتالوج — نفس بيانات view('update_service.catalog_category').
+     */
+    public function apiCatalogCategory(string $key): JsonResponse
+    {
+        try {
+            $category = Category::where('key', $key)->where('is_active', true)->first();
+
+            if (!$category) {
+                $category = new Category([
+                    'key' => $key,
+                    'name_ar' => $key === 'ministries' ? 'الوزارات' : ($key === 'authorities' ? 'الهيئات والمؤسسات الحكومية' : 'الشركات والجهات الخاصة'),
+                    'name_en' => ucfirst($key),
+                ]);
+                $category->setRelation('entities', collect());
+            }
+
+            $entitiesQuery = Entity::where('category_id', $category->id)
+                ->where('is_active', true)
+                ->with(['govServices' => fn($q) => $q->where('is_active', true)->orderBy('sort_order')])
+                ->orderBy('sort_order');
+
+            $entities = $entitiesQuery->get();
+            $category->setRelation('entities', $entities);
+
+            return response()->json([
+                'category' => [
+                    'id'      => $category->id,
+                    'key'     => $category->key,
+                    'name_ar' => $category->name_ar,
+                    'name_en' => $category->name_en,
+                    'icon'    => $category->icon,
+                    'color'   => $category->color,
+                    'bg'      => $category->bg,
+                ],
+                'entities' => $entities->map(fn($e) => [
+                    'id'         => $e->id,
+                    'name_ar'    => $e->name_ar,
+                    'name_en'    => $e->name_en,
+                    'icon'       => $e->icon,
+                    'color'      => $e->color,
+                    'bg'         => $e->bg,
+                    'tag_ar'     => $e->tag_ar,
+                    'tag_en'     => $e->tag_en,
+                    'images'     => $e->images,
+                    'services'   => $e->govServices->map(fn($s) => [
+                        'id'      => $s->id,
+                        'name_ar' => $s->name_ar,
+                        'name_en' => $s->name_en,
+                    ]),
+                ]),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiCatalogCategory DB error: ' . $e->getMessage());
+
+            return response()->json(['category' => ['key' => $key, 'name_ar' => $key, 'name_en' => $key, 'icon' => null, 'color' => null, 'bg' => null], 'entities' => []]);
+        }
+    }
+
+    /**
+     * JSON: صفحة جهة — نفس بيانات view('update_service.catalog_entity').
+     */
+    public function apiCatalogEntity(string $key, int $entityId): JsonResponse
+    {
+        try {
+            $category = Category::where('key', $key)->where('is_active', true)->first();
+            $entity = Entity::where('id', $entityId)->where('is_active', true)->first();
+
+            if (!$entity) {
+                return response()->json(['category' => ['key' => $key, 'name_ar' => 'الجهة', 'name_en' => 'Entity'], 'entity' => null, 'services' => []]);
+            }
+
+            $services = GovService::where('entity_id', $entity->id)
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->get()
+                ->map(fn($s) => [
+                    'id'            => $s->id,
+                    'name_ar'       => $s->name_ar,
+                    'name_en'       => $s->name_en,
+                    'icon'          => $s->icon,
+                    'price'         => (float) $s->price,
+                    'duration'      => \App\Support\ServiceDuration::format($s->duration_min, $s->duration_max, $s->duration_unit),
+                    'duration_min'  => $s->duration_min,
+                    'duration_max'  => $s->duration_max,
+                    'duration_unit' => $s->duration_unit,
+                    'description'   => $s->description,
+                ]);
+
+            return response()->json([
+                'category' => [
+                    'id'      => $category?->id,
+                    'key'     => $category?->key ?? $key,
+                    'name_ar' => $category?->name_ar ?? 'الجهة',
+                    'name_en' => $category?->name_en ?? 'Entity',
+                    'color'   => $category?->color,
+                    'bg'      => $category?->bg,
+                ],
+                'entity' => [
+                    'id'      => $entity->id,
+                    'name_ar' => $entity->name_ar,
+                    'name_en' => $entity->name_en,
+                    'icon'    => $entity->icon,
+                    'color'   => $entity->color,
+                    'bg'      => $entity->bg,
+                    'tag_ar'  => $entity->tag_ar,
+                    'tag_en'  => $entity->tag_en,
+                    'images'  => $entity->images,
+                ],
+                'services' => $services,
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiCatalogEntity DB error: ' . $e->getMessage());
+
+            return response()->json(['category' => ['key' => $key, 'name_ar' => 'الجهة', 'name_en' => 'Entity'], 'entity' => null, 'services' => []]);
+        }
+    }
+
+    /**
+     * JSON: دليل المكاتب حسب النوع (law|services|customs|accounting|engineering|freelance).
+     */
+    public function apiOfficeDirectory(string $type): JsonResponse
+    {
+        try {
+            $offices = Office::where('type', $type)
+                ->where('is_active', true)
+                ->where('is_verified', true)
+                ->visibleInDirectory()
+                ->with(['specialtiesRelation'])
+                ->withCount('requests as total_requests_count')
+                ->get();
+
+            return response()->json([
+                'type'    => $type,
+                'offices' => $offices->map(fn($o) => [
+                    'id'             => $o->id,
+                    'office_code'    => $o->office_code,
+                    'name_ar'        => $o->name_ar,
+                    'name_en'        => $o->name_en,
+                    'bio'            => $o->bio,
+                    'logo'           => $o->logo,
+                    'city'           => $o->city,
+                    'region'         => $o->region,
+                    'is_verified'    => (bool) $o->is_verified,
+                    'views_count'    => (int) $o->views_count,
+                    'total_requests_count' => (int) ($o->total_requests_count ?? 0),
+                    'specialties'    => $o->specialtiesRelation->map(fn($s) => [
+                        'id'      => $s->id,
+                        'name_ar' => $s->name_ar,
+                        'name_en' => $s->name_en,
+                    ]),
+                ]),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiOfficeDirectory DB error: ' . $e->getMessage());
+
+            return response()->json(['type' => $type, 'offices' => []]);
+        }
+    }
+
+    /**
+     * JSON: تفاصيل مكتب/مستشار واحد.
+     */
+    public function apiOfficeDetail(int $officeId): JsonResponse
+    {
+        try {
+            $office = Office::with(['specialtiesRelation', 'services'])
+                ->withCount('requests as total_requests_count')
+                ->find($officeId);
+
+            if (!$office) {
+                return response()->json(['office' => null]);
+            }
+
+            return response()->json([
+                'office' => [
+                    'id'             => $office->id,
+                    'office_code'    => $office->office_code,
+                    'name_ar'        => $office->name_ar,
+                    'name_en'        => $office->name_en,
+                    'bio'            => $office->bio,
+                    'logo'           => $office->logo,
+                    'type'           => $office->type,
+                    'city'           => $office->city,
+                    'region'         => $office->region,
+                    'is_verified'    => (bool) $office->is_verified,
+                    'views_count'    => (int) $office->views_count,
+                    'total_requests_count' => (int) ($office->total_requests_count ?? 0),
+                    'specialties'    => $office->specialtiesRelation->map(fn($s) => [
+                        'id'      => $s->id,
+                        'name_ar' => $s->name_ar,
+                        'name_en' => $s->name_en,
+                    ]),
+                    'services'       => $office->services->map(fn($svc) => [
+                        'id'      => $svc->id,
+                        'name_ar' => $svc->name_ar,
+                        'price'   => (float) $svc->price,
+                    ]),
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiOfficeDetail DB error: ' . $e->getMessage());
+
+            return response()->json(['office' => null]);
+        }
+    }
+
+    /**
+     * JSON: صفحة دليل المكاتب — تخصصات النوع مع عدّادات (مطابق لـ office_directory.blade.php).
+     */
+    public function apiOfficeSpecialties(string $type): JsonResponse
+    {
+        try {
+            $specialties = \App\Models\Business\Specialty::where('is_active', true)
+                ->where('office_type', $type)
+                ->with(['services' => fn($q) => $q->where('is_active', true)->orderBy('sort_order')])
+                ->orderBy('name_ar')
+                ->get();
+
+            // عدّ المكاتب المرتبطة بكل تخصص
+            $pivot = \Illuminate\Support\Facades\DB::connection('business')
+                ->table('bs_office_specialties')
+                ->whereIn('specialty_id', $specialties->pluck('id'))
+                ->selectRaw('specialty_id, count(*) as offices_count')
+                ->groupBy('specialty_id')
+                ->pluck('offices_count', 'specialty_id');
+
+            $totalOffices = \App\Models\Business\Office::where('type', $type)
+                ->where('is_active', true)
+                ->where('is_verified', true)
+                ->visibleInDirectory()
+                ->count();
+
+            $cfg = $this->officeTypeConfig($type);
+
+            return response()->json([
+                'type'          => $type,
+                'config'        => $cfg,
+                'total_specialties' => $specialties->count(),
+                'total_offices' => $totalOffices,
+                'specialties'   => $specialties->map(fn($s) => [
+                    'id'            => $s->id,
+                    'name_ar'       => $s->name_ar,
+                    'name_en'       => $s->name_en ?? $s->name_ar,
+                    'offices_count' => (int) ($pivot[$s->id] ?? 0),
+                    'services_count' => $s->services->count(),
+                    'services'      => $s->services->take(3)->map(fn($svc) => [
+                        'name_ar' => $svc->name_ar,
+                        'name_en' => $svc->name_en ?? $svc->name_ar,
+                    ]),
+                    'more_count'    => max(0, $s->services->count() - 3),
+                ]),
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiOfficeSpecialties DB error: ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
+
+            return response()->json([
+                'type' => $type,
+                'config' => $this->officeTypeConfig($type),
+                'total_specialties' => 0,
+                'total_offices' => 0,
+                'specialties' => [],
+            ]);
+        }
+    }
+
+    private function officeTypeConfig(string $type): array
+    {
+        $map = [
+            'law' => [
+                'icon' => 'ti-scale', 'color' => '#006C35', 'accent' => '#0B3B2C',
+                'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+                'badge_ar' => 'مكاتب متخصصة',
+                'hint_ar' => 'اختر التخصص المناسب؛ طلبك ينتظر إسناد إدارة المنصة لأحد المكاتب المعتمدة',
+                'name_ar' => 'مكاتب المحاماة', 'name_en' => 'Law Firms',
+                'desc_ar' => 'مكاتب محاماة معتمدة متخصصة في الاستشارات القانونية والتمثيل أمام الجهات القضائية',
+            ],
+            'services' => [
+                'icon' => 'ti-briefcase', 'color' => '#006C35', 'accent' => '#0B3B2C',
+                'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+                'badge_ar' => 'مكاتب تنفيذ معاملات',
+                'hint_ar' => 'اختر التخصص المناسب؛ طلبك ينتظر إسناد إدارة المنصة لأول مكتب مساند مؤهل',
+                'name_ar' => 'مكاتب الخدمات والتعقيب', 'name_en' => 'Service & Expediting Offices',
+                'desc_ar' => 'مكاتب متخصصة في إنهاء المعاملات الحكومية والرسمية بكل سهولة وسرعة',
+            ],
+            'customs' => [
+                'icon' => 'ti-truck', 'color' => '#006C35', 'accent' => '#0B3B2C',
+                'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+                'badge_ar' => 'شركات تخليص جمركي',
+                'hint_ar' => 'اختر التخصص المناسب؛ طلبك ينتظر إسناد إدارة المنصة لإحدى الشركات المعتمدة',
+                'name_ar' => 'شركات التخليص الجمركي', 'name_en' => 'Customs Clearance Companies',
+                'desc_ar' => 'شركات متخصصة في تخليص البضائع وإجراءات الاستيراد والتصدير',
+            ],
+            'accounting' => [
+                'icon' => 'ti-calculator', 'color' => '#006C35', 'accent' => '#0B3B2C',
+                'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+                'badge_ar' => 'استشارات مالية وضريبية',
+                'hint_ar' => 'اختر التخصص المناسب؛ طلبك ينتظر إسناد إدارة المنصة لأحد المكاتب المعتمدة',
+                'name_ar' => 'مكاتب المحاسبة والاستشارات المالية والضريبية', 'name_en' => 'Accounting & Tax Consulting',
+                'desc_ar' => 'خدمات المحاسبة والاستشارات المالية والضريبية للشركات والأفراد',
+            ],
+            'engineering' => [
+                'icon' => 'ti-building', 'color' => '#006C35', 'accent' => '#0B3B2C',
+                'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+                'badge_ar' => 'استشارات هندسية',
+                'hint_ar' => 'اختر التخصص المناسب؛ طلبك ينتظر إسناد إدارة المنصة لأحد المكاتب المعتمدة',
+                'name_ar' => 'الاستشارات الهندسية والتصميم والإشراف', 'name_en' => 'Engineering Consulting',
+                'desc_ar' => 'خدمات التصميم الهندسي والإشراف وإدارة المشاريع',
+            ],
+            'freelance' => [
+                'icon' => 'ti-user', 'color' => '#006C35', 'accent' => '#0B3B2C',
+                'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+                'badge_ar' => 'مهنيون متخصصون',
+                'hint_ar' => 'اختر التخصص المناسب؛ طلبك ينتظر إسناد إدارة المنصة للخبير المعتمد',
+                'name_ar' => 'أصحاب المهن الحرة', 'name_en' => 'Freelance Professionals',
+                'desc_ar' => 'مقدمو الخدمات المهنية المستقلون في مختلف التخصصات',
+            ],
+        ];
+
+        return $map[$type] ?? $map['services'];
+    }
+
     private function resolveMediaUrl(string $path): string
     {
         if (str_starts_with($path, 'homepage/')) {

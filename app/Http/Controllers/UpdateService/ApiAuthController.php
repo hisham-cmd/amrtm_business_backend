@@ -102,6 +102,46 @@ class ApiAuthController extends Controller
     }
 
     /**
+     * POST /api/v1/auth/register
+     * إنشاء حساب Business جديد وإرجاع توكن مباشرة.
+     */
+    public function register(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name'        => ['required', 'string', 'max:255'],
+            'email'       => ['required', 'email', 'max:255', 'unique:App\Models\Business\BusinessUser,email'],
+            'phone'       => ['required', 'string', 'max:30'],
+            'password'    => ['required', 'string', 'min:8', 'confirmed'],
+            'account_type' => ['nullable', 'in:establishment,individual'],
+        ]);
+
+        $accountType = $request->input('account_type', 'individual');
+
+        $user = BusinessUser::create([
+            'name'         => $validated['name'],
+            'email'        => $validated['email'],
+            'phone'        => $validated['phone'],
+            'password'     => Hash::make($validated['password']),
+            'role'         => 'user',
+            'account_type' => $accountType,
+            'is_active'    => true,
+        ]);
+
+        $token = $user->createToken('api-token', ['business'])->plainTextToken;
+
+        return response()->json([
+            'isSuccess'  => true,
+            'value'      => [
+                'token'      => $token,
+                'token_type' => 'Bearer',
+                'user'       => $this->businessPayload($user),
+            ],
+            'error'      => null,
+            'statusCode' => 201,
+        ], 201);
+    }
+
+    /**
      * GET /api/v1/auth/me
      * المستخدم الحالي. يعمل مع Business أو Office عبر التوكن.
      */

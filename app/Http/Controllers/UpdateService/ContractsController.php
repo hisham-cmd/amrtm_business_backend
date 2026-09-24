@@ -7,6 +7,7 @@ use App\Models\Business\CompanyProfile;
 use App\Models\Business\Contract;
 use App\Models\Business\ContractType;
 use App\Models\Business\Office;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -222,6 +223,132 @@ class ContractsController extends Controller
             'contracts' => $contracts,
             'office'    => $office,
         ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | JSON API — عقودي الصادرة (للواجهة الأمامية المنفصلة)
+    |--------------------------------------------------------------------------
+    */
+
+    public function apiMyContracts(): JsonResponse
+    {
+        $office = $this->tokenOffice();
+        if (! $office) {
+            return response()->json(['isSuccess' => false, 'value' => null, 'error' => ['message' => 'غير مصادق عليه.', 'code' => 'UNAUTHENTICATED'], 'statusCode' => 401], 401);
+        }
+
+        $contracts = Contract::query()
+            ->with('type')
+            ->where('party_1_office_id', $office->id)
+            ->orderByDesc('id')
+            ->get();
+
+        return response()->json(['isSuccess' => true, 'value' => $contracts->map(fn($c) => $this->contractPayload($c)), 'error' => null, 'statusCode' => 200]);
+    }
+
+    public function apiIncoming(): JsonResponse
+    {
+        $office = $this->tokenOffice();
+        if (! $office) {
+            return response()->json(['isSuccess' => false, 'value' => null, 'error' => ['message' => 'غير مصادق عليه.', 'code' => 'UNAUTHENTICATED'], 'statusCode' => 401], 401);
+        }
+
+        $contracts = Contract::query()
+            ->with('type', 'partyOneOffice')
+            ->where(function ($q) use ($office) {
+                $q->where('party_2_office_id', $office->id)
+                    ->orWhere('party_2_email', mb_strtolower($office->email));
+            })
+            ->orderByDesc('id')
+            ->get();
+
+        foreach ($contracts as $c) {
+            if ($c->party_2_office_id !== $office->id) {
+                $c->party_2_office_id = $office->id;
+                $c->party_2_status = Contract::PARTY2_REGISTERED;
+                $c->save();
+            }
+        }
+
+        return response()->json(['isSuccess' => true, 'value' => $contracts->map(fn($c) => $this->contractPayload($c)), 'error' => null, 'statusCode' => 200]);
+    }
+
+    public function apiContractShow($id): JsonResponse
+    {
+        $contract = Contract::with(['type', 'partyOneOffice', 'partyTwoOffice'])->find($id);
+        if (! $contract) {
+            return response()->json(['isSuccess' => false, 'value' => null, 'error' => ['message' => 'العقد غير موجود.', 'code' => 'NOT_FOUND'], 'statusCode' => 404], 404);
+        }
+
+        return response()->json(['isSuccess' => true, 'value' => $this->contractPayload($contract), 'error' => null, 'statusCode' => 200]);
+    }
+
+    public function apiCreateData(): JsonResponse
+    {
+        $office = $this->tokenOffice();
+
+        $contractTypes = ContractType::query()
+            ->with('clauses')
+            ->orderBy('sort_order')
+            ->get();
+
+        return response()->json([
+            'isSuccess'  => true,
+            'value'      => [
+                'office'          => $office ? ['id' => $office->id, 'name_ar' => $office->name_ar, 'name_en' => $office->name_en] : null,
+                'contractTypes'   => $contractTypes->map(fn($t) => [
+                    'id'       => $t->id,
+                    'name'     => $t->name,
+                    'price'    => (float) $t->price,
+                    'clauses'  => $t->clauses->sortBy('sort_order')->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'description' => $c->description]),
+                ]),
+                'companyProfile'  => $this->companyPayload(),
+            ],
+            'error'      => null,
+            'statusCode' => 200,
+        ]);
+    }
+
+    private function tokenOffice(): ?Office
+    {
+        $user = \Illuminate\Support\Facades\Auth::guard('office_token')->user()
+            ?? \Illuminate\Support\Facades\Auth::guard('business_token')->user();
+
+        if ($user && method_exists($user, 'office')) {
+            return $user->office;
+        }
+
+        return null;
+    }
+
+    private function contractPayload(Contract $c): array
+    {
+        return [
+            'id'                  => $c->id,
+            'number'              => $c->number,
+            'type_name'           => $c->type?->name,
+            'price'               => (float) ($c->price ?? 0),
+            'party_name'          => $c->party_name,
+            'party_1_name'        => $c->party_1_name,
+            'party_2_email'       => $c->party_2_email,
+            'party_2_status'      => $c->party_2_status,
+            'status'              => $c->status,
+            'start_date'          => $c->start_date?->format('Y-m-d'),
+            'end_date'            => $c->end_date?->format('Y-m-d'),
+            'created_at'          => $c->created_at?->toISOString(),
+            'clauses_json'        => $c->clauses_json,
+        ];
+    }
+
+    private function companyPayload(): ?array
+    {
+        try {
+            $cp = CompanyProfile::current();
+            return $cp ? ['name' => $cp->name, 'cr_number' => $cp->cr_number, 'city' => $cp->city] : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     /*
