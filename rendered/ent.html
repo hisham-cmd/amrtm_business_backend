@@ -1,0 +1,1075 @@
+﻿
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="csrf-token" content="izLU45vhYhan7wcXlUPgdCeMRsj2uZfvvmWShnzN">
+    <title>    وزارة الداخلية | منصة آمر تم
+</title>
+    <link rel="icon" type="image/png" href="http://localhost/images/new-logo1.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link rel="preload" as="style" href="http://localhost/build/assets/app-Dy5uBiDp.css" /><link rel="modulepreload" as="script" href="http://localhost/build/assets/app-DOkskYnS.js" /><link rel="stylesheet" href="http://localhost/build/assets/app-Dy5uBiDp.css" /><script type="module" src="http://localhost/build/assets/app-DOkskYnS.js"></script>        <style>
+        html { scroll-behavior: smooth; }
+
+        .corp-hero {
+            background: linear-gradient(135deg, #001A0D 0%, #002A15 30%, #004D28 70%, #006C35 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .corp-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: .5;
+            pointer-events: none;
+        }
+
+        .svc-card {
+            transition: transform .3s ease, box-shadow .3s ease;
+            cursor: pointer;
+        }
+
+        .svc-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px -15px rgba(0,44,21,.2);
+        }
+
+        .svc-card:hover .svc-icon {
+            transform: scale(1.1) rotate(-3deg);
+        }
+
+        .svc-icon { transition: transform .4s ease; }
+
+        .svc-rule {
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform .4s ease;
+        }
+
+        .svc-card:hover .svc-rule { transform: scaleX(1); }
+
+        /* Form */
+        .form-section {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px -10px rgba(0,44,21,.1);
+            overflow: hidden;
+            border: 1px solid rgba(0,108,53,.08);
+        }
+
+        .login-gate {
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .lg-ico {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(0,108,53,.08);
+            border: 2px solid rgba(0,108,53,.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #006C35;
+            margin: 0 auto 1.2rem;
+        }
+
+        .lg-ttl { font-size: 19px; font-weight: 800; color: #002A15; margin-bottom: .5rem; }
+        .lg-sub { font-size: 13.5px; color: #5A8A6A; line-height: 1.8; margin-bottom: 1.6rem; }
+
+        .lg-btns { display: flex; flex-direction: column; gap: .75rem; max-width: 360px; margin: 0 auto; }
+
+        .lg-btn-pri {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            height: 48px; border-radius: 12px;
+            background: linear-gradient(135deg, #006C35, #00843D);
+            color: #fff; font-family: inherit; font-size: 14.5px; font-weight: 800; text-decoration: none;
+            border: none; cursor: pointer; transition: transform .2s;
+        }
+
+        .lg-btn-pri:hover { transform: translateY(-2px); }
+
+        .lg-btn-sec {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            height: 48px; border-radius: 12px;
+            background: transparent; color: #006C35; font-family: inherit; font-size: 14px; font-weight: 700;
+            text-decoration: none; border: 1.5px solid rgba(0,108,53,.25); transition: all .2s;
+        }
+
+        .lg-btn-sec:hover { background: rgba(0,108,53,.06); }
+
+        .svc-bar {
+            display: flex; align-items: center; gap: .9rem; padding: .9rem 1.5rem;
+            background: #F8F9FF; border-bottom: 1px solid rgba(0,108,53,.07);
+        }
+
+        .svc-bar-ico {
+            width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .svc-bar-ico i { font-size: 20px; }
+        .svc-bar-nm { font-size: 18px; font-weight: 700; color: #002A15; flex: 1; }
+        .svc-bar-sub { font-size: 14px; color: #7A82B8; margin-top: 2px; }
+        .svc-bar-price { font-size: 18px; font-weight: 900; flex-shrink: 0; }
+
+        .bal-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: .6rem 1.5rem; background: #fff; border-bottom: 1px solid rgba(0,108,53,.07);
+            font-size: 13px; flex-wrap: wrap; gap: .4rem; margin: 8px; border-radius: 10px;
+        }
+
+        .bal-lbl { color: #5A8A6A; font-weight: 600; }
+        .bal-val { font-weight: 800; color: #006C35; }
+
+        /* Form Fields */
+        .fm-body { padding: 1.5rem; }
+        .fm-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .fld { margin-bottom: 1rem; }
+        .fld label { display: block; font-size: 12.5px; font-weight: 700; color: #002A15; margin-bottom: 5px; }
+        .req { color: #C62828; margin-right: 3px; }
+        .fld input, .fld textarea, .fld select {
+            width: 100%; height: 44px; padding: 0 13px; border-radius: 10px;
+            border: 1.5px solid rgba(0,108,53,.1); background: #fff; color: #002A15;
+            font-family: inherit; font-size: 13px; outline: none; transition: all .2s;
+            box-shadow: 0 1px 4px rgba(0,108,53,.06);
+        }
+        .fld textarea { height: 80px; padding: 10px 13px; resize: vertical; }
+        .fld input:focus, .fld textarea:focus, .fld select:focus {
+            border-color: #006C35; box-shadow: 0 0 0 3px rgba(0,108,53,.08);
+        }
+        .fld input.err { border-color: #C62828; }
+        .ferr { font-size: 11px; color: #C62828; margin-top: 4px; display: none; align-items: center; gap: 3px; }
+        .ferr.show { display: flex; }
+
+        /* File Upload */
+        .f-area {
+            border: 2px dashed rgba(0,108,53,.2); border-radius: 12px; padding: 1.2rem;
+            text-align: center; background: #F8F9FF; cursor: pointer; transition: all .2s; position: relative;
+        }
+        .f-area:hover { border-color: #006C35; background: rgba(0,108,53,.06); }
+        .f-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+        .f-area-ico { font-size: 26px; color: #7A82B8; }
+        .f-area-t { font-size: 12.5px; font-weight: 700; color: #5A8A6A; margin-top: .4rem; }
+        .f-area-s { font-size: 11px; color: #7A82B8; margin-top: 3px; }
+        .f-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .7rem; justify-content: center; }
+        .chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 7px; background: rgba(0,108,53,.12); color: #006C35; font-size: 11px; font-weight: 600; }
+        .chip-x { cursor: pointer; color: #7A82B8; font-size: 12px; }
+        .chip-x:hover { color: #C62828; }
+
+        .prv {
+            display: flex; align-items: flex-start; gap: 7px; padding: .8rem 1rem;
+            border-radius: 10px; background: rgba(0,108,53,.06); border: 1px solid rgba(0,108,53,.1);
+            margin-bottom: 1rem; font-size: 12px; color: #5A8A6A; line-height: 1.7;
+        }
+        .prv i { font-size: 15px; color: #00843D; flex-shrink: 0; margin-top: 1px; }
+
+        /* Submit */
+        .fm-sub {
+            width: 100%; height: 50px;
+            background: linear-gradient(135deg, #006C35, #00843D);
+            color: #fff; font-family: inherit; font-size: 15px; font-weight: 800;
+            border: none; border-radius: 12px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 5px 18px rgba(0,108,53,.18); transition: all .25s;
+        }
+        .fm-sub:hover { transform: translateY(-2px); }
+        .fm-sub.ld { opacity: .75; pointer-events: none; }
+        .spin { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: sp .7s linear infinite; display: none; }
+        .fm-sub.ld .spin { display: block; }
+        .fm-sub.ld .stxt { display: none; }
+        @keyframes sp { to { transform: rotate(360deg); } }
+
+        /* Success */
+        .succ { display: none; flex-direction: column; align-items: center; padding: 3rem 2rem; text-align: center; }
+        .succ.on { display: flex; }
+        .succ-ico { width: 72px; height: 72px; border-radius: 50%; background: rgba(0,108,53,.1); border: 2px solid rgba(0,108,53,.2); display: flex; align-items: center; justify-content: center; font-size: 32px; color: #006C35; margin-bottom: 1.1rem; }
+        .succ-ttl { font-size: 19px; font-weight: 800; color: #002A15; margin-bottom: .5rem; }
+        .succ-sub { font-size: 13.5px; color: #5A8A6A; line-height: 1.8; max-width: 360px; }
+        .succ-ref { margin-top: 1rem; padding: .7rem 1.4rem; border-radius: 10px; background: rgba(0,108,53,.06); border: 1px solid rgba(0,108,53,.1); font-size: 13px; color: #006C35; font-weight: 700; }
+        .succ-btns { display: flex; gap: 10px; margin-top: 1.4rem; flex-wrap: wrap; justify-content: center; }
+        .s-b1 { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: 10px; background: #006C35; color: #fff; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; border: none; text-decoration: none; }
+        .s-b2 { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: 10px; background: transparent; color: #006C35; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; border: 1.5px solid rgba(0,108,53,.25); }
+
+        /* Change Service */
+        .fm-change {
+            display: inline-flex; align-items: center; gap: .6rem;
+            padding: .7rem 1.2rem; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #006C35, #00843D);
+            color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 6px 16px rgba(0,108,53,.2); transition: all .25s ease;
+        }
+        .fm-change:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,108,53,.3); }
+        .fm-change i { font-size: 16px; transition: transform .25s; }
+        .fm-change:hover i { transform: translateX(-4px); }
+
+        /* User Modal */
+        .usr-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none;
+            align-items: center; justify-content: center; z-index: 9999; backdrop-filter: blur(4px);
+        }
+        .usr-modal.show { display: flex; }
+        .usr-modal-box {
+            width: 430px; max-width: 92%; background: #fff; border-radius: 18px;
+            overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,.2); animation: pop .25s ease;
+        }
+        .usr-head { padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+        .usr-head h3 { margin: 0; font-size: 18px; display: flex; gap: 8px; align-items: center; }
+        .usr-close { border: none; background: none; font-size: 22px; cursor: pointer; }
+        .usr-body { padding: 22px; }
+        .usr-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f1f1; }
+        .usr-item span { color: #666; }
+        .usr-item strong { color: #111; }
+        .usr-note { margin-top: 18px; padding: 14px; background: #eef8ff; color: #2b5f88; border-radius: 10px; display: flex; gap: 8px; align-items: flex-start; font-size: 14px; }
+        .usr-foot { padding: 18px; border-top: 1px solid #eee; }
+        .usr-ok { width: 100%; height: 46px; border: none; border-radius: 10px; background: #006C35; color: #fff; font-size: 15px; cursor: pointer; }
+        @keyframes pop { from { transform: translateY(20px) scale(.96); opacity: 0; } to { transform: none; opacity: 1; } }
+
+        /* Company */
+        .company-check input { display: none; }
+        .company-label {
+            display: flex; align-items: center; gap: 15px; padding: 16px 18px;
+            border: 1px solid #dbe4ef; border-radius: 14px; background: #fff;
+            cursor: pointer; transition: .3s; user-select: none;
+        }
+        .company-label:hover { border-color: #006C35; box-shadow: 0 8px 20px rgba(0,108,53,.08); }
+        .company-icon { width: 48px; height: 48px; border-radius: 12px; background: #f4f8fc; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .company-icon i { font-size: 24px; color: #006C35; }
+        .company-text { flex: 1; display: flex; flex-direction: column; }
+        .company-text strong { color: #002A15; font-size: 16px; font-weight: 700; }
+        .company-text small { color: #6b7280; font-size: 13px; margin-top: 2px; }
+        .company-switch { width: 48px; height: 26px; background: #d1d5db; border-radius: 30px; position: relative; transition: .3s; }
+        .company-switch::before { content: ''; width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: .3s; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+        .company-check input:checked + .company-label { border-color: #006C35; background: #f8fbff; }
+        .company-check input:checked + .company-label .company-switch { background: #006C35; }
+        .company-check input:checked + .company-label .company-switch::before { left: 25px; }
+        .company-card { margin-top: 20px; padding: 22px; background: #fbfdff; border: 1px solid #dbe4ef; border-right: 5px solid #006C35; border-radius: 14px; animation: fadeIn .35s ease; }
+        .company-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; color: #002A15; font-size: 18px; font-weight: 700; }
+        .company-card-header i { width: 42px; height: 42px; border-radius: 10px; background: #eef4fb; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        .company-card .fld input { width: 100%; height: 48px; border: 1px solid #d8e2ee; border-radius: 10px; padding: 0 14px; transition: .25s; background: #fff; }
+        .company-card .fld input:focus { border-color: #006C35; box-shadow: 0 0 0 4px rgba(0,108,53,.08); outline: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Agreement */
+        .agreement-box { display: flex; gap: 16px; align-items: flex-start; padding: 18px; margin-top: 20px; background: #fbfdff; border: 1px solid #dbe4ef; border-right: 5px solid #006C35; border-radius: 14px; }
+        .agreement-icon { width: 48px; height: 48px; min-width: 48px; border-radius: 12px; background: #eef4fb; display: flex; align-items: center; justify-content: center; }
+        .agreement-icon i { font-size: 24px; color: #006C35; }
+        .agreement-label { display: flex; align-items: flex-start; gap: 12px; margin: 0; cursor: pointer; line-height: 1.9; color: #374151; font-size: 14px; }
+        .agreement-label input[type="checkbox"] { width: 20px; height: 20px; margin-top: 4px; accent-color: #006C35; cursor: pointer; flex-shrink: 0; }
+        .agreement-label a { color: #006C35; font-weight: 700; text-decoration: none; }
+        .agreement-label a:hover { text-decoration: underline; }
+
+        /* Search */
+        .search-box { position: relative; width: 100%; }
+        .search-box input { width: 100%; height: 52px; border-radius: 14px; border: 1.5px solid rgba(0,108,53,.15); background: #F8F9FF; font-size: 14px; padding: 0 48px; transition: .3s; font-family: 'Cairo', sans-serif; }
+        .search-box input:focus { outline: none; border-color: #006C35; background: #fff; box-shadow: 0 0 0 4px rgba(0,108,53,.08); }
+        .search-box .search-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #006C35; font-size: 18px; }
+        .search-box #clearSearch { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border: none; border-radius: 50%; cursor: pointer; background: #EAF4EF; color: #006C35; display: none; }
+        .search-suggestions { position: absolute; top: calc(100% + 8px); left: 0; right: 0; display: none; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.15); z-index: 999; max-height: 350px; overflow-y: auto; }
+        .search-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; cursor: pointer; transition: .25s; }
+        .search-item:hover { background: #F0F7F3; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .fm-row { grid-template-columns: 1fr; }
+            .svc-bar { flex-direction: column; text-align: center; }
+            .svc-bar-price { margin-top: 8px; }
+        }
+    </style>
+</head>
+<body class="ar font-sans bg-surface text-gray-900 min-h-screen">
+    
+    <nav class="sticky top-0 inset-x-0 z-[999] w-full border-b border-slate-200 bg-white shadow-sm">
+    <div class="mx-auto flex h-[72px] w-full max-w-[1400px] items-center justify-between gap-4 px-4 md:px-6">
+        <!-- Logo -->
+        <a class="flex shrink-0 items-center gap-2.5 no-underline" href="http://localhost">
+            <span class="relative flex h-[52px] w-[52px] items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-[#f8fafc]">
+                <img src="http://localhost/images/official-logo.jpg"
+                     alt="آمر تم"
+                     class="relative h-[48px] w-[48px] object-contain"
+                     onerror="this.style.display='none';this.nextElementSibling&&this.nextElementSibling.classList.remove('hidden');">
+                <svg class="hidden" viewBox="0 0 24 24" fill="none" stroke="rgba(0,108,53,0.7)" stroke-width="2" width="24" height="24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                </svg>
+            </span>
+            <span class="hidden text-xl font-black text-[#006C35] sm:block">آمر تم</span>
+        </a>
+
+        <!-- Desktop Links -->
+        <div class="hidden flex-1 items-center justify-center gap-1 lg:flex">
+                            <a href="http://localhost"
+                   class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200" id="nl-home">الرئيسية</a>
+                <a href="http://localhost#services"
+                   class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200" id="nl-svcs">الخدمات</a>
+                        <a href="http://localhost#about"
+               class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200" id="nl-about">عن المنصة</a>
+            <a href="http://localhost#contact"
+               class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200" id="nl-con">تواصل معنا</a>
+        </div>
+
+        <!-- Right Section -->
+        <div class="flex shrink-0 items-center gap-2.5">
+            <!-- Language Toggle -->
+            <div class="flex items-center overflow-hidden rounded-full border-[1.5px] border-slate-300 bg-gray-50">
+                <button type="button" id="la" onclick="navLang('ar')"
+                        class="cursor-pointer px-3 py-2 text-xs font-bold text-gray-400 transition-all duration-200">AR</button>
+                <button type="button" id="le" onclick="navLang('en')"
+                        class="cursor-pointer px-3 py-2 text-xs font-bold text-gray-400 transition-all duration-200">EN</button>
+            </div>
+
+            <!-- Guest Buttons -->
+            <div id="nb-guest" class="flex items-center gap-2">
+                <a href="http://localhost/login" id="nb-li"
+                   class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-gray-700 no-underline transition-all duration-200 hover:bg-gray-50">
+                    <i class="fa fa-right-to-bracket text-sm"></i><span id="nl-li">دخول</span>
+                </a>
+                <a href="http://localhost/register" id="nb-re"
+                   class="inline-flex items-center gap-2 rounded-lg bg-[#006C35] px-4 py-2 text-sm font-semibold text-white no-underline transition-all duration-200 hover:bg-[#00843D]">
+                    <i class="fa fa-user-plus text-sm"></i><span id="nl-re">تسجيل</span>
+                </a>
+                <a href="http://localhost/office/login"
+                   class="hidden items-center gap-2 rounded-lg border border-[#006C35]/20 px-4 py-2 text-sm font-semibold text-[#006C35] no-underline transition-all duration-200 hover:bg-[#006C35] hover:text-white lg:inline-flex">
+                    <i class="fa fa-building text-sm"></i>
+                    <span class="sm:hidden">المكاتب</span>
+                </a>
+            </div>
+
+            <!-- Auth Buttons -->
+            <div id="nb-auth" class="hidden items-center gap-2">
+                            </div>
+
+            <!-- Hamburger -->
+            <button type="button"
+                    class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl bg-gray-100 text-gray-600 transition-all duration-200 hover:bg-gray-200 lg:hidden"
+                    onclick="togMob()">
+                <i class="fa fa-bars text-lg"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mob-dd" class="fixed top-[72px] left-0 right-0 bottom-0 z-[1998] hidden flex-col items-stretch gap-1 overflow-y-auto bg-white px-4 pb-6 pt-2">
+            <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10" href="http://localhost">
+            <i class="fa fa-house w-5 text-center"></i><span id="mn-h">الرئيسية</span>
+        </a>
+        <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10" href="http://localhost#services">
+            <i class="fa fa-table-cells-large w-5 text-center"></i><span id="mn-s">الخدمات</span>
+        </a>
+                <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10" href="http://localhost/login">
+            <i class="fa fa-right-to-bracket w-5 text-center"></i><span id="mn-l">تسجيل الدخول</span>
+        </a>
+        <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10" href="http://localhost/register">
+            <i class="fa fa-user-plus w-5 text-center"></i><span id="mn-r">إنشاء حساب</span>
+        </a>
+    </div>
+
+
+    <!-- ══════════ HERO ══════════ -->
+    <section class="corp-hero">
+        <div class="relative mx-auto w-full max-w-[1320px] px-4 py-10 md:py-16 md:px-6">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-5">
+                <ol class="flex flex-wrap items-center gap-2 text-[13px] text-white/60">
+                    <li>
+                        <a href="http://localhost"
+                            class="inline-flex items-center gap-1.5 font-semibold text-white/75 no-underline transition-colors hover:text-white">
+                            <i class="ti ti-home-2 text-[14px]"></i>
+                            <span>الرئيسية</span>
+                        </a>
+                    </li>
+                    <li class="text-white/30"><i class="ti ti-chevron-left"></i></li>
+                    <li>
+                        <a href="http://localhost/catalog/ministries"
+                            class="font-semibold text-white/75 no-underline transition-colors hover:text-white">
+                            الوزارات
+                        </a>
+                    </li>
+                    <li class="text-white/30"><i class="ti ti-chevron-left"></i></li>
+                    <li class="font-bold text-white">وزارة الداخلية</li>
+                </ol>
+            </nav>
+
+            <div class="flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-between">
+                <!-- Entity Info -->
+                <div class="text-center md:text-right">
+                    <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm ring-1 ring-white/20 mx-auto md:mx-0 mb-4">
+                                                    <img src="http://localhost/images/uploads/952da002-1964-46be-b6fa-30729747ba24.webp" alt="وزارة الداخلية"
+                                class="h-16 w-16 rounded-xl object-contain"
+                                onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                            <i class="ti ti-shield hidden text-4xl text-white"></i>
+                                            </div>
+                    <h1 class="text-2xl font-black text-white md:text-[36px]">وزارة الداخلية</h1>
+                    <p class="mt-2 text-[14px] text-white/60">الأمن والمواطنة</p>
+                </div>
+
+                <!-- Search -->
+                <div class="w-full max-w-md">
+                    <div class="search-box">
+                        <i class="ti ti-search search-icon"></i>
+                        <input type="text" id="searchInput" autocomplete="off" placeholder="ابحث عن خدمتك الآن"
+                            oninput="searchServices(this.value)">
+                        <button id="clearSearch" type="button" onclick="clearSearch()"><i class="ti ti-x"></i></button>
+                        <div id="searchSuggestions" class="search-suggestions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SERVICES GRID ══════════ -->
+    <section class="px-4 py-10 md:px-6 md:py-14" id="services-wrap">
+        <div class="mx-auto w-full max-w-[1200px]">
+            <div class="mb-6">
+                <h2 class="text-xl font-black text-slate-900 md:text-2xl">الخدمات المتاحة</h2>
+                <p class="mt-1 text-[13px] text-slate-500">اختر الخدمة المطلوبة لتقديم طلبك</p>
+            </div>
+
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                                    <div class="svc-card group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white"
+                        style="--ecc: #C62828; --ecbg: rgba(198,40,40,.11);"
+                        onclick="selectService(1)">
+                        <span class="svc-rule absolute inset-x-0 top-0 h-1 rounded-t-2xl"
+                            style="background:linear-gradient(90deg, #C62828, #006C35);"></span>
+
+                        <div class="flex items-center gap-4 p-4">
+                            <div class="svc-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
+                                style="background: var(--ecbg); color: var(--ecc);">
+                                <i class="ti ti-id text-2xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[14px] font-extrabold text-slate-900 truncate"
+                                    data-ar="استخراج جواز السفر" data-en="Passport Issuance">
+                                    استخراج جواز السفر
+                                </div>
+                                <div class="text-[12px] text-slate-500 mt-1 line-clamp-1"
+                                    data-ar=""
+                                    data-en="">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-slate-100 bg-slate-50/80 px-4 py-2.5">
+                            <span class="text-[12px] font-bold text-[#006C35] ec-svcs"
+                                data-ar="اطلب الخدمة" data-en="Request Service">
+                                اطلب الخدمة
+                            </span>
+                            <i class="ti ti-arrow-left text-[18px] transition-transform group-hover:-translate-x-1"
+                                style="color: var(--ecc);"></i>
+                        </div>
+                    </div>
+                                    <div class="svc-card group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white"
+                        style="--ecc: #C62828; --ecbg: rgba(198,40,40,.11);"
+                        onclick="selectService(2)">
+                        <span class="svc-rule absolute inset-x-0 top-0 h-1 rounded-t-2xl"
+                            style="background:linear-gradient(90deg, #C62828, #006C35);"></span>
+
+                        <div class="flex items-center gap-4 p-4">
+                            <div class="svc-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
+                                style="background: var(--ecbg); color: var(--ecc);">
+                                <i class="ti ti-id-badge text-2xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[14px] font-extrabold text-slate-900 truncate"
+                                    data-ar="تجديد بطاقة الهوية" data-en="ID Card Renewal">
+                                    تجديد بطاقة الهوية
+                                </div>
+                                <div class="text-[12px] text-slate-500 mt-1 line-clamp-1"
+                                    data-ar=""
+                                    data-en="">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-slate-100 bg-slate-50/80 px-4 py-2.5">
+                            <span class="text-[12px] font-bold text-[#006C35] ec-svcs"
+                                data-ar="اطلب الخدمة" data-en="Request Service">
+                                اطلب الخدمة
+                            </span>
+                            <i class="ti ti-arrow-left text-[18px] transition-transform group-hover:-translate-x-1"
+                                style="color: var(--ecc);"></i>
+                        </div>
+                    </div>
+                                    <div class="svc-card group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white"
+                        style="--ecc: #C62828; --ecbg: rgba(198,40,40,.11);"
+                        onclick="selectService(3)">
+                        <span class="svc-rule absolute inset-x-0 top-0 h-1 rounded-t-2xl"
+                            style="background:linear-gradient(90deg, #C62828, #006C35);"></span>
+
+                        <div class="flex items-center gap-4 p-4">
+                            <div class="svc-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
+                                style="background: var(--ecbg); color: var(--ecc);">
+                                <i class="ti ti-file text-2xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-[14px] font-extrabold text-slate-900 truncate"
+                                    data-ar="استخراج وثيقة السجل العائلي" data-en="Family Registration Document">
+                                    استخراج وثيقة السجل العائلي
+                                </div>
+                                <div class="text-[12px] text-slate-500 mt-1 line-clamp-1"
+                                    data-ar=""
+                                    data-en="">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between border-t border-slate-100 bg-slate-50/80 px-4 py-2.5">
+                            <span class="text-[12px] font-bold text-[#006C35] ec-svcs"
+                                data-ar="اطلب الخدمة" data-en="Request Service">
+                                اطلب الخدمة
+                            </span>
+                            <i class="ti ti-arrow-left text-[18px] transition-transform group-hover:-translate-x-1"
+                                style="color: var(--ecc);"></i>
+                        </div>
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ FORM ══════════ -->
+    <section class="form-section px-4 pb-14 md:px-6">
+        <div class="form-card">
+                            <!-- LOGIN GATE -->
+                <div class="login-gate" id="login-gate" style="display:none;">
+                    <div class="lg-ico"><i class="ti ti-lock"></i></div>
+                    <div class="lg-ttl" id="lg-ttl">تسجيل الدخول مطلوب</div>
+                    <p class="lg-sub" id="lg-sub">لتقديم طلب خدمة يجب أن يكون لديك حساب مسجل في المنصة. سجّل دخولك أو أنشئ حساباً جديداً مجاناً.</p>
+                    <div class="lg-btns">
+                        <a class="lg-btn-pri" href="http://localhost/login?redirect=http%3A%2F%2Flocalhost%2Fcatalog%2Fministries%2F1">
+                            <i class="ti ti-login"></i>
+                            <span id="lg-login-lbl">تسجيل الدخول</span>
+                        </a>
+                        <a class="lg-btn-sec" href="http://localhost/register">
+                            <i class="ti ti-user-plus"></i>
+                            <span id="lg-reg-lbl">إنشاء حساب جديد</span>
+                        </a>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    <!-- ══════════ INVOICE MODAL ══════════ -->
+    <div class="usr-modal" id="invoiceModal">
+        <div class="usr-modal-box">
+            <div class="usr-head">
+                <h3><i class="ti ti-receipt"></i> مراجعة الطلب</h3>
+                <button class="usr-close" onclick="closeInvoiceModal()"><i class="ti ti-x"></i></button>
+            </div>
+            <div class="usr-body">
+                <div class="usr-item"><span>الاسم</span><strong id="rName"></strong></div>
+                <div class="usr-item"><span>الجوال</span><strong id="rPhone"></strong></div>
+                <div class="usr-item"><span>البريد الإلكتروني</span><strong id="rEmail"></strong></div>
+                <div class="usr-item"><span>رقم الهوية</span><strong id="rNational"></strong></div>
+                <hr style="margin:12px 0;border-color:#eee;">
+                <div class="usr-item"><span>الخدمة</span><strong id="rService"></strong></div>
+                <div class="usr-item"><span>مدة التنفيذ</span><strong id="rDays"></strong></div>
+                <div class="usr-item"><span>اسم الشركة</span><strong id="rCompany"></strong></div>
+                <div class="usr-item"><span>السجل التجاري</span><strong id="rCR"></strong></div>
+                <div class="usr-item"><span>الملاحظات</span><strong id="rNotes"></strong></div>
+                <div class="usr-item"><span>المرفقات</span><strong id="rFiles"></strong></div>
+                <hr style="margin:12px 0;border-color:#eee;">
+                <div class="usr-item">
+                    <span style="font-size:18px;font-weight:700;">إجمالي قيمة الطلب</span>
+                    <strong id="rPrice" style="font-size:22px;color:#006C35;"></strong>
+                </div>
+            </div>
+            <div class="usr-foot" style="display:flex;gap:10px;">
+                <button onclick="closeInvoiceModal()" style="flex:1;height:46px;border:1.5px solid rgba(0,108,53,.25);border-radius:10px;background:transparent;color:#006C35;font-size:14px;font-weight:700;cursor:pointer;">رجوع</button>
+                <button onclick="confirmOrder()" class="usr-ok" style="flex:2;">
+                    <i class="ti ti-check"></i> تأكيد وإرسال الطلب
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 border-t border-slate-200 bg-white">
+    <div class="mx-auto w-full max-w-[1400px]">
+        <!-- Main Footer -->
+        <div class="grid grid-cols-1 gap-8 px-4 py-10 md:grid-cols-2 md:px-6 lg:grid-cols-4">
+            <!-- Brand -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-2.5">
+                    <span class="flex h-[46px] w-[46px] items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-[#f8fafc]">
+                        <img src="http://localhost/images/official-logo.jpg" alt="آمر تم" class="h-[42px] w-[42px] object-contain">
+                    </span>
+                    <span class="text-lg font-black text-[#006C35]">آمر تم</span>
+                </div>
+                <p class="text-sm leading-relaxed text-gray-500">
+                    منصة سعودية متكاملة لتقديم الخدمات الحكومية إلكترونياً بكل سهولة وأمان.
+                </p>
+            </div>
+
+            <!-- روابط المنصة -->
+            <div>
+                <h3 class="mb-4 text-sm font-bold text-gray-900">روابط المنصة</h3>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li><a href="http://localhost" class="transition-colors no-underline duration-200 hover:text-[#006C35]">الرئيسية</a></li>
+                    <li><a href="#services" class="transition-colors no-underline duration-200 hover:text-[#006C35]">الخدمات</a></li>
+                    <li><a href="http://localhost/offices/law" class="transition-colors no-underline duration-200 hover:text-[#006C35]">المكاتب المعتمدة</a></li>
+                </ul>
+            </div>
+
+            <!-- حسابات -->
+            <div>
+                <h3 class="mb-4 text-sm font-bold text-gray-900">حسابك</h3>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li><a href="http://localhost/login" class="transition-colors no-underline duration-200 hover:text-[#006C35]">دخول</a></li>
+                    <li><a href="http://localhost/register" class="transition-colors no-underline duration-200 hover:text-[#006C35]">تسجيل جديد</a></li>
+                    <li><a href="http://localhost/dashboard" class="transition-colors no-underline duration-200 hover:text-[#006C35]">لوحة المستخدم</a></li>
+                </ul>
+            </div>
+
+            <!-- تواصل -->
+            <div>
+                <h3 class="mb-4 text-sm font-bold text-gray-900">تواصل معنا</h3>
+                <ul class="space-y-3 text-sm text-gray-500">
+                    <li class="flex items-center gap-2"><i class="fa fa-envelope text-[#006C35]"></i> support@amrtm.sa</li>
+                    <li class="flex items-center gap-2"><i class="fa fa-phone text-[#006C35]"></i> 920000000</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="border-t border-slate-200 py-5 text-center text-sm text-gray-500" id="fcp">
+            © 2025 <b class="text-[#006C35]">آمر تم</b> — جميع الحقوق محفوظة
+        </div>
+    </div>
+</footer>
+
+    <script>
+    window._NAV_T = {
+        ar: {home:'الرئيسية', svcs:'الخدمات', li:'دخول', re:'تسجيل', da:'حسابي', mn_h:'الرئيسية', mn_s:'الخدمات', mn_l:'تسجيل الدخول', mn_r:'إنشاء حساب'},
+        en: {home:'Home', svcs:'Services', li:'Sign In', re:'Register', da:'My Account', mn_h:'Home', mn_s:'Services', mn_l:'Sign In', mn_r:'Create Account'}
+    };
+
+    function _applyNavLang(l) {
+        var t = window._NAV_T[l] || window._NAV_T.ar;
+        var ids = {'nl-li':'li', 'nl-re':'re', 'nl-da':'da', 'mn-h':'mn_h', 'mn-s':'mn_s', 'mn-l':'mn_l', 'mn-r':'mn_r'};
+        Object.keys(ids).forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.textContent = t[ids[id]];
+        });
+    }
+
+    window.navLang = function(l) {
+        if (typeof setLang === 'function') {
+            setLang(l);
+        } else {
+            localStorage.setItem('amrtm_lang', l);
+            document.documentElement.setAttribute('lang', l);
+            document.documentElement.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+            _applyNavLang(l);
+        }
+        _setLangBtn('la', l === 'ar');
+        _setLangBtn('le', l === 'en');
+    };
+
+    function _setLangBtn(id, active) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('bg-[#006C35]', 'text-white', 'text-gray-400');
+        if (active) {
+            el.classList.add('bg-[#006C35]', 'text-white');
+        } else {
+            el.classList.add('text-gray-400');
+        }
+    }
+
+    window.togMob = function() {
+        var d = document.getElementById('mob-dd');
+        if (d) { d.classList.toggle('hidden'); d.classList.toggle('flex'); }
+    };
+    window.clsMob = function() {
+        var d = document.getElementById('mob-dd');
+        if (d) { d.classList.remove('flex'); d.classList.add('hidden'); }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var l = localStorage.getItem('amrtm_lang') || 'ar';
+        if (l !== 'ar') navLang(l);
+    });
+</script>
+    <script>
+        window.AMRTM_USER = null;
+        window.AMRTM_CSRF     = 'izLU45vhYhan7wcXlUPgdCeMRsj2uZfvvmWShnzN';
+        window.AMRTM_API_BASE = 'http://localhost/amrtm/api';
+        window.AMRTM_ROUTES = {
+            login:         'http://localhost/login',
+            logout:        'http://localhost/logout',
+            home:          'http://localhost',
+            userDashboard: 'http://localhost/dashboard',
+            adminDashboard:'http://localhost/admin',
+            catalogCat:    'http://localhost/catalog/ministries',
+        };
+
+        const pageData = {
+            entityId:   1,
+            entityKey:  'ministries',
+            entityName: { ar:'وزارة الداخلية', en:'Ministry of Interior' },
+            entityTag:  { ar:'الأمن والمواطنة', en:'Security &amp; Citizenship' },
+            catName:    { ar:'الوزارات', en:'Ministries' },
+        };
+
+        const T = {
+            ar:{
+                sel:'اختر الخدمة المطلوبة...',days:'مدة الإنجاز:',dayUnit:' يوم',
+                bl:'رصيدك الحالي:',sar:'ر.س',
+                lid:'رقم الهوية / الإقامة',lno:'ملاحظات',lfi:'إرفاق ملفات',
+                fat:'اضغط لرفع الملفات أو اسحبها هنا',fas:'PDF, JPG, PNG — حد أقصى 10MB',
+                prv:'بياناتك محمية ومشفرة. لن يتم مشاركتها مع أي جهة خارجية دون موافقتك.',
+                chngsvc:'تغيير الخدمة',search:"ابحث عن خدمتك الآن",
+                sub:'تقديم الطلب',erq:'مطلوب',eid:'غير صحيح',
+                sct:'تم تقديم طلبك بنجاح!',scs:'سيتم مراجعة طلبك والتواصل معك خلال المدة المحددة.',
+                scr:'رقم الطلب: ',scd:'تابع طلبك',scn:'طلب جديد',
+                noSvc:'اختر الخدمة أولاً',noBal:'رصيدك غير كافٍ — اشحن رصيدك من حسابك.',
+                lgTtl:'تسجيل الدخول مطلوب',lgSub:'لتقديم طلب خدمة يجب أن يكون لديك حساب مسجل في المنصة.',
+                lgLogin:'تسجيل الدخول',lgReg:'إنشاء حساب جديد',
+            },
+            en:{
+                sel:'Select required service...',days:'Completion time:',dayUnit:' days',
+                bl:'Your balance:',sar:'SAR',
+                search:"Search for your service...",
+                lid:'ID / Residency Number',lno:'Notes',lfi:'Attach Files',
+                fat:'Click to upload or drag & drop',fas:'PDF, JPG, PNG — Max 10MB',
+                prv:'Your data is protected and encrypted.',
+                chngsvc:'Change service',
+                sub:'Submit Application',erq:'Required',eid:'Invalid',
+                sct:'Application Submitted Successfully!',scs:'Your application will be reviewed and we will contact you within the specified time.',
+                scr:'Reference: ',scd:'Track Request',scn:'New Request',
+                noSvc:'Select a service first',noBal:'Insufficient balance — top up from your account.',
+                lgTtl:'Login Required',lgSub:'You need a registered account to submit a service request.',
+                lgLogin:'Sign In',lgReg:'Create New Account',
+            },
+        };
+
+        let lang = localStorage.getItem('amrtm_lang') || 'ar';
+        let files = [];
+        let curBalance = 0;
+
+        function setLang(l) {
+            lang = l;
+            localStorage.setItem('amrtm_lang', l);
+            applyLang();
+        }
+
+        function applyLang() {
+            const t = T[lang];
+            document.documentElement.lang = lang;
+            document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+
+            document.querySelectorAll('.ec-nm, [data-ar][data-en]').forEach(el => {
+                el.textContent = lang === 'ar' ? el.dataset.ar : el.dataset.en;
+            });
+
+            const inp = document.getElementById('searchInput');
+            if (inp) {
+                inp.placeholder = t.search;
+                inp.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            }
+
+            if (document.getElementById('lid')) document.getElementById('lid').textContent = t.lid;
+            if (document.getElementById('lno')) document.getElementById('lno').textContent = t.lno;
+            if (document.getElementById('lfi')) document.getElementById('lfi').textContent = t.lfi;
+            if (document.getElementById('fat')) document.getElementById('fat').textContent = t.fat;
+            if (document.getElementById('fas')) document.getElementById('fas').textContent = t.fas;
+            if (document.getElementById('prv-t')) document.getElementById('prv-t').textContent = t.prv;
+            if (document.getElementById('chng-svc')) document.getElementById('chng-svc').textContent = t.chngsvc;
+            if (document.getElementById('fm-st')) document.getElementById('fm-st').innerHTML = `<i class="ti ti-send"></i> ${t.sub}`;
+            if (document.getElementById('bal-lbl')) document.getElementById('bal-lbl').textContent = t.bl;
+            if (document.getElementById('sc-t')) document.getElementById('sc-t').textContent = t.sct;
+            if (document.getElementById('sc-s')) document.getElementById('sc-s').textContent = t.scs;
+            if (document.getElementById('sc-dl')) document.getElementById('sc-dl').textContent = t.scd;
+            if (document.getElementById('sc-nl')) document.getElementById('sc-nl').textContent = t.scn;
+            if (document.getElementById('eidt')) document.getElementById('eidt').textContent = t.eid;
+            if (document.getElementById('lg-ttl')) document.getElementById('lg-ttl').textContent = t.lgTtl;
+            if (document.getElementById('lg-sub')) document.getElementById('lg-sub').textContent = t.lgSub;
+            if (document.getElementById('lg-login-lbl')) document.getElementById('lg-login-lbl').textContent = t.lgLogin;
+            if (document.getElementById('lg-reg-lbl')) document.getElementById('lg-reg-lbl').textContent = t.lgReg;
+        }
+
+        async function loadBalance() {
+            try {
+                const res = await fetch(window.AMRTM_API_BASE + '/dashboard/user', {
+                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF },
+                    credentials: 'same-origin',
+                });
+                if (res.ok) {
+                    const d = await res.json();
+                    curBalance = parseFloat(d.user?.balance ?? d.balance ?? d.stats?.balance ?? 0);
+                    const el = document.getElementById('bal-val');
+                    if (el) el.textContent = curBalance.toFixed(2) + ' ' + T[lang].sar;
+                    if (window.AMRTM_USER) window.AMRTM_USER.balance = curBalance;
+                }
+            } catch(_) {}
+        }
+
+        function onSelChange(sel) {
+            const t = T[lang];
+            const opt = sel.options[sel.selectedIndex];
+            const bar = document.getElementById('svc-bar');
+            if (!opt || !opt.value) { if (bar) bar.style.display = 'none'; return; }
+            if (bar) bar.style.display = 'flex';
+            document.getElementById('svc-ico-i').className = 'ti ' + (opt.dataset.icon || 'ti-file-text');
+            document.getElementById('svc-ico').style.background = 'rgba(198,40,40,.11)';
+            document.getElementById('svc-nm').textContent = lang === 'ar' ? opt.dataset.nameAr : opt.dataset.nameEn;
+            const days = parseInt(opt.dataset.days || 0);
+            document.getElementById('svc-days').textContent = days ? t.days + ' ' + days + t.dayUnit : '';
+            const price = parseFloat(opt.dataset.price || 0);
+            document.getElementById('svc-price').textContent = price.toFixed(2) + ' ' + t.sar;
+            document.getElementById('svc-price').style.color = '#C62828';
+            document.getElementById('svc-price').style.display = 'block';
+        }
+
+        function selectService(id) {
+            history.pushState({ service: id }, '', '#service');
+            const sel = document.getElementById('fm-sel');
+            if (sel) { sel.value = id; onSelChange(sel); }
+            document.getElementById('services-wrap').style.display = 'none';
+                            const gate = document.getElementById('login-gate');
+                gate.style.display = 'block';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function changeService() {
+            document.getElementById('fm-in').style.display = 'none';
+            document.getElementById('services-wrap').style.display = 'block';
+            document.getElementById('services-wrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function hndFiles(inp) {
+            Array.from(inp.files).forEach(f => { if (f.size <= 10*1024*1024) files.push(f); });
+            renderChips();
+            inp.value = '';
+        }
+
+        function renderChips() {
+            document.getElementById('f-chips').innerHTML = files.map((f, i) =>
+                `<div class="chip"><i class="ti ti-file"></i>${f.name.length > 18 ? f.name.slice(0,15)+'...' : f.name}<span class="chip-x" onclick="rmFile(${i})"><i class="ti ti-x"></i></span></div>`
+            ).join('');
+        }
+
+        function rmFile(i) { files.splice(i, 1); renderChips(); }
+
+        function validate() {
+            const t = T[lang];
+            let ok = true;
+            const fid = document.getElementById('fid');
+            if (!fid?.value.trim()) { fid?.classList.add('err'); ok = false; }
+            else { fid?.classList.remove('err'); }
+            if (fid?.value.trim() && !/^\d{10}$/.test(fid.value.trim())) {
+                document.getElementById('eid')?.classList.add('show');
+                fid.classList.add('err');
+                ok = false;
+            }
+            return ok;
+        }
+
+        async function sbmFm() {
+            const t = T[lang];
+            const selEl = document.getElementById('fm-sel');
+            if (!selEl.value) { showToast(t.noSvc, 'warning'); return; }
+            if (!validate()) return;
+            const price = parseFloat(selEl.options[selEl.selectedIndex].dataset.price || 0);
+            if (price > 0 && curBalance < price) { showToast(t.noBal, 'error'); return; }
+
+            const btn = document.getElementById('fm-sub');
+            btn.classList.add('ld');
+
+            const fd = new FormData();
+            fd.append('service_id', selEl.value);
+            fd.append('client_name', document.getElementById('fn').value.trim());
+            fd.append('client_email', document.getElementById('fem').value.trim());
+            fd.append('client_phone', document.getElementById('fph').value.trim());
+            fd.append('client_id_number', document.getElementById('fid').value.trim());
+            fd.append('company_name', document.getElementById('fco')?.value.trim() || '');
+            fd.append('company_cr', document.getElementById('fcr')?.value.trim() || '');
+            fd.append('notes', document.getElementById('fno')?.value.trim() || '');
+            files.forEach(file => fd.append('attachments[]', file));
+
+            try {
+                const res = await fetch(window.AMRTM_API_BASE + '/requests', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF },
+                    credentials: 'same-origin',
+                    body: fd,
+                });
+                const d = await res.json();
+                if (res.ok) {
+                    document.getElementById('fm-in').style.display = 'none';
+                    document.getElementById('fm-succ').classList.add('on');
+                    document.getElementById('sc-r').textContent = 'رقم الطلب: ' + (d.ref_number ?? '---');
+                    document.getElementById('fm-succ').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    let msg = d.message || 'فشل تقديم الطلب';
+                    if (d.errors) msg = Object.values(d.errors).flat().join('\n');
+                    showToast(msg, 'error');
+                }
+            } catch (err) {
+                showToast('حدث خطأ في الاتصال', 'error');
+            }
+            btn.classList.remove('ld');
+        }
+
+        function rstFm() {
+            document.getElementById('fm-in').style.display = '';
+            document.getElementById('fm-succ').classList.remove('on');
+            document.getElementById('fm-sel').value = '';
+            document.getElementById('svc-bar').style.display = 'none';
+            files = [];
+            renderChips();
+        }
+
+        function showToast(message, type = 'success', duration = 3500) {
+            const existing = document.getElementById('amrtm-toast');
+            if (existing) existing.remove();
+            const colors = {
+                success: { bg: 'rgba(0,108,53,.95)', icon: 'ti-circle-check' },
+                error:   { bg: 'rgba(198,40,40,.95)', icon: 'ti-alert-circle' },
+                warning: { bg: 'rgba(230,81,0,.95)', icon: 'ti-alert-triangle' },
+            };
+            const c = colors[type] || colors.success;
+            const toast = document.createElement('div');
+            toast.id = 'amrtm-toast';
+            toast.style.cssText = `position:fixed;bottom:24px;${lang==='ar'?'right':'left'}:24px;z-index:9999;background:${c.bg};color:#fff;padding:12px 18px;border-radius:12px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:0 8px 24px rgba(0,0,0,.25);font-family:'Cairo',sans-serif;max-width:340px;`;
+            toast.innerHTML = `<i class="ti ${c.icon}" style="font-size:18px;flex-shrink:0;"></i><span>${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity .3s'; setTimeout(() => toast.remove(), 300); }, duration);
+        }
+
+        function openUserModal() {
+            if (!window.AMRTM_USER) return;
+            document.getElementById('mName').textContent = window.AMRTM_USER.name;
+            document.getElementById('mPhone').textContent = window.AMRTM_USER.phone;
+            document.getElementById('mEmail').textContent = window.AMRTM_USER.email;
+            document.getElementById('usrModal').classList.add('show');
+        }
+
+        function closeUserModal() { document.getElementById('usrModal').classList.remove('show'); }
+
+        function openInvoiceModal() {
+            document.getElementById('rName').textContent = window.AMRTM_USER?.name || '';
+            document.getElementById('rPhone').textContent = window.AMRTM_USER?.phone || '';
+            document.getElementById('rEmail').textContent = window.AMRTM_USER?.email || '';
+            document.getElementById('rNational').textContent = document.getElementById('fid')?.value || '';
+            document.getElementById('rCompany').textContent = document.getElementById('fco')?.value || '-';
+            document.getElementById('rCR').textContent = document.getElementById('fcr')?.value || '-';
+            document.getElementById('rNotes').textContent = document.getElementById('fno')?.value || 'لا توجد';
+            document.getElementById('rService').textContent = document.getElementById('svc-nm')?.textContent || '';
+            document.getElementById('rDays').textContent = document.getElementById('svc-days')?.textContent || '';
+            document.getElementById('rPrice').innerHTML = document.getElementById('svc-price')?.innerHTML || '';
+            const fc = document.getElementById('ffi')?.files.length || 0;
+            document.getElementById('rFiles').textContent = fc ? fc + ' ملف' : 'لا توجد';
+            document.getElementById('invoiceModal').classList.add('show');
+        }
+
+        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.remove('show'); }
+        function confirmOrder() { closeInvoiceModal(); sbmFm(); }
+
+        function searchServices(value) {
+            value = value.trim().toLowerCase();
+            const clearBtn = document.getElementById('clearSearch');
+            const suggestions = document.getElementById('searchSuggestions');
+            clearBtn.style.display = value ? 'block' : 'none';
+
+            if (value === '') {
+                suggestions.style.display = 'none';
+                document.querySelectorAll('.svc-card').forEach(c => c.style.display = 'flex');
+                return;
+            }
+
+            let found = 0;
+            let html = '';
+            document.querySelectorAll('.svc-card').forEach(card => {
+                const nameEl = card.querySelector('[data-ar][data-en]');
+                const name = (nameEl?.dataset.ar || '').toLowerCase();
+                const tag = (card.querySelector('.ec-svcs')?.dataset.ar || '').toLowerCase();
+                if (name.includes(value) || tag.includes(value)) {
+                    found++;
+                    card.style.display = 'flex';
+                    html += `<div class="search-item" onclick="selectService(${card.getAttribute('onclick')?.match(/\d+/)?.[0] || 0})">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-lg" style="background:${card.style.getPropertyValue('--ecbg') || '#EAF4EF'}">
+                            <i class="ti ti-file-text" style="color:${card.style.getPropertyValue('--ecc') || '#006C35'}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="search-title truncate">${nameEl?.dataset.ar || ''}</div>
+                        </div>
+                    </div>`;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            suggestions.innerHTML = html;
+            suggestions.style.display = found ? 'block' : 'none';
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            searchServices('');
+        }
+
+        // Event Listeners
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.search-box')) {
+                document.getElementById('searchSuggestions').style.display = 'none';
+            }
+        });
+
+        document.getElementById('usrModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeUserModal();
+        });
+
+        document.getElementById('invoiceModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closeInvoiceModal();
+        });
+
+        document.getElementById('isCompany')?.addEventListener('change', function () {
+            document.getElementById('companyFields').style.display = this.checked ? 'block' : 'none';
+        });
+
+        window.addEventListener('popstate', function () {
+            document.getElementById('services-wrap').style.display = 'block';
+            document.getElementById('fm-in').style.display = 'none';
+            document.getElementById('login-gate').style.display = 'none';
+            document.getElementById('fm-succ').classList.remove('on');
+            document.getElementById('fm-sel').selectedIndex = 0;
+            document.getElementById('svc-bar').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLang();
+            const stored = localStorage.getItem('amrtm_lang') || 'ar';
+            if (stored !== 'ar') setLang(stored);
+            if (window.AMRTM_USER) {
+                loadBalance();
+                document.getElementById('fn').value = window.AMRTM_USER.name || '';
+                document.getElementById('fph').value = window.AMRTM_USER.phone || '';
+                document.getElementById('fem').value = window.AMRTM_USER.email || '';
+            }
+        });
+    </script>
+</body>
+</html>

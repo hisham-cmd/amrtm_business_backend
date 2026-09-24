@@ -1,0 +1,528 @@
+﻿
+
+@php
+$typeConfig = [
+    'law' => [
+        'icon'=>'ti-scale',
+        'color'=>'#1A237E',
+        'bg'=>'rgba(26,35,126,.10)',
+        'gradient'=>'linear-gradient(135deg,#1A237E,#283593)',
+        'name_ar'=>'مكاتب المحاماة',
+        'name_en'=>'Law Firms',
+        'desc_ar'=>'مكاتب محاماة معتمدة متخصصة في الاستشارات القانونية والتمثيل أمام الجهات القضائية',
+        'desc_en'=>'Certified law firms specializing in legal consultations and judicial representation',
+    ],
+
+    'services' => [
+        'icon'=>'ti-briefcase',
+        'color'=>'#1565C0',
+        'bg'=>'rgba(21,101,192,.10)',
+        'gradient'=>'linear-gradient(135deg,#1565C0,#1E88E5)',
+        'name_ar'=>'مكاتب الخدمات والتعقيب',
+        'name_en'=>'Service & Expediting Offices',
+        'desc_ar'=>'مكاتب متخصصة في إنهاء المعاملات الحكومية والرسمية بكل سهولة وسرعة',
+        'desc_en'=>'Offices specialized in completing government and official transactions quickly',
+    ],
+
+    'customs' => [
+        'icon'=>'ti-truck',
+        'color'=>'#00695C',
+        'bg'=>'rgba(0,105,92,.10)',
+        'gradient'=>'linear-gradient(135deg,#00695C,#00897B)',
+        'name_ar'=>'شركات التخليص الجمركي',
+        'name_en'=>'Customs Clearance Companies',
+        'desc_ar'=>'شركات متخصصة في تخليص البضائع وإجراءات الاستيراد والتصدير',
+        'desc_en'=>'Companies specialized in customs clearance and import/export procedures',
+    ],
+
+    'accounting' => [
+        'icon'=>'ti-calculator',
+        'color'=>'#2E7D32',
+        'bg'=>'rgba(46,125,50,.10)',
+        'gradient'=>'linear-gradient(135deg,#2E7D32,#43A047)',
+        'name_ar'=>'مكاتب المحاسبة والاستشارات المالية والضريبية',
+        'name_en'=>'Accounting & Tax Consulting',
+        'desc_ar'=>'خدمات المحاسبة والاستشارات المالية والضريبية للشركات والأفراد',
+        'desc_en'=>'Accounting, financial and tax consulting services',
+    ],
+
+    'engineering' => [
+        'icon'=>'ti-building',
+        'color'=>'#EF6C00',
+        'bg'=>'rgba(239,108,0,.10)',
+        'gradient'=>'linear-gradient(135deg,#EF6C00,#FB8C00)',
+        'name_ar'=>'الاستشارات الهندسية والتصميم والإشراف',
+        'name_en'=>'Engineering Consulting',
+        'desc_ar'=>'خدمات التصميم الهندسي والإشراف وإدارة المشاريع',
+        'desc_en'=>'Engineering design, supervision and project management services',
+    ],
+
+    'freelance' => [
+        'icon'=>'ti-user',
+        'color'=>'#6A1B9A',
+        'bg'=>'rgba(106,27,154,.10)',
+        'gradient'=>'linear-gradient(135deg,#6A1B9A,#8E24AA)',
+        'name_ar'=>'أصحاب المهن الحرة',
+        'name_en'=>'Freelance Professionals',
+        'desc_ar'=>'مقدمو الخدمات المهنية المستقلون في مختلف التخصصات',
+        'desc_en'=>'Independent professionals in various fields',
+    ],
+];
+
+$cfg = $typeConfig[$type];
+@endphp
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>{{ $cfg['name_ar'] }} | منصة آمر تم</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/new-logo1.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--pri:#1A237E;--pri2:#283593;--pri3:#1565C0;--bg:#F4F6FB;--sur:#fff;--bc:rgba(26,35,126,.07);--t1:#0D1257;--t2:#3A4490;--t3:#7A82B8;--t4:#BDC2E0;--pd:rgba(26,35,126,.08);--sh:rgba(26,35,126,.08);--sh2:rgba(26,35,126,.18);}
+html,body{background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;}
+body.ar,body.ar *:not(i){font-family:'Cairo',sans-serif;direction:rtl;}
+body.en,body.en *:not(i){font-family:'Inter',sans-serif;direction:ltr;}
+
+/* NAVBAR */
+.nb{height:70px;display:flex;align-items:center;padding:0 2rem;gap:1rem;background:linear-gradient(135deg,#1A237E,#1565C0);box-shadow:0 2px 16px rgba(26,35,126,.3);position:sticky;top:0;z-index:200;}
+.nb-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.nb-logo-nm{font-size:20px;font-weight:900;color:#fff;}
+.nb-mid{flex:1;}
+.nb-right{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.lng{display:flex;padding:2px;border-radius:8px;background:rgba(255,255,255,.15);gap:1px;}
+.lt{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.55);transition:all .2s;}
+.lt.on{background:rgba(255,255,255,.22);color:#fff;}
+.nb-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .2s;border:none;text-decoration:none;}
+.nb-btn.out{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff;}
+.nb-btn.out:hover{background:rgba(255,255,255,.28);}
+.nb-btn.sol{background:#fff;color:var(--pri);}
+.nb-btn.sol:hover{background:rgba(255,255,255,.9);}
+.nb-user{display:flex;align-items:center;gap:7px;padding:4px 10px;border-radius:9px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);cursor:pointer;}
+.nb-user-nm{font-size:12px;font-weight:700;color:#fff;}
+.nb-user-av{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,.35);}
+
+/* BREADCRUMB */
+.bc-bar{background:var(--sur);border-bottom:1px solid var(--bc);padding:.7rem 2rem;}
+.bc{display:flex;align-items:center;gap:6px;max-width:1100px;margin:0 auto;font-size:12.5px;color:var(--t3);}
+.bc a{color:var(--t3);text-decoration:none;transition:color .15s;}
+.bc a:hover{color:var(--pri);}
+.bc-sep{font-size:11px;}
+.bc-cur{color:var(--t2);font-weight:700;}
+
+/* PAGE HEADER */
+.ph{padding:2.5rem 2rem 2rem;max-width:1100px;margin:0 auto;}
+.ph-inner{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.ph-ico{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ph-ico i{font-size:34px;}
+.ph-title{font-size:26px;font-weight:900;color:var(--t1);}
+.ph-sub{font-size:14px;color:var(--t3);margin-top:4px;max-width:500px;line-height:1.6;}
+.ph-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.ph-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:var(--pd);font-size:12px;font-weight:700;color:var(--pri);}
+.ph-badge.verified{background:rgba(16,185,129,.1);color:#059669;}
+
+/* SEARCH BAR */
+.search-wrap{padding:0 2rem;max-width:1100px;margin:0 auto 1.5rem;}
+.search-box{display:flex;align-items:center;gap:10px;background:var(--sur);border:1.5px solid var(--bc);border-radius:14px;padding:0 16px;box-shadow:0 2px 8px var(--sh);}
+.search-box i{color:var(--t3);font-size:16px;flex-shrink:0;}
+.search-box input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--t1);padding:12px 0;background:transparent;}
+.search-box input::placeholder{color:var(--t4);}
+
+/* OFFICE GRID */
+.off-wrap{padding:0 2rem 3rem;max-width:1100px;margin:0 auto;}
+.off-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.3rem;}
+
+/* OFFICE CARD */
+.oc{border-radius:18px;border:1.5px solid var(--bc);background:var(--sur);overflow:hidden;box-shadow:0 4px 18px var(--sh);transition:all .25s;display:flex;flex-direction:column;text-decoration:none;color:inherit;cursor:pointer;}
+.oc:hover{transform:translateY(-5px);box-shadow:0 20px 44px var(--sh2);}
+.oc-head{padding:1.4rem 1.4rem 1rem;display:flex;align-items:flex-start;gap:1rem;}
+.oc-av{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;font-weight:900;color:#fff;transition:transform .25s;}
+.oc:hover .oc-av{transform:scale(1.06);}
+.oc-meta{flex:1;min-width:0;}
+.oc-nm{font-size:15px;font-weight:800;color:var(--t1);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.oc-badges{display:flex;gap:5px;flex-wrap:wrap;}
+.oc-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;}
+.oc-badge.ver{background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.2);}
+.oc-badge.pend{background:rgba(245,158,11,.1);color:#d97706;border:1px solid rgba(245,158,11,.2);}
+.oc-badge.type{background:var(--pd);color:var(--pri);}
+.oc-body{padding:.2rem 1.4rem 1rem;flex:1;}
+.oc-desc{font-size:13px;color:var(--t3);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.oc-foot{padding:.85rem 1.4rem;border-top:1px solid var(--bc);background:#F8F9FF;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.oc-info{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t3);}
+.oc-info i{font-size:13px;color:var(--t3);}
+.oc-spec{display:flex;gap:5px;flex-wrap:wrap;padding:.6rem 1.4rem .9rem;}
+.oc-spec-tag{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;background:var(--pd);color:var(--pri2);}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:5rem 2rem;color:var(--t3);}
+.empty-ico{width:80px;height:80px;border-radius:24px;display:flex;align-items:center;justify-content:center;background:var(--pd);margin:0 auto 1.2rem;font-size:36px;}
+.empty h3{font-size:18px;font-weight:800;color:var(--t2);margin-bottom:8px;}
+.empty p{font-size:14px;line-height:1.7;max-width:380px;margin:0 auto 1.5rem;}
+.empty-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;border:none;background:linear-gradient(135deg,var(--pri),var(--pri3));color:#fff;box-shadow:0 6px 20px rgba(26,35,126,.3);transition:opacity .2s;}
+.empty-btn:hover{opacity:.88;}
+
+/* REGISTER CTA BANNER */
+.cta-banner{margin:0 2rem 2.5rem;max-width:1100px;margin-left:auto;margin-right:auto;border-radius:20px;padding:1.8rem 2rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;background:linear-gradient(135deg,rgba(26,35,126,.07),rgba(21,101,192,.07));border:1.5px solid rgba(26,35,126,.12);}
+.cta-banner-ico{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:26px;}
+.cta-banner-text{flex:1;min-width:0;}
+.cta-banner-title{font-size:16px;font-weight:800;color:var(--t1);margin-bottom:4px;}
+.cta-banner-sub{font-size:13px;color:var(--t3);}
+.cta-banner-actions{display:flex;gap:9px;flex-shrink:0;flex-wrap:wrap;}
+.cta-btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;border:none;transition:all .2s;white-space:nowrap;}
+.cta-btn.pri{background:linear-gradient(135deg,var(--pri),var(--pri3));color:#fff;box-shadow:0 6px 18px rgba(26,35,126,.3);}
+.cta-btn.pri:hover{opacity:.88;transform:translateY(-1px);}
+.cta-btn.sec{background:var(--pd);color:var(--pri);border:1.5px solid rgba(26,35,126,.15);}
+.cta-btn.sec:hover{background:rgba(26,35,126,.14);}
+
+/* FOOTER */
+.footer{background:linear-gradient(135deg,#1A237E,#1565C0);margin-top:2rem;padding:1.2rem 2rem;text-align:center;}
+.f-cp{font-size:12px;color:rgba(255,255,255,.55);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(26,35,126,.2);border-radius:4px;}
+
+@media(max-width:700px){
+  .nb{padding:0 1rem;}
+  .ph{padding:1.8rem 1rem 1.5rem;}
+  .search-wrap{padding:0 1rem;}
+  .off-wrap{padding:0 1rem 2rem;}
+  .off-grid{grid-template-columns:1fr;}
+  .cta-banner{margin:0 1rem 2rem;padding:1.4rem 1.2rem;flex-direction:column;align-items:flex-start;}
+  .cta-banner-actions{width:100%;}
+  .cta-btn{flex:1;justify-content:center;}
+}
+</style>
+</head>
+<body class="ar">
+
+<!-- NAVBAR -->
+<nav class="nb">
+  <a class="nb-logo" href="{{ route('amrtm.index') }}">
+    <div><div class="nb-logo-nm" id="nnm">آمر تم</div></div>
+  </a>
+  <div class="nb-mid"></div>
+  <div class="nb-right">
+    <div class="lng">
+      <div class="lt on" id="la" onclick="setLang('ar')">AR</div>
+      <div class="lt"    id="le" onclick="setLang('en')">EN</div>
+    </div>
+    <div id="nb-guest" style="display:flex;gap:6px;align-items:center;">
+      <a class="nb-btn out" href="{{ route('amrtm.login') }}"><i class="ti ti-login"></i><span id="nl-li">دخول</span></a>
+      <a class="nb-btn sol" href="{{ route('amrtm.register') }}"><i class="ti ti-user-plus"></i><span id="nl-re">تسجيل</span></a>
+    </div>
+    <div id="nb-auth" style="display:none;gap:6px;align-items:center;">
+      <a class="nb-btn out" id="nb-dash-lnk" href="{{ route('amrtm.user.dashboard') }}"><i class="ti ti-layout-dashboard"></i><span id="nl-da">حسابي</span></a>
+      <div class="nb-user" id="nb-user-chip">
+        <img class="nb-user-av" id="nb-av" src="" alt=""/>
+        <span class="nb-user-nm" id="nb-un"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="bc-bar">
+  <div class="bc">
+    <a href="{{ route('amrtm.index') }}" id="bc-home"><i class="ti ti-home-2" style="font-size:13px;"></i> الرئيسية</a>
+    <span class="bc-sep"><i class="ti ti-chevron-left" style="font-size:11px;"></i></span>
+    <a href="{{ route('amrtm.index') }}#offices" id="bc-sec">القطاع المهني</a>
+    <span class="bc-sep"><i class="ti ti-chevron-left" style="font-size:11px;"></i></span>
+    <span class="bc-cur" id="bc-cur">{{ $cfg['name_ar'] }}</span>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="ph">
+  <div class="ph-inner">
+    <div class="ph-ico" style="background:{{ $cfg['bg'] }};border:2px solid {{ $cfg['color'] }}33;">
+      <i class="ti {{ $cfg['icon'] }}" style="color:{{ $cfg['color'] }};"></i>
+    </div>
+    <div>
+      <div class="ph-title" id="ph-title">{{ $cfg['name_ar'] }}</div>
+      <div class="ph-sub" id="ph-sub">{{ $cfg['desc_ar'] }}</div>
+      <div class="ph-badges">
+        <div class="ph-badge"><i class="ti ti-building"></i> <span id="ph-cnt">{{ $offices->count() }} مكتب متاح</span></div>
+        @if($offices->where('is_verified', true)->count() > 0)
+          <div class="ph-badge verified"><i class="ti ti-shield-check"></i> <span id="ph-ver">{{ $offices->where('is_verified', true)->count() }} معتمد ومتحقق منه</span></div>
+        @endif
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <i class="ti ti-search"></i>
+    <input type="text" id="search-inp" placeholder="ابحث باسم المكتب أو المدينة..." oninput="filterOffices(this.value)">
+  </div>
+</div>
+
+<!-- OFFICES GRID -->
+<div class="off-wrap">
+  @if($offices->isEmpty())
+    <div class="empty" id="empty-state">
+      <div class="empty-ico" style="color:{{ $cfg['color'] }};background:{{ $cfg['bg'] }};">
+        <i class="ti {{ $cfg['icon'] }}"></i>
+      </div>
+      <h3 id="empty-title">لا توجد مكاتب مسجّلة حالياً</h3>
+      <p id="empty-desc">لم يتم تسجيل أي مكتب في هذا التخصص بعد. هل مكتبك متخصص في هذا المجال؟ سجّل الآن وابدأ في تلقي الطلبات.</p>
+      <a href="{{ route('amrtm.login') }}?type=office&mode=register" class="empty-btn">
+        <i class="ti ti-building-plus"></i>
+        <span id="empty-cta">سجّل مكتبك الآن</span>
+      </a>
+    </div>
+  @else
+    <div class="off-grid" id="off-grid">
+      @foreach($offices as $office)
+      <a class="oc" href="{{ route('amrtm.offices.detail', [$type, $office->id]) }}" data-name-ar="{{ strtolower($office->name_ar) }}" data-name-en="{{ strtolower($office->name_en ?? '') }}" data-city="{{ strtolower($office->city ?? '') }}">
+        <div class="oc-head">
+          <div class="oc-av" style="background:{{ $cfg['gradient'] }};">
+            {{ mb_substr($office->name_ar, 0, 1) }}
+          </div>
+          <div class="oc-meta">
+            <div class="oc-nm" data-ar="{{ $office->name_ar }}" data-en="{{ $office->name_en ?? $office->name_ar }}">{{ $office->name_ar }}</div>
+            <div class="oc-badges">
+              @if($office->is_verified)
+                <span class="oc-badge ver"><i class="ti ti-shield-check"></i> <span class="badge-ver-lbl">موثّق</span></span>
+              @else
+                <span class="oc-badge pend"><i class="ti ti-clock"></i> <span class="badge-pend-lbl">قيد المراجعة</span></span>
+              @endif
+              @if($office->city)
+                <span class="oc-badge type"><i class="ti ti-map-pin"></i> {{ $office->city }}</span>
+              @endif
+            </div>
+          </div>
+        </div>
+        @if($office->description_ar || $office->description_en)
+        <div class="oc-body">
+          <div class="oc-desc" data-ar="{{ $office->description_ar ?? '' }}" data-en="{{ $office->description_en ?? $office->description_ar ?? '' }}">
+            {{ $office->description_ar ?? '' }}
+          </div>
+        </div>
+        @endif
+        @if($office->specialties && count($office->specialties) > 0)
+        <div class="oc-spec">
+          @foreach(array_slice($office->specialties, 0, 4) as $spec)
+            <span class="oc-spec-tag">{{ $spec }}</span>
+          @endforeach
+        </div>
+        @endif
+        <div class="oc-foot">
+          @if($office->phone)
+            <div class="oc-info"><i class="ti ti-phone"></i> {{ $office->phone }}</div>
+          @endif
+          @if($office->email)
+            <div class="oc-info"><i class="ti ti-mail"></i> {{ $office->email }}</div>
+          @endif
+          @if(!$office->phone && !$office->email)
+            <div class="oc-info"><i class="ti ti-info-circle"></i> <span class="oc-contact-lbl">يتم التواصل عبر المنصة</span></div>
+          @endif
+          <div style="margin-right:auto"><span style="font-size:11px;font-weight:700;color:var(--pri);background:var(--pd);padding:3px 10px;border-radius:20px;" id="view-lbl-{{ $office->id }}">عرض الخدمات ←</span></div>
+        </div>
+      </a>
+      @endforeach
+    </div>
+    <div id="no-results" style="display:none;">
+      <div class="empty">
+        <div class="empty-ico" style="color:var(--t3);background:var(--pd);"><i class="ti ti-search-off"></i></div>
+        <h3 id="nores-title">لا نتائج مطابقة</h3>
+        <p id="nores-desc">لم يتم العثور على مكاتب تطابق بحثك. حاول بكلمات مختلفة.</p>
+      </div>
+    </div>
+  @endif
+</div>
+
+<!-- REGISTER CTA BANNER -->
+@if($offices->isNotEmpty())
+<div class="cta-banner" style="max-width:1100px;padding-left:2rem;padding-right:2rem;">
+  <div class="cta-banner-ico" style="background:{{ $cfg['bg'] }};color:{{ $cfg['color'] }};">
+    <i class="ti ti-building-plus"></i>
+  </div>
+  <div class="cta-banner-text">
+    <div class="cta-banner-title" id="cta-title">هل مكتبك متخصص في هذا المجال؟</div>
+    <div class="cta-banner-sub" id="cta-sub">انضم لمنصة آمر تم وابدأ في تلقي الطلبات من العملاء مباشرة</div>
+  </div>
+  <div class="cta-banner-actions">
+    <a href="{{ route('amrtm.login') }}?type=office&mode=register" class="cta-btn pri">
+      <i class="ti ti-building-plus"></i>
+      <span id="cta-reg-lbl">سجّل مكتبك</span>
+    </a>
+    <a href="{{ route('amrtm.login') }}?type=office" class="cta-btn sec">
+      <i class="ti ti-login"></i>
+      <span id="cta-login-lbl">دخول المكاتب</span>
+    </a>
+  </div>
+</div>
+@endif
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="f-cp" id="fcp">© 2025 <b style="color:rgba(255,255,255,.85);">آمر تم</b> — جميع الحقوق محفوظة</div>
+</footer>
+
+<script>
+window.AMRTM_USER = {!! auth('business')->check() ? json_encode([
+    'id'   => auth('business')->id(),
+    'name' => auth('business')->user()->name,
+    'role' => auth('business')->user()->role,
+]) : 'null' !!};
+window.AMRTM_ROUTES = {
+    login:         '{{ route("amrtm.login") }}',
+    logout:        '{{ route("amrtm.logout") }}',
+    home:          '{{ route("amrtm.index") }}',
+    userDashboard: '{{ route("amrtm.user.dashboard") }}',
+    adminDashboard:'{{ route("amrtm.admin.dashboard") }}',
+};
+
+const PAGE_TYPE = '{{ $type }}';
+const PAGE_DATA = {
+    ar: { name: '{{ $cfg['name_ar'] }}', desc: '{{ $cfg['desc_ar'] }}' },
+    en: { name: '{{ $cfg['name_en'] }}', desc: '{{ $cfg['desc_en'] }}' },
+};
+
+const T = {
+    ar:{
+        li:'دخول', re:'تسجيل', da:'حسابي', dash:'لوحة التحكم',
+        home:'الرئيسية', sec:'القطاع المهني',
+        available:' مكتب متاح', verified:' معتمد ومتحقق منه',
+        search:'ابحث باسم المكتب أو المدينة...',
+        viaPlat:'يتم التواصل عبر المنصة',
+        badgeVer:'موثّق', badgePend:'قيد المراجعة',
+        emptyTitle:'لا توجد مكاتب مسجّلة حالياً',
+        emptyDesc:'لم يتم تسجيل أي مكتب في هذا التخصص بعد. هل مكتبك متخصص في هذا المجال؟ سجّل الآن.',
+        emptyCta:'سجّل مكتبك الآن',
+        noresTitle:'لا نتائج مطابقة',
+        noresDesc:'لم يتم العثور على مكاتب تطابق بحثك.',
+        ctaTitle:'هل مكتبك متخصص في هذا المجال؟',
+        ctaSub:'انضم لمنصة آمر تم وابدأ في تلقي الطلبات من العملاء مباشرة',
+        ctaReg:'سجّل مكتبك', ctaLogin:'دخول المكاتب',
+        fcp:'© 2025 آمر تم — جميع الحقوق محفوظة',
+    },
+    en:{
+        li:'Sign In', re:'Register', da:'My Account', dash:'Dashboard',
+        home:'Home', sec:'Professional Sector',
+        available:' offices available', verified:' verified',
+        search:'Search by office name or city...',
+        viaPlat:'Contact via platform',
+        badgeVer:'Verified', badgePend:'Under Review',
+        emptyTitle:'No offices registered yet',
+        emptyDesc:'No offices have registered in this specialty yet. Is your office specialized in this field? Register now.',
+        emptyCta:'Register Your Office',
+        noresTitle:'No matching results',
+        noresDesc:'No offices match your search.',
+        ctaTitle:'Is your office specialized in this field?',
+        ctaSub:'Join Amrtm platform and start receiving client requests directly',
+        ctaReg:'Register Office', ctaLogin:'Office Login',
+        fcp:'© 2025 Amrtm — All Rights Reserved',
+    },
+};
+let lang = localStorage.getItem('amrtm_lang') || 'ar';
+
+function setLang(l) {
+    lang = l;
+    localStorage.setItem('amrtm_lang', l);
+    document.body.className = l;
+    document.getElementById('la').className = 'lt' + (l==='ar'?' on':'');
+    document.getElementById('le').className = 'lt' + (l==='en'?' on':'');
+    applyLang();
+}
+
+function applyLang() {
+    const t = T[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+
+    if(document.getElementById('nl-li')) document.getElementById('nl-li').textContent = t.li;
+    if(document.getElementById('nl-re')) document.getElementById('nl-re').textContent = t.re;
+    if(document.getElementById('nl-da')) document.getElementById('nl-da').textContent = t.da;
+    if(document.getElementById('bc-home')) document.getElementById('bc-home').lastChild.textContent = ' '+t.home;
+    if(document.getElementById('bc-sec')) document.getElementById('bc-sec').textContent = t.sec;
+    if(document.getElementById('bc-cur')) document.getElementById('bc-cur').textContent = PAGE_DATA[lang].name;
+    if(document.getElementById('ph-title')) document.getElementById('ph-title').textContent = PAGE_DATA[lang].name;
+    if(document.getElementById('ph-sub')) document.getElementById('ph-sub').textContent = PAGE_DATA[lang].desc;
+    if(document.getElementById('search-inp')) document.getElementById('search-inp').placeholder = t.search;
+
+    // Office names and descriptions
+    document.querySelectorAll('.oc-nm').forEach(el => {
+        el.textContent = lang==='ar' ? (el.dataset.ar||el.textContent) : (el.dataset.en||el.dataset.ar);
+    });
+    document.querySelectorAll('.oc-desc').forEach(el => {
+        const txt = lang==='ar' ? el.dataset.ar : el.dataset.en;
+        if(txt) el.textContent = txt;
+    });
+    document.querySelectorAll('.badge-ver-lbl').forEach(el => el.textContent = t.badgeVer);
+    document.querySelectorAll('.badge-pend-lbl').forEach(el => el.textContent = t.badgePend);
+    document.querySelectorAll('.oc-contact-lbl').forEach(el => el.textContent = t.viaPlat);
+
+    const cnt = document.querySelectorAll('.oc').length;
+    if(document.getElementById('ph-cnt')) document.getElementById('ph-cnt').textContent = cnt + t.available;
+
+    if(document.getElementById('empty-title')) document.getElementById('empty-title').textContent = t.emptyTitle;
+    if(document.getElementById('empty-desc'))  document.getElementById('empty-desc').textContent  = t.emptyDesc;
+    if(document.getElementById('empty-cta'))   document.getElementById('empty-cta').textContent   = t.emptyCta;
+    if(document.getElementById('nores-title')) document.getElementById('nores-title').textContent = t.noresTitle;
+    if(document.getElementById('nores-desc'))  document.getElementById('nores-desc').textContent  = t.noresDesc;
+    if(document.getElementById('cta-title'))   document.getElementById('cta-title').textContent   = t.ctaTitle;
+    if(document.getElementById('cta-sub'))     document.getElementById('cta-sub').textContent     = t.ctaSub;
+    if(document.getElementById('cta-reg-lbl')) document.getElementById('cta-reg-lbl').textContent = t.ctaReg;
+    if(document.getElementById('cta-login-lbl')) document.getElementById('cta-login-lbl').textContent = t.ctaLogin;
+    if(document.getElementById('fcp')) document.getElementById('fcp').innerHTML =
+        t.fcp.replace('آمر تم','<b style="color:rgba(255,255,255,.85);">آمر تم</b>')
+             .replace('Amrtm','<b style="color:rgba(255,255,255,.85);">Amrtm</b>');
+}
+
+function filterOffices(q) {
+    q = q.toLowerCase().trim();
+    const cards = document.querySelectorAll('#off-grid .oc');
+    let visible = 0;
+    cards.forEach(c => {
+        const nameAr = c.dataset.nameAr || '';
+        const nameEn = c.dataset.nameEn || '';
+        const city   = c.dataset.city   || '';
+        const match  = !q || nameAr.includes(q) || nameEn.includes(q) || city.includes(q);
+        c.style.display = match ? '' : 'none';
+        if(match) visible++;
+    });
+    const nores = document.getElementById('no-results');
+    if(nores) nores.style.display = (q && visible === 0) ? '' : 'none';
+    const grid = document.getElementById('off-grid');
+    if(grid) grid.style.display = (q && visible === 0) ? 'none' : '';
+    if(document.getElementById('ph-cnt'))
+        document.getElementById('ph-cnt').textContent = visible + T[lang].available;
+}
+
+function updateNavAuth() {
+    const u = window.AMRTM_USER;
+    if(u) {
+        document.getElementById('nb-guest').style.display = 'none';
+        const a = document.getElementById('nb-auth'); a.style.display = 'flex';
+        document.getElementById('nb-un').textContent = u.name.split(' ')[0];
+        const av = document.getElementById('nb-av');
+        av.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=1A237E&color=fff&size=64`;
+        const dashUrl = u.role==='admin'
+            ? (window.AMRTM_ROUTES.adminDashboard||'/amrtm/admin')
+            : (window.AMRTM_ROUTES.userDashboard||'/amrtm/dashboard');
+        document.getElementById('nb-dash-lnk').href = dashUrl;
+        document.getElementById('nb-user-chip').onclick = () => location.href = dashUrl;
+        if(document.getElementById('nl-da'))
+            document.getElementById('nl-da').textContent = u.role==='admin'
+                ? (lang==='ar'?'لوحة التحكم':'Dashboard')
+                : (lang==='ar'?'حسابي':'My Account');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    applyLang();
+    updateNavAuth();
+    const stored = localStorage.getItem('amrtm_lang') || 'ar';
+    if(stored !== 'ar') setLang(stored);
+});
+</script>
+</body>
+</html>

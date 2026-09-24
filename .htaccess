@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # إجبار طلبات /storage/* على المرور عبر Laravel مباشرة.
+    # يتجاوز أي سيم لينك public/storage معطل أو محظور على الاستضافة
+    # (كان يتسبب في 403 Forbidden بدل عرض الصورة/الملف).
+    RewriteRule ^storage(/.*)?$ public/index.php [L]
+
+    # If the request already points inside public/ — leave it alone
+    RewriteCond %{REQUEST_URI} !^/public/
+
+    # If the request is for a real file or directory that exists — leave it alone
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Otherwise forward to public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

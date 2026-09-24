@@ -1,0 +1,274 @@
+@php
+$typeConfig = [
+    'law'         => ['icon'=>'ti-scale',      'color'=>'#006C35','bg'=>'rgba(0,108,53,.08)','gradient'=>'linear-gradient(135deg,#0B3B2C,#006C35)','name_ar'=>'مكاتب المحاماة','name_en'=>'Law Firms'],
+    'services'    => ['icon'=>'ti-briefcase',  'color'=>'#006C35','bg'=>'rgba(0,108,53,.08)','gradient'=>'linear-gradient(135deg,#0B3B2C,#006C35)','name_ar'=>'مكاتب الخدمات والتعقيب','name_en'=>'Service & Expediting Offices'],
+    'customs'     => ['icon'=>'ti-truck',      'color'=>'#006C35','bg'=>'rgba(0,108,53,.08)','gradient'=>'linear-gradient(135deg,#0B3B2C,#006C35)','name_ar'=>'شركات التخليص الجمركي','name_en'=>'Customs Clearance Companies'],
+    'accounting'  => ['icon'=>'ti-calculator', 'color'=>'#006C35','bg'=>'rgba(0,108,53,.08)','gradient'=>'linear-gradient(135deg,#0B3B2C,#006C35)','name_ar'=>'مكاتب المحاسبة والاستشارات المالية والضريبية','name_en'=>'Accounting & Tax Consulting'],
+    'engineering' => ['icon'=>'ti-building',   'color'=>'#006C35','bg'=>'rgba(0,108,53,.08)','gradient'=>'linear-gradient(135deg,#0B3B2C,#006C35)','name_ar'=>'الاستشارات الهندسية والتصميم والإشراف','name_en'=>'Engineering Consulting'],
+    'freelance'   => ['icon'=>'ti-user',       'color'=>'#006C35','bg'=>'rgba(0,108,53,.08)','gradient'=>'linear-gradient(135deg,#0B3B2C,#006C35)','name_ar'=>'أصحاب المهن الحرة','name_en'=>'Freelance Professionals'],
+];
+$cfg = $typeConfig[$type] ?? [
+    'icon'=>'ti-briefcase','color'=>'#006C35','bg'=>'rgba(0,108,53,.08)','gradient'=>'linear-gradient(135deg,#0B3B2C,#006C35)',
+    'name_ar'=>\App\Models\Business\Office::$typeLabels[$type]['ar'] ?? $type,
+    'name_en'=>\App\Models\Business\Office::$typeLabels[$type]['en'] ?? $type
+];
+$businessUser = auth('business')->user();
+$user = $businessUser ?? auth('office')->user();
+$specAr = $office->display_specialty_ar;
+$specEn = $office->display_specialty_en;
+@endphp
+@extends('layouts.public')
+@section('title')
+    {{ $specAr }} | منصة آمر تم
+@endsection
+
+@section('content')
+<!-- NAVBAR -->
+@include('partials.public.navbar', ['user' => $user, 'active' => 'services'])
+
+<div class="min-h-screen bg-[#F4F6FB]">
+    <div class="mx-auto max-w-[1100px] px-4 pb-16 md:px-6">
+        <!-- BREADCRUMB -->
+        <nav class="flex flex-wrap items-center gap-1.5 border-b border-slate-200 bg-white px-2 py-3.5 text-[13px] text-slate-500 md:px-4" aria-label="Breadcrumb">
+            <a href="{{ route('amrtm.index') }}" class="inline-flex items-center gap-1 font-semibold no-underline transition-colors hover:text-emerald-600"><i class="ti ti-home-2 text-[14px]"></i> الرئيسية</a>
+            <i class="ti ti-chevron-left text-[11px] text-slate-400"></i>
+            <a href="{{ route('amrtm.offices.directory', $type) }}" class="no-underline transition-colors hover:text-emerald-600">{{ $cfg['name_ar'] }}</a>
+            <i class="ti ti-chevron-left text-[11px] text-slate-400"></i>
+            <span class="font-bold text-emerald-700">{{ $specAr }}</span>
+        </nav>
+
+        <!-- HERO -->
+        <div class="mt-6 overflow-hidden rounded-3xl border-[1.5px] border-slate-100 bg-white p-6 shadow-sm md:p-8">
+            <div class="flex flex-wrap items-start gap-5">
+                <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-[20px] text-white"
+                     style="background:{{ $cfg['gradient'] }};">
+                    <i class="ti {{ $cfg['icon'] }} text-4xl"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <h1 class="text-2xl font-black leading-tight text-slate-900 md:text-[26px]">{{ $specAr }}</h1>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11.5px] font-bold text-emerald-600"><i class="ti ti-shield-check"></i> معتمد وموثّق من منصة آمر تم</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11.5px] font-bold text-emerald-600" style="background:{{ $cfg['bg'] }};">{{ $cfg['name_ar'] }}</span>
+                        @if($office->city)
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-[11.5px] font-bold text-emerald-600"><i class="ti ti-map-pin"></i> {{ $office->city }}</span>
+                        @endif
+                    </div>
+                    @if($office->description_ar)
+                    <p class="mt-3.5 max-w-[600px] text-sm leading-relaxed text-slate-500">{{ $office->description_ar }}</p>
+                    @else
+                    <p class="mt-3.5 max-w-[600px] text-sm leading-relaxed text-slate-500">خدمات واستشارات متخصصة ومعتمدة يتم إنجازها ومتابعتها بإشراف كامل وضمان من منصة آمر تم لقطاع الأعمال.</p>
+                    @endif
+                    <div class="mt-4 flex flex-wrap gap-5">
+                        <span class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-emerald-700"><i class="ti ti-shield-check text-emerald-500"></i> تقديم ومتابعة مباشرة عبر المنصة</span>
+                        <span class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-emerald-700"><i class="ti ti-lock text-emerald-600"></i> سرية تامة وحماية لبيانات العميل</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICES SECTION -->
+        <div class="mt-10">
+            <div class="mb-5 flex items-center gap-2.5">
+                <i class="ti ti-list-details text-xl" style="color:{{ $cfg['color'] }};"></i>
+                <h2 class="text-lg font-black text-slate-900">الخدمات المتاحة</h2>
+                <span class="text-[13px] font-bold text-slate-400">({{ $office->services->count() }} خدمة)</span>
+            </div>
+
+            @if($office->services->isEmpty())
+                <div class="rounded-3xl border-[1.5px] border-slate-100 bg-white py-16 text-center shadow-sm">
+                    <div class="mx-auto mb-4 flex h-[70px] w-[70px] items-center justify-center rounded-[20px] bg-slate-100 text-3xl text-slate-400"><i class="ti ti-list-details"></i></div>
+                    <h3 class="mb-1.5 text-base font-extrabold text-emerald-700">لم يتم إضافة خدمات تفصيلية بعد</h3>
+                    <p class="text-[13px] text-slate-500">يمكنك طلب الخدمة والاستفسار مباشرة عبر منصة آمر تم.</p>
+                </div>
+            @else
+                @if(!$businessUser)
+                <div class="mb-6 rounded-2xl border-[1.5px] border-dashed border-slate-300 bg-white p-7 text-center shadow-sm">
+                    <i class="ti ti-lock mx-auto mb-2.5 block text-[32px] text-slate-300"></i>
+                    <h3 class="mb-1.5 text-[15px] font-extrabold text-emerald-700">سجّل دخولك لطلب الخدمة</h3>
+                    <p class="mx-auto mb-4 max-w-sm text-[13px] text-slate-500">تحتاج إلى حساب في منصة آمر تم لإرسال طلبك ومتابعته بكل سهولة.</p>
+                    <a href="{{ route('amrtm.login') }}?redirect={{ urlencode(request()->url()) }}"
+                       class="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13.5px] font-extrabold text-white no-underline transition-opacity hover:opacity-90"
+                       style="background:linear-gradient(135deg,#0B3B2C,#006C35);box-shadow:0 6px 18px rgba(0,108,53,.32);">
+                        <i class="ti ti-login"></i> تسجيل الدخول أو إنشاء حساب
+                    </a>
+                </div>
+                @endif
+
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    @foreach($office->services as $svc)
+                    <div class="flex flex-col overflow-hidden rounded-3xl border-[1.5px] border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                        <div class="flex-1 p-6">
+                            <div class="mb-1.5 text-[15px] font-extrabold text-slate-900" data-ar="{{ $svc->name_ar }}" data-en="{{ $svc->name_en ?? $svc->name_ar }}">{{ $svc->name_ar }}</div>
+                            @if($svc->description_ar)
+                            <div class="mb-3 line-clamp-3 text-[13px] leading-relaxed text-slate-500" data-ar="{{ $svc->description_ar }}" data-en="{{ $svc->description_en ?? $svc->description_ar }}">{{ $svc->description_ar }}</div>
+                            @endif
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="text-lg font-black" style="color:{{ $cfg['color'] }};">{{ number_format($svc->price, 0) }} ر.س</span>
+                                @if($svc->duration)
+                                <span class="inline-flex items-center gap-1 text-xs text-slate-500"><i class="ti ti-clock"></i> {{ $svc->duration }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="border-t border-slate-100 bg-slate-50/60 p-4">
+                            @if($businessUser)
+                            <button type="button" onclick="openRequestModal({{ $svc->id }}, '{{ addslashes($svc->name_ar) }}', {{ $svc->price }})"
+                                    class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-extrabold text-white transition-opacity hover:opacity-90"
+                                    style="background:linear-gradient(135deg,#0B3B2C,#006C35);">
+                                <i class="ti ti-send"></i> طلب هذه الخدمة
+                            </button>
+                            @else
+                            <a href="{{ route('amrtm.login') }}?redirect={{ urlencode(request()->url()) }}"
+                               class="flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-extrabold text-white no-underline transition-opacity hover:opacity-90"
+                               style="background:linear-gradient(135deg,#0B3B2C,#006C35);">
+                                <i class="ti ti-login"></i> سجّل دخولك للطلب
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="mt-4 bg-gradient-to-l from-[#0B3B2C] to-[#006C35] py-5 text-center">
+    <div class="text-xs text-white/60">© 2025 <b class="text-white/85">آمر تم</b> — جميع الحقوق محفوظة</div>
+</footer>
+
+<!-- REQUEST MODAL -->
+@if($businessUser)
+<div id="req-overlay" class="fixed inset-0 z-[500] hidden items-center justify-center bg-black/50 p-5" onclick="if(event.target===this)closeModal()">
+    <div class="flex max-h-[90vh] w-full max-w-[520px] flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+            <span class="text-base font-extrabold text-emerald-600">طلب خدمة</span>
+            <button type="button" class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700" onclick="closeModal()"><i class="ti ti-x text-xl"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto px-6 py-5" id="modal-body">
+            <div class="mb-4 rounded-2xl p-4 text-[13px]" style="background:{{ $cfg['bg'] }};">
+                <div class="font-extrabold text-slate-900" id="svc-info-name"></div>
+                <div class="mt-1 text-base font-black" id="svc-info-price" style="color:{{ $cfg['color'] }};"></div>
+            </div>
+
+            <div id="req-form">
+                <div class="mb-4 rounded-2xl border border-slate-100 bg-slate-50 p-4">
+                    <div class="mb-2 flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wide text-slate-400"><i class="ti ti-user-check text-[13px]"></i> بياناتك المسجلة</div>
+                    <div class="flex flex-wrap gap-x-6 gap-y-1.5 text-sm text-slate-900">
+                        <span class="inline-flex items-center gap-1.5"><i class="ti ti-user text-[#0f766e]"></i><span class="text-slate-500">الاسم:</span> {{ $user->name }}</span>
+                        <span class="inline-flex items-center gap-1.5" dir="ltr"><i class="ti ti-phone text-[#0f766e]"></i><span class="text-slate-500">الجوال:</span> {{ $user->phone }}</span>
+                    </div>
+                    <p class="mt-2 text-[11px] leading-relaxed text-slate-400">سيتم إرسال الطلب بهذه البيانات المسجلة في حسابك.</p>
+                </div>
+                <div class="mb-4">
+                    <label class="mb-1.5 block text-[13px] font-bold text-emerald-700">ملاحظات إضافية <span class="font-medium text-slate-400">(اختياري)</span></label>
+                    <textarea id="f-notes" rows="3" placeholder="أي تفاصيل إضافية تود إضافتها..."
+                              class="w-full rounded-xl border-[1.5px] border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition-colors focus:border-emerald-500 focus:bg-white focus:ring-0"></textarea>
+                </div>
+            </div>
+
+            <div id="req-success" class="hidden py-6 text-center">
+                <div class="mx-auto mb-3 flex h-[60px] w-[60px] items-center justify-center rounded-full bg-emerald-50 text-[26px] text-emerald-600"><i class="ti ti-circle-check"></i></div>
+                <div class="mb-1.5 text-base font-extrabold text-slate-900">تم إرسال طلبك بنجاح!</div>
+                <div class="text-[13px] text-slate-500">رقم المرجع:</div>
+                <div class="my-2 inline-block rounded-xl px-4 py-2 font-mono text-lg font-black text-emerald-600" style="background:{{ $cfg['bg'] }};" id="success-ref"></div>
+                <div class="mt-2.5 text-[13px] leading-relaxed text-slate-500">تم استلام طلبك بنجاح، وسيتم إسناد مكتب التنفيذ إليك من قبل إدارة المنصة خلال وقت قصير. المتابعة والمحادثة تتم حصراً عبر المنصة.</div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2.5 border-t border-slate-100 px-6 py-4" id="modal-foot">
+            <button type="button" class="cursor-pointer rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-200" onclick="closeModal()">إلغاء</button>
+            <button type="button" id="submit-btn" onclick="doSubmit()"
+                    class="inline-flex cursor-pointer items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-extrabold text-white transition-opacity hover:opacity-90"
+                    style="background:linear-gradient(135deg,#0B3B2C,#006C35);box-shadow:0 6px 18px rgba(0,108,53,.32);">
+                <i class="ti ti-send"></i> إرسال الطلب
+            </button>
+        </div>
+    </div>
+</div>
+@endif
+@endsection
+
+@push('scripts')
+<script>
+window.OFFICE_ID     = {{ $office->id }};
+window.AMRTM_CSRF   = '{{ csrf_token() }}';
+window.AMRTM_ROUTES = {
+    login:        '{{ route("amrtm.login") }}',
+    home:         '{{ route("amrtm.index") }}',
+    officeReqs:   '{{ url("/amrtm/api/office-requests") }}',
+};
+
+let selectedServiceId = null;
+let lang = localStorage.getItem('amrtm_lang') || 'ar';
+
+function setLang(l) {
+    lang = l;
+    localStorage.setItem('amrtm_lang', l);
+    document.documentElement.lang = l;
+    document.documentElement.dir  = l === 'ar' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+        el.textContent = l === 'ar' ? (el.dataset.ar || '') : (el.dataset.en || el.dataset.ar || '');
+    });
+}
+
+function openRequestModal(serviceId, nameAr, price) {
+    selectedServiceId = serviceId;
+    document.getElementById('svc-info-name').textContent = nameAr;
+    document.getElementById('svc-info-price').textContent = parseFloat(price).toLocaleString('ar-SA') + ' ر.س';
+    document.getElementById('req-form').style.display = '';
+    document.getElementById('req-success').classList.add('hidden');
+    document.getElementById('modal-foot').style.display = '';
+    const ov = document.getElementById('req-overlay');
+    ov.classList.remove('hidden');
+    ov.classList.add('flex');
+    const btn = document.getElementById('submit-btn');
+    if(btn){ btn.disabled = false; btn.innerHTML = '<i class="ti ti-send"></i> إرسال الطلب'; }
+}
+
+function closeModal() {
+    const ov = document.getElementById('req-overlay');
+    ov.classList.add('hidden');
+    ov.classList.remove('flex');
+    selectedServiceId = null;
+}
+
+async function doSubmit() {
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="inline-block h-[18px] w-[18px] animate-spin rounded-full border-[2.5px] border-white/30 border-t-white"></span> جاري الإرسال...';
+
+    try {
+        const res = await fetch(window.AMRTM_ROUTES.officeReqs, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': window.AMRTM_CSRF,
+            },
+            body: JSON.stringify({
+                office_id:         window.OFFICE_ID,
+                office_service_id: selectedServiceId,
+                notes:             document.getElementById('f-notes').value.trim() || null,
+            }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw data;
+
+        document.getElementById('req-form').style.display = 'none';
+        document.getElementById('req-success').classList.remove('hidden');
+        document.getElementById('success-ref').textContent = data.ref_number;
+        document.getElementById('modal-foot').style.display = 'none';
+    } catch(e) {
+        if (window.AmrtmNotify) AmrtmNotify.fromFetchError(e || {}); else alert(e.message || 'حدث خطأ. حاول مرة أخرى.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ti ti-send"></i> إرسال الطلب';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const stored = localStorage.getItem('amrtm_lang') || 'ar';
+    if (stored !== 'ar') setLang(stored);
+});
+</script>
+@endpush

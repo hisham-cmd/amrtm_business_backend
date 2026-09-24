@@ -1,0 +1,707 @@
+@extends('layouts.public')
+@php
+    $typeConfig = [
+        'law' => [
+            'icon' => 'ti-scale',
+            'color' => '#006C35',
+            'accent' => '#0B3B2C',
+            'bg' => 'rgba(0,108,53,.08)',
+            'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+            'badge_ar' => 'مكاتب متخصصة',
+            'hint_ar' => 'اختر مكتبك المعتمد للحصول على خدمات قانونية وقضائية يتابعها ويشرف عليها فريق المنصة',
+            'name_ar' => 'مكاتب المحاماة',
+            'name_en' => 'Law Firms',
+            'desc_ar' => 'مكاتب محاماة معتمدة متخصصة في الاستشارات القانونية والتمثيل أمام الجهات القضائية',
+            'desc_en' => 'Certified law firms specializing in legal consultations and judicial representation',
+            'route' => 'amrtm.office.law.info',
+        ],
+        'services' => [
+            'icon' => 'ti-briefcase',
+            'color' => '#006C35',
+            'accent' => '#0B3B2C',
+            'bg' => 'rgba(0,108,53,.08)',
+            'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+            'badge_ar' => 'مكاتب تنفيذ معاملات',
+            'hint_ar' => 'اختر المكتب المناسب لإنجاز معاملاتك الحكومية والرسمية بكل سهولة وسرعة',
+            'name_ar' => 'مكاتب الخدمات والتعقيب',
+            'name_en' => 'Service & Expediting Offices',
+            'desc_ar' => 'مكاتب متخصصة في إنهاء المعاملات الحكومية والرسمية بكل سهولة وسرعة',
+            'desc_en' => 'Offices specialized in completing government and official transactions quickly',
+            'route' => 'amrtm.office.services.info',
+        ],
+        'customs' => [
+            'icon' => 'ti-truck',
+            'color' => '#006C35',
+            'accent' => '#0B3B2C',
+            'bg' => 'rgba(0,108,53,.08)',
+            'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+            'badge_ar' => 'شركات تخليص جمركي',
+            'hint_ar' => 'اختر شركة التخليص المعتمدة لتسهيل استيراد وتصدير بضائعك بأمان',
+            'name_ar' => 'شركات التخليص الجمركي',
+            'name_en' => 'Customs Clearance Companies',
+            'desc_ar' => 'شركات متخصصة في تخليص البضائع وإجراءات الاستيراد والتصدير',
+            'desc_en' => 'Companies specialized in customs clearance and import/export procedures',
+            'route' => 'amrtm.office.customs.info',
+        ],
+        'accounting' => [
+            'icon' => 'ti-calculator',
+            'color' => '#006C35',
+            'accent' => '#0B3B2C',
+            'bg' => 'rgba(0,108,53,.08)',
+            'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+            'badge_ar' => 'استشارات مالية وضريبية',
+            'hint_ar' => 'اختر المكتب المعتمد للاستشارات المالية والمحاسبية والضريبية لشركتك',
+            'name_ar' => 'مكاتب المحاسبة والاستشارات المالية والضريبية',
+            'name_en' => 'Accounting & Tax Consulting',
+            'desc_ar' => 'خدمات المحاسبة والاستشارات المالية والضريبية للشركات والأفراد',
+            'desc_en' => 'Accounting, financial and tax consulting services',
+            'route' => 'amrtm.office.accounting.info',
+        ],
+        'engineering' => [
+            'icon' => 'ti-building',
+            'color' => '#006C35',
+            'accent' => '#0B3B2C',
+            'bg' => 'rgba(0,108,53,.08)',
+            'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+            'badge_ar' => 'استشارات هندسية',
+            'hint_ar' => 'اختر المكتب المعتمد للتصميم الهندسي والإشراف وإدارة مشاريعك',
+            'name_ar' => 'الاستشارات الهندسية والتصميم والإشراف',
+            'name_en' => 'Engineering Consulting',
+            'desc_ar' => 'خدمات التصميم الهندسي والإشراف وإدارة المشاريع',
+            'desc_en' => 'Engineering design, supervision and project management services',
+            'route' => 'amrtm.office.engineering.info',
+        ],
+        'freelance' => [
+            'icon' => 'ti-user',
+            'color' => '#006C35',
+            'accent' => '#0B3B2C',
+            'bg' => 'rgba(0,108,53,.08)',
+            'gradient' => 'linear-gradient(135deg,#0B3B2C,#006C35)',
+            'badge_ar' => 'مهنيون متخصصون',
+            'hint_ar' => 'اختر الخبير المتخصص في مجالك للحصول على خدمات مهنية موثوقة ومعتمدة',
+            'name_ar' => 'أصحاب المهن الحرة',
+            'name_en' => 'Freelance Professionals',
+            'desc_ar' => 'مقدمو الخدمات المهنية المستقلون في مختلف التخصصات',
+            'desc_en' => 'Independent professionals in various fields',
+            'route' => 'amrtm.office.freelance.info',
+        ],
+    ];
+    $cfg = $typeConfig[$type];
+    $verifiedCount = $offices->where('is_verified', true)->count();
+    $cities = $offices->pluck('city')->filter()->unique()->sort()->values();
+    $specOptions = $offices->pluck('display_specialty_ar')->filter()->unique()->sort()->values();
+@endphp
+@section('title')
+    {{ $cfg["name_ar"] }} | منصة آمر تم
+@endsection
+
+@push('styles')
+    @include('partials.public.corporate-ui')
+    <style>
+        :root {
+            --pri: #006C35;
+            --pd: rgba(0, 108, 53, .08);
+        }
+
+        body {
+            background-color: var(--cui-surface);
+            background-image: url('{{ asset('images/bg-pattern.png') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-attachment: fixed;
+        }
+
+        /* ── Office Cards (.oc) ── */
+        .oc {
+            border-radius: 18px;
+            border: 1.5px solid var(--cui-border);
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(0, 30, 15, .06);
+            transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .oc:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 44px rgba(0, 30, 15, .12);
+            border-color: var(--cui-border-hover);
+        }
+
+        .oc-head {
+            padding: 1.4rem 1.4rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .oc-av {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            transition: transform .25s;
+        }
+
+        .oc:hover .oc-av {
+            transform: scale(1.06);
+        }
+
+        .oc-meta {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .oc-nm {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--cui-text);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .oc-badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .oc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .oc-badge.ver {
+            background: rgba(16, 185, 129, .1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, .2);
+        }
+
+        .oc-badge.type {
+            background: var(--pd);
+            color: var(--pri);
+        }
+
+        .oc-body {
+            padding: .2rem 1.4rem 1rem;
+            flex: 1;
+        }
+
+        .oc-desc {
+            font-size: 13px;
+            color: var(--cui-text-muted);
+            line-height: 1.65;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .oc-spec {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            padding: 0 1.4rem .9rem;
+        }
+
+        .oc-spec-tag {
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--pd);
+            color: var(--pri);
+        }
+
+        .oc-foot {
+            padding: .85rem 1.4rem;
+            border-top: 1px solid var(--cui-border);
+            background: #F8FAF8;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .oc-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--cui-text-muted);
+        }
+
+        .oc-info i {
+            font-size: 13px;
+        }
+    </style>
+@endpush
+
+@section('content')
+    <!-- NAVBAR -->
+    @include('partials.public.navbar', ['active' => 'services'])
+
+    <!-- ═══ HERO ═══ -->
+    <x-cui.hero>
+        @slot('breadcrumb')
+        <ol class="flex flex-wrap items-center gap-1.5 text-[12px] text-white/55">
+            <li>
+                <a href="{{ route('amrtm.index') }}" id="bc-home"
+                    class="inline-flex items-center gap-1 font-semibold text-white/70 no-underline transition-colors duration-200 hover:text-white">
+                    <i class="ti ti-home-2 text-[13px]"></i>
+                    <span id="bc-home-lbl">الرئيسية</span>
+                </a>
+            </li>
+            <li class="text-white/25"><i class="ti ti-chevron-left text-[10px]"></i></li>
+            <li>
+                <a href="{{ route('amrtm.index') }}#offices" id="bc-sec"
+                    class="font-semibold text-white/70 no-underline transition-colors duration-200 hover:text-white">القطاع
+                    المهني</a>
+            </li>
+            <li class="text-white/25"><i class="ti ti-chevron-left text-[10px]"></i></li>
+            <li class="font-bold text-white" id="bc-cur">{{ $cfg['name_ar'] }}</li>
+        </ol>
+        @endslot
+
+        <x-slot:title>
+            <span id="ph-title">{{ $cfg['name_ar'] }}</span>
+        </x-slot:title>
+        <x-slot:badge>
+            <i class="ti {{ $cfg['icon'] }} text-[12px]"></i>
+            <span>{{ $cfg['badge_ar'] }}</span>
+        </x-slot:badge>
+        <x-slot:subtitle>
+            <span id="ph-sub">{{ $cfg['hint_ar'] }}</span>
+        </x-slot:subtitle>
+
+        @slot('chips')
+        <span class="cui-glass inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold text-white/85">
+            <i class="ti ti-building"></i>
+            <span id="ph-cnt">{{ $offices->count() }} مكتب متاح</span>
+        </span>
+        @if($verifiedCount > 0)
+            <span class="cui-glass inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold text-white/85">
+                <i class="ti ti-shield-check"></i>
+                <span id="ph-ver">{{ $verifiedCount }} معتمد ومتحقق منه</span>
+            </span>
+        @endif
+        @endslot
+
+        @slot('side')
+        <div class="hidden shrink-0 items-center justify-center lg:flex">
+            <div
+                class="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl cui-glass shadow-lg ring-1 ring-white/15">
+                <div class="absolute -right-3 -top-4 h-12 w-12 rounded-full bg-white/8 blur-xl"></div>
+                <img src="{{ asset('images/logo2.jpg') }}" alt="AMRTM Logo" class="h-full w-full object-cover" />
+            </div>
+        </div>
+        @endslot
+
+        <x-slot:search>
+            <div
+                class="w-full rounded-2xl border border-slate-200/80 bg-white p-3 shadow-[0_8px_24px_-10px_rgba(0,30,15,.08)]">
+                <div class="mb-3 space-y-2.5">
+                    <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                        <span class="cui-chip-group-label"><i class="ti ti-shield-check text-[12px]"></i> الحالة:</span>
+                        <button type="button" class="cui-chip active" data-status="all"
+                            onclick="setFilter('status','all',this)">الكل</button>
+                        <button type="button" class="cui-chip" data-status="verified"
+                            onclick="setFilter('status','verified',this)">معتمد فقط</button>
+                    </div>
+                    @if($cities->isNotEmpty())
+                        <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                            <span class="cui-chip-group-label"><i class="ti ti-map-pin text-[12px]"></i> المدينة:</span>
+                            <button type="button" class="cui-chip active" data-city="" onclick="setFilter('city','',this)">كل
+                                المدن</button>
+                            @foreach($cities as $city)
+                                <button type="button" class="cui-chip" data-city="{{ $city }}"
+                                    onclick="setFilter('city',this.dataset.city,this)">{{ $city }}</button>
+                            @endforeach
+                        </div>
+                    @endif
+                    @if($specOptions->isNotEmpty())
+                        <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                            <span class="cui-chip-group-label"><i class="ti ti-tag text-[12px]"></i> التخصص:</span>
+                            <button type="button" class="cui-chip active" data-spec="" onclick="setFilter('spec','',this)">كل
+                                التخصصات</button>
+                            @foreach($specOptions as $spec)
+                                <button type="button" class="cui-chip" data-spec="{{ $spec }}"
+                                    onclick="setFilter('spec',this.dataset.spec,this)">{{ $spec }}</button>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1">
+                        <i
+                            class="ti ti-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[15px] text-slate-400"></i>
+                        <input id="pageSearch" type="text" placeholder="ابحث بالتخصص أو المدينة..." autocomplete="off"
+                            dir="rtl"
+                            class="w-full rounded-xl border border-slate-200 bg-slate-50/70 !py-2.5 !px-9 !text-[13px] text-slate-800 placeholder:!text-slate-400 transition-colors focus:!border-[#006C35]/40 focus:!bg-white focus:!outline-none focus:!ring-0"
+                            oninput="applyFilters()" />
+                    </div>
+                    <button id="pageClear" type="button"
+                        class="hidden shrink-0 cursor-pointer rounded-lg border border-slate-200 bg-slate-50/70 px-2.5 py-2.5 text-[12px] font-semibold text-slate-500 transition-colors hover:bg-[#006C35]/8 hover:text-[#006C35]"
+                        onclick="clearPageSearch()">
+                        <i class="ti ti-x text-[14px]"></i>
+                    </button>
+                </div>
+            </div>
+        </x-slot:search>
+    </x-cui.hero>
+
+    <!-- ═══ OFFICES ═══ -->
+    <section class="px-4 py-8 md:px-6 md:py-10">
+        <div class="w-full">
+            <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+
+                <span id="filter-count"
+                    class="inline-flex items-center gap-1 rounded-full bg-[#006C35]/8 px-2.5 py-1 text-[11px] font-bold text-[#006C35]">
+                    <i class="ti ti-building text-[12px]"></i>
+                    <span id="filter-count-val">{{ $offices->count() }}</span>
+                    <span id="filter-count-lbl">مكتب</span>
+                </span>
+            </div>
+
+            <!-- Empty -->
+            @if($offices->isEmpty())
+                <div class="mx-auto max-w-xl rounded-xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+                    <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-xl bg-[#006C35]/8">
+                        <i class="ti {{ $cfg['icon'] }} text-3xl text-[#006C35]"></i>
+                    </div>
+                    <h3 class="mb-1 text-base font-extrabold text-slate-900" id="empty-title">لا توجد خدمات متاحة حالياً</h3>
+                    <p class="mx-auto mb-5 max-w-sm text-[13px] leading-relaxed text-slate-500" id="empty-desc">
+                        لم يتم تسجيل أي مزود خدمة في هذا المجال بعد. هل تقدم خدمات في هذا التخصص؟ سجّل الآن وابدأ في
+                        استقبال الطلبات.
+                    </p>
+                    <a href="{{ route('amrtm.provider.account.create') }}"
+                        class="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-bold text-white no-underline shadow-md"
+                        style="background:linear-gradient(135deg,#0B3B2C,#006C35);">
+                        <i class="ti ti-building-plus"></i> <span id="empty-cta">تسجيل مزود خدمة جديد</span>
+                    </a>
+                </div>
+            @else
+                <!-- Grid -->
+                <div id="off-grid" class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    @foreach($offices as $office)
+                        @php
+                            $specAr = $office->display_specialty_ar;
+                            $specEn = $office->display_specialty_en;
+                            $desc = $office->description_ar ?? $office->description_en ?? 'خدمات واستشارات متخصصة ومعتمدة عبر منصة آمر تم لقطاع الأعمال';
+                            $specsData = ($office->specialtiesRelation && $office->specialtiesRelation->count())
+                                ? $office->specialtiesRelation->pluck('name_ar')->implode(',')
+                                : $specAr;
+                        @endphp
+                        <a class="oc" href="{{ route('amrtm.offices.detail', [$type, $office->id]) }}"
+                            data-name-ar="{{ strtolower($specAr) }}" data-name-en="{{ strtolower($specEn) }}"
+                            data-city="{{ strtolower($office->city ?? '') }}" data-verified="{{ $office->is_verified ? '1' : '0' }}"
+                            data-specs="{{ strtolower($specsData) }}">
+                            <div class="oc-head">
+                                <div class="oc-av" style="background:{{ $cfg['gradient'] }};">
+                                    <i class="ti {{ $cfg['icon'] }}" style="font-size:22px;"></i>
+                                </div>
+                                <div class="oc-meta">
+                                    <div class="oc-nm" data-ar="{{ $specAr }}" data-en="{{ $specEn }}">{{ $specAr }}
+                                    </div>
+                                    <div class="oc-badges">
+                                        <span class="oc-badge ver"><i class="ti ti-shield-check"></i> <span
+                                                class="badge-ver-lbl">معتمد من آمر تم</span></span>
+                                        @if($office->city)
+                                            <span class="oc-badge type"><i class="ti ti-map-pin"></i> {{ $office->city }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="oc-body">
+                                <div class="oc-desc"
+                                    data-ar="{{ $office->description_ar ?? 'خدمات واستشارات متخصصة ومعتمدة عبر منصة آمر تم لقطاع الأعمال' }}"
+                                    data-en="{{ $office->description_en ?? $office->description_ar ?? 'Specialized and certified services via Amrtm Platform for business' }}">
+                                    {{ $desc }}
+                                </div>
+                            </div>
+                            @if($office->specialtiesRelation && $office->specialtiesRelation->count() > 1)
+                                <div class="oc-spec">
+                                    @foreach($office->specialtiesRelation->skip(1)->take(4) as $spec)
+                                        <span class="oc-spec-tag">{{ $spec->name_ar }}</span>
+                                    @endforeach
+                                </div>
+                            @endif
+                            <div class="oc-foot">
+                                <div class="oc-info"><i class="ti ti-shield-check" style="color:#059669;"></i> <span
+                                        class="oc-contact-lbl">طلب وإشراف عبر المنصة</span></div>
+                                <div style="margin-right:auto"><span
+                                        style="font-size:11px;font-weight:700;color:var(--pri);background:var(--pd);padding:4px 12px;border-radius:20px;"
+                                        id="view-lbl-{{ $office->id }}">طلب الخدمة ←</span></div>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+
+                <!-- No results -->
+                <div id="no-results"
+                    class="hidden mx-auto max-w-md rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+                    <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-[#006C35]/8">
+                        <i class="ti ti-search-off text-2xl text-[#006C35]"></i>
+                    </div>
+                    <p class="text-[13px] font-bold text-slate-600" id="nores-title">لا نتائج مطابقة</p>
+                    <p class="text-[12px] text-slate-500" id="nores-desc">لم يتم العثور على تخصصات تطابق بحثك. حاول بكلمات
+                        مختلفة.</p>
+                    <button type="button"
+                        class="mt-2 cursor-pointer rounded-lg border-0 bg-transparent px-3 py-1.5 text-[12px] font-bold text-[#006C35] transition-colors hover:bg-[#006C35]/8"
+                        onclick="clearSearch()">
+                        <i class="ti ti-rotate text-[13px] ml-1"></i>إظهار الكل
+                    </button>
+                </div>
+
+                <!-- REGISTER CTA BANNER -->
+                <div
+                    class="mt-10 flex flex-wrap items-center gap-4 rounded-3xl border border-[#006C35]/12 bg-white p-7 shadow-sm md:p-8">
+                    <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl"
+                        style="background:var(--cui-primary-soft);color:#006C35;">
+                        <i class="ti ti-building-plus"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-base font-extrabold text-slate-900" id="cta-title">هل مكتبك متخصص في هذا المجال؟</div>
+                        <div class="mt-1 text-[13px] text-slate-500" id="cta-sub">انضم لمنصة آمر تم وابدأ في تلقي الطلبات من
+                            العملاء مباشرة</div>
+                    </div>
+                    <div class="flex shrink-0 flex-wrap gap-2.5">
+                        <a href="{{ route('amrtm.provider.account.create') }}"
+                            class="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-bold text-white no-underline shadow-md transition-all hover:-translate-y-0.5 hover:opacity-90"
+                            style="background:linear-gradient(135deg,#0B3B2C,#006C35);">
+                            <i class="ti ti-building-plus"></i> <span id="cta-reg-lbl">سجّل مكتبك</span>
+                        </a>
+                        <a href="{{ route('amrtm.login') }}?type=office"
+                            class="inline-flex items-center gap-2 rounded-xl border-[1.5px] px-5 py-2.5 text-[13px] font-bold text-[#006C35] no-underline transition-all hover:opacity-90"
+                            style="border-color:rgba(0,108,53,.18);background:var(--cui-primary-soft);">
+                            <i class="ti ti-login"></i> <span id="cta-login-lbl">دخول المكاتب</span>
+                        </a>
+                    </div>
+                </div>
+            @endif
+        </div>
+    </section>
+
+    @include('partials.public.footer')
+@endsection
+
+@push('scripts')
+    <script>
+        window.AMRTM_USER = {!! auth('business')->check() ? json_encode([
+        'id' => auth('business')->id(),
+        'name' => auth('business')->user()->name,
+        'role' => auth('business')->user()->role,
+    ]) : 'null' !!};
+        window.AMRTM_ROUTES = {
+            login: '{{ route("amrtm.login") }}',
+            logout: '{{ route("amrtm.logout") }}',
+            home: '{{ route("amrtm.index") }}',
+            userDashboard: '{{ route("amrtm.user.dashboard") }}',
+            adminDashboard: '{{ route("amrtm.admin.dashboard") }}',
+        };
+
+        const PAGE_TYPE = '{{ $type }}';
+        const PAGE_DATA = {
+            ar: { name: '{{ $cfg['name_ar'] }}', desc: '{{ $cfg['hint_ar'] }}' },
+            en: { name: '{{ $cfg['name_en'] }}', desc: '{{ $cfg['desc_en'] }}' },
+        };
+
+        const T = {
+            ar: {
+                li: 'دخول', re: 'تسجيل', da: 'حسابي', dash: 'لوحة التحكم',
+                home: 'الرئيسية', sec: 'القطاع المهني',
+
+                available: ' مكتب متاح', verified: ' معتمد ومتحقق منه',
+                search: 'ابحث بالتخصص أو المدينة...',
+                viaPlat: 'طلب وإشراف عبر المنصة',
+                badgeVer: 'معتمد من آمر تم', badgePend: 'قيد المراجعة',
+                secTitle: 'المكاتب والشركات المعتمدة',
+                secSub: 'تابع المزودين المتاحين واختر ما يناسب خدمتك المطلوبة',
+                emptyTitle: 'لا توجد خدمات متاحة حالياً',
+                emptyDesc: 'لم يتم تسجيل أي مزود خدمة في هذا المجال بعد.',
+                emptyCta: 'تسجيل مزود خدمة جديد',
+                noresTitle: 'لا نتائج مطابقة',
+                noresDesc: 'لم يتم العثور على تخصصات تطابق بحثك. حاول بكلمات مختلفة.',
+                ctaTitle: 'هل مكتبك متخصص في هذا المجال؟',
+                ctaSub: 'انضم لمنصة آمر تم وابدأ في تلقي الطلبات من العملاء مباشرة',
+                ctaReg: 'سجّل مكتبك', ctaLogin: 'دخول المكاتب',
+                viewLbl: 'التفاصيل',
+            },
+            en: {
+                li: 'Sign In', re: 'Register', da: 'My Account', dash: 'Dashboard',
+                home: 'Home', sec: 'Professional Sector',
+                info: 'Learn about the platform & services',
+                available: ' offices available', verified: ' verified',
+                search: 'Search by specialty or city...',
+                viaPlat: 'Requested via platform',
+                badgeVer: 'Certified by Amrtm', badgePend: 'Under Review',
+                secTitle: 'Certified Offices & Companies',
+                secSub: 'Browse available providers and choose what fits your service',
+                emptyTitle: 'No services available yet',
+                emptyDesc: 'No provider registered in this field yet.',
+                emptyCta: 'Register Provider',
+                noresTitle: 'No matching results',
+                noresDesc: 'No specialties match your search. Try different keywords.',
+                ctaTitle: 'Is your office specialized in this field?',
+                ctaSub: 'Join Amrtm platform and start receiving service requests',
+                ctaReg: 'Register your office', ctaLogin: 'Office Login',
+                viewLbl: 'Details',
+            },
+        };
+        let lang = localStorage.getItem('amrtm_lang') || 'ar';
+
+        window.setLang = function (l) {
+            lang = l;
+            localStorage.setItem('amrtm_lang', l);
+            applyLang();
+        };
+
+        function applyLang() {
+            const t = T[lang];
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+            if (document.getElementById('nl-li')) document.getElementById('nl-li').textContent = t.li;
+            if (document.getElementById('nl-re')) document.getElementById('nl-re').textContent = t.re;
+            if (document.getElementById('nl-da')) document.getElementById('nl-da').textContent = t.da;
+            if (document.getElementById('bc-home')) document.getElementById('bc-home-lbl').textContent = t.home;
+            if (document.getElementById('bc-sec')) document.getElementById('bc-sec').textContent = t.sec;
+            if (document.getElementById('bc-cur')) document.getElementById('bc-cur').textContent = PAGE_DATA[lang].name;
+            if (document.getElementById('ph-title')) document.getElementById('ph-title').textContent = PAGE_DATA[lang].name;
+            if (document.getElementById('ph-sub')) document.getElementById('ph-sub').textContent = PAGE_DATA[lang].desc;
+            if (document.getElementById('ph-info-lbl')) document.getElementById('ph-info-lbl').textContent = t.info;
+            if (document.getElementById('pageSearch')) document.getElementById('pageSearch').placeholder = t.search;
+
+            if (document.getElementById('sec-sub')) document.getElementById('sec-sub').textContent = t.secSub;
+
+            document.querySelectorAll('.badge-ver-lbl').forEach(el => el.textContent = t.badgeVer);
+            document.querySelectorAll('.oc-contact-lbl').forEach(el => el.textContent = t.viaPlat);
+
+            document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+                if (el.id === 'pageSearch') return;
+                const isEn = lang === 'en';
+                if (el.dataset.en !== undefined) el.textContent = isEn ? (el.dataset.en || el.dataset.ar) : el.dataset.ar;
+            });
+
+            const cnt = document.querySelectorAll('#off-grid > a').length;
+            const hasActiveFilters = typeof lastVisibleCount === 'number' && (document.getElementById('pageSearch') && document.getElementById('pageSearch').value || filters.status !== 'all' || filters.city || filters.spec);
+            if (document.getElementById('ph-cnt')) document.getElementById('ph-cnt').textContent = (hasActiveFilters ? lastVisibleCount : cnt) + t.available;
+            if (document.getElementById('ph-ver')) document.getElementById('ph-ver').textContent = '{{ $verifiedCount }}' + t.verified;
+            if (document.getElementById('filter-count-val')) document.getElementById('filter-count-val').textContent = hasActiveFilters ? lastVisibleCount : cnt;
+            if (document.getElementById('filter-count-lbl')) document.getElementById('filter-count-lbl').textContent = t.available.trim().split(' ')[0] || '';
+
+            if (document.getElementById('empty-title')) document.getElementById('empty-title').textContent = t.emptyTitle;
+            if (document.getElementById('empty-desc')) document.getElementById('empty-desc').textContent = t.emptyDesc;
+            if (document.getElementById('empty-cta')) document.getElementById('empty-cta').textContent = t.emptyCta;
+            if (document.getElementById('nores-title')) document.getElementById('nores-title').textContent = t.noresTitle;
+            if (document.getElementById('nores-desc')) document.getElementById('nores-desc').textContent = t.noresDesc;
+            if (document.getElementById('cta-title')) document.getElementById('cta-title').textContent = t.ctaTitle;
+            if (document.getElementById('cta-sub')) document.getElementById('cta-sub').textContent = t.ctaSub;
+            if (document.getElementById('cta-reg-lbl')) document.getElementById('cta-reg-lbl').textContent = t.ctaReg;
+            if (document.getElementById('cta-login-lbl')) document.getElementById('cta-login-lbl').textContent = t.ctaLogin;
+        }
+
+        let lastVisibleCount = null;
+        const filters = { status: 'all', city: '', spec: '' };
+
+        function setFilter(key, value, el) {
+            filters[key] = value;
+            el.closest('.flex').querySelectorAll('.cui-chip').forEach(c => c.classList.toggle('active', c === el));
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const input = document.getElementById('pageSearch');
+            const q = (input ? input.value : '').toLowerCase().trim();
+            const cards = document.querySelectorAll('#off-grid > a');
+            let visible = 0;
+            cards.forEach(c => {
+                const nameAr = (c.dataset.nameAr || '').toLowerCase();
+                const nameEn = (c.dataset.nameEn || '').toLowerCase();
+                const city = (c.dataset.city || '').toLowerCase();
+                const specs = (c.dataset.specs || '').toLowerCase();
+                const verified = c.dataset.verified === '1';
+
+                const statusOk = filters.status === 'all' || (filters.status === 'verified' && verified);
+                const cityOk = !filters.city || city === filters.city.toLowerCase();
+                const specOk = !filters.spec || specs.includes(filters.spec.toLowerCase());
+                const qOk = !q || nameAr.includes(q) || nameEn.includes(q) || city.includes(q) || specs.includes(q);
+
+                const match = statusOk && cityOk && specOk && qOk;
+                c.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            lastVisibleCount = visible;
+            const nores = document.getElementById('no-results');
+            if (nores) nores.classList.toggle('hidden', !((q || filters.status !== 'all' || filters.city || filters.spec) && visible === 0));
+            const grid = document.getElementById('off-grid');
+            if (grid) grid.classList.toggle('hidden', Boolean((q || filters.status !== 'all' || filters.city || filters.spec) && visible === 0));
+            if (document.getElementById('ph-cnt'))
+                document.getElementById('ph-cnt').textContent = visible + T[lang].available;
+            if (document.getElementById('filter-count-val'))
+                document.getElementById('filter-count-val').textContent = visible;
+            const clearBtn = document.getElementById('pageClear');
+            if (clearBtn) clearBtn.classList.toggle('hidden', q === '');
+        }
+
+        function clearSearch() {
+            filters.status = 'all';
+            filters.city = '';
+            filters.spec = '';
+            document.querySelectorAll('.cui-chip').forEach(c => {
+                const isDefault = c.dataset.status === 'all' || c.hasAttribute('data-city') && !c.dataset.city || c.hasAttribute('data-spec') && !c.dataset.spec;
+                c.classList.toggle('active', Boolean(isDefault));
+            });
+            const input = document.getElementById('pageSearch');
+            if (input) input.value = '';
+            applyFilters();
+        }
+
+        function clearPageSearch() {
+            clearSearch();
+        }
+
+        function updateNavAuth() {
+            const u = window.AMRTM_USER;
+            if (!u) return;
+            document.getElementById('nb-guest').style.display = 'none';
+            const a = document.getElementById('nb-auth'); a.style.display = 'flex';
+            document.getElementById('nb-un').textContent = u.name.split(' ')[0];
+            const av = document.getElementById('nb-av');
+            if (av) av.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=006C35&color=fff&size=64`;
+            const dashUrl = u.role === 'admin'
+                ? (window.AMRTM_ROUTES.adminDashboard || '/amrtm/admin')
+                : (window.AMRTM_ROUTES.userDashboard || '/amrtm/dashboard');
+            document.getElementById('nb-dash-lnk').href = dashUrl;
+            document.getElementById('nb-user-chip').onclick = () => location.href = dashUrl;
+            if (document.getElementById('nl-da'))
+                document.getElementById('nl-da').textContent = u.role === 'admin'
+                    ? (lang === 'ar' ? 'لوحة التحكم' : 'Dashboard')
+                    : (lang === 'ar' ? 'حسابي' : 'My Account');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLang();
+            updateNavAuth();
+            document.getElementById('pageClear')?.addEventListener('click', clearPageSearch);
+            const stored = localStorage.getItem('amrtm_lang') || 'ar';
+            if (stored !== 'ar') applyLang();
+        });
+    </script>
+@endpush

@@ -1,0 +1,639 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>{{ $entity->name_ar }} | منصة آمر تم</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/new-logo1.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--pri:#1A237E;--pri2:#283593;--pri3:#1565C0;--bg:#F4F6FB;--sur:#fff;--sur2:#F0F3FF;--b1:rgba(26,35,126,.1);--b2:rgba(26,35,126,.28);--bc:rgba(26,35,126,.07);--t1:#0D1257;--t2:#3A4490;--t3:#7A82B8;--t4:#BDC2E0;--pd:rgba(26,35,126,.08);--pd2:rgba(26,35,126,.15);--sh:rgba(26,35,126,.08);--sh2:rgba(26,35,126,.18);}
+html,body{background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;}
+body.ar,body.ar *:not(i){font-family:'Cairo',sans-serif;direction:rtl;}
+body.en,body.en *:not(i){font-family:'Inter',sans-serif;direction:ltr;}
+
+/* NAVBAR */
+.nb{height:70px;display:flex;align-items:center;padding:0 2rem;gap:1rem;background:linear-gradient(135deg,#1A237E,#1565C0);box-shadow:0 2px 16px rgba(26,35,126,.3);position:sticky;top:0;z-index:200;}
+.nb-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.nb-logo-nm{font-size:20px;font-weight:900;color:#fff;}
+.nb-mid{flex:1;}
+.nb-right{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.lng{display:flex;padding:2px;border-radius:8px;background:rgba(255,255,255,.15);gap:1px;}
+.lt{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.55);transition:all .2s;}
+.lt.on{background:rgba(255,255,255,.22);color:#fff;}
+.nb-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .2s;border:none;text-decoration:none;}
+.nb-btn.out{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff;}
+.nb-btn.sol{background:#fff;color:var(--pri);}
+.nb-user{display:flex;align-items:center;gap:7px;padding:4px 10px;border-radius:9px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);cursor:pointer;}
+.nb-user-nm{font-size:12px;font-weight:700;color:#fff;}
+.nb-user-av{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,.35);}
+
+/* BREADCRUMB */
+.bc-bar{background:var(--sur);border-bottom:1px solid var(--bc);padding:.7rem 2rem;}
+.bc{display:flex;align-items:center;gap:6px;max-width:900px;margin:0 auto;font-size:12.5px;color:var(--t3);flex-wrap:wrap;}
+.bc a{color:var(--t3);text-decoration:none;transition:color .15s;}
+.bc a:hover{color:var(--pri);}
+.bc-sep{font-size:11px;}
+.bc-cur{color:var(--t2);font-weight:700;}
+
+/* ENTITY HERO */
+.ent-hero{background:linear-gradient(135deg,#1A237E,#1565C0);padding:1.8rem 2rem;}
+.ent-hero-in{max-width:900px;margin:0 auto;display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;}
+.ent-hero-ico{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;flex-shrink:0;}
+.ent-hero-nm{font-size:20px;font-weight:900;color:#fff;}
+.ent-hero-tag{font-size:12px;color:rgba(255,255,255,.7);margin-top:3px;}
+
+/* FORM CARD */
+.form-wrap{max-width:900px;margin:0 auto;padding:2rem;}
+.form-card{background:var(--sur);border-radius:20px;box-shadow:0 8px 32px var(--sh);overflow:hidden;border:1.5px solid var(--bc);}
+
+/* Login gate */
+.login-gate{padding:3rem 2rem;text-align:center;}
+.lg-ico{width:72px;height:72px;border-radius:50%;background:var(--pd);border:2px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--pri);margin:0 auto 1.2rem;}
+.lg-ttl{font-size:19px;font-weight:800;color:var(--t1);margin-bottom:.5rem;}
+.lg-sub{font-size:13.5px;color:var(--t2);line-height:1.8;margin-bottom:1.6rem;}
+.lg-btns{display:flex;flex-direction:column;gap:.75rem;max-width:360px;margin:0 auto;}
+.lg-btn-pri{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--pri),var(--pri3));color:#fff;font-family:inherit;font-size:14.5px;font-weight:800;text-decoration:none;}
+.lg-btn-sec{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:12px;background:transparent;color:var(--pri);font-family:inherit;font-size:14px;font-weight:700;text-decoration:none;border:1.5px solid var(--b2);}
+
+/* SERVICE BAR */
+.svc-sel-wrap{padding:1rem 1.5rem;border-bottom:1px solid var(--bc);}
+.svc-sel-wrap select{width:100%;height:46px;padding:0 14px;border-radius:11px;border:1.5px solid var(--b1);background:var(--sur);color:var(--t1);font-family:inherit;font-size:13.5px;outline:none;cursor:pointer;transition:border-color .2s;}
+.svc-sel-wrap select:focus{border-color:var(--pri);}
+.svc-bar{display:flex;align-items:center;gap:.9rem;padding:.9rem 1.5rem;background:#F8F9FF;border-bottom:1px solid var(--bc);}
+.svc-ico{width:42px;height:42px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.svc-ico i{font-size:20px;}
+.svc-nm{font-size:14px;font-weight:700;color:var(--t1);flex:1;}
+.svc-cat{font-size:11px;color:var(--t3);margin-top:2px;}
+.svc-price{font-size:16px;font-weight:900;color:var(--pri3);flex-shrink:0;}
+
+/* BALANCE BAR */
+.bal-bar{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.5rem;background:var(--pd);border-bottom:1px solid var(--b1);font-size:13px;flex-wrap:wrap;gap:.4rem;}
+.bal-lbl{color:var(--t2);font-weight:600;}
+.bal-val{font-weight:800;color:var(--pri);}
+
+/* FORM FIELDS */
+.fm-body{padding:1.5rem;}
+.fm-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.fld{margin-bottom:1rem;}
+.fld label{display:block;font-size:12.5px;font-weight:700;color:var(--t1);margin-bottom:5px;}
+.req{color:#C62828;margin-right:3px;}
+body.en .req{margin-right:0;margin-left:3px;}
+.fld input,.fld textarea,.fld select{width:100%;height:44px;padding:0 13px;border-radius:10px;border:1.5px solid var(--b1);background:var(--sur);color:var(--t1);font-family:inherit;font-size:13px;outline:none;transition:all .2s;box-shadow:0 1px 4px var(--sh);}
+.fld textarea{height:80px;padding:10px 13px;resize:vertical;}
+.fld input:focus,.fld textarea:focus,.fld select:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--pd);}
+.fld input.err{border-color:#C62828;}
+.ferr{font-size:11px;color:#C62828;margin-top:4px;display:none;align-items:center;gap:3px;}
+.ferr.show{display:flex;}
+
+/* FILE UPLOAD */
+.f-area{border:2px dashed var(--b2);border-radius:12px;padding:1.2rem;text-align:center;background:#F8F9FF;cursor:pointer;transition:all .2s;position:relative;}
+.f-area:hover{border-color:var(--pri);background:var(--pd);}
+.f-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.f-area-ico{font-size:26px;color:var(--t3);}
+.f-area-t{font-size:12.5px;font-weight:700;color:var(--t2);margin-top:.4rem;}
+.f-area-s{font-size:11px;color:var(--t3);margin-top:3px;}
+.f-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:.7rem;justify-content:center;}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:7px;background:var(--pd2);color:var(--pri);font-size:11px;font-weight:600;}
+.chip-x{cursor:pointer;color:var(--t3);font-size:12px;}
+.chip-x:hover{color:#C62828;}
+
+/* PRIVACY */
+.prv{display:flex;align-items:flex-start;gap:7px;padding:.8rem 1rem;border-radius:10px;background:var(--pd);border:1px solid var(--b1);margin-bottom:1rem;font-size:12px;color:var(--t2);line-height:1.7;}
+.prv i{font-size:15px;color:var(--pri3);flex-shrink:0;margin-top:1px;}
+
+/* SUBMIT */
+.fm-sub{width:100%;height:50px;background:linear-gradient(135deg,var(--pri),var(--pri3));color:#fff;font-family:inherit;font-size:15px;font-weight:800;border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 5px 18px var(--sh2);transition:all .25s;}
+.fm-sub:hover{transform:translateY(-2px);}
+.fm-sub.ld{opacity:.75;pointer-events:none;}
+.spin{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;display:none;}
+.fm-sub.ld .spin{display:block;}
+.fm-sub.ld .stxt{display:none;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* SUCCESS */
+.succ{display:none;flex-direction:column;align-items:center;padding:3rem 2rem;text-align:center;}
+.succ.on{display:flex;}
+.succ-ico{width:72px;height:72px;border-radius:50%;background:rgba(27,94,32,.1);border:2px solid rgba(27,94,32,.2);display:flex;align-items:center;justify-content:center;font-size:32px;color:#1B5E20;margin-bottom:1.1rem;}
+.succ-ttl{font-size:19px;font-weight:800;color:var(--t1);margin-bottom:.5rem;}
+.succ-sub{font-size:13.5px;color:var(--t2);line-height:1.8;max-width:360px;}
+.succ-ref{margin-top:1rem;padding:.7rem 1.4rem;border-radius:10px;background:var(--pd);border:1px solid var(--b1);font-size:13px;color:var(--pri);font-weight:700;}
+.succ-btns{display:flex;gap:10px;margin-top:1.4rem;flex-wrap:wrap;justify-content:center;}
+.s-b1{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;background:var(--pri);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;text-decoration:none;}
+.s-b2{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;background:transparent;color:var(--pri);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:1.5px solid var(--b2);}
+
+/* TOAST */
+#amrtm-toast{display:none;}
+
+/* FOOTER */
+.footer{background:linear-gradient(135deg,#1A237E,#1565C0);margin-top:2rem;padding:1.2rem 2rem;text-align:center;}
+.f-cp{font-size:12px;color:rgba(255,255,255,.55);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(26,35,126,.2);border-radius:4px;}
+@media(max-width:600px){
+  .nb{padding:0 1rem;}
+  .form-wrap{padding:1.2rem 1rem;}
+  .fm-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body class="ar">
+
+<!-- NAVBAR -->
+<nav class="nb">
+  <a class="nb-logo" href="{{ route('amrtm.index') }}">
+    <div><div class="nb-logo-nm">آمر تم</div></div>
+  </a>
+  <div class="nb-mid"></div>
+  <div class="nb-right">
+    <div class="lng"><div class="lt on" id="la" onclick="setLang('ar')">AR</div><div class="lt" id="le" onclick="setLang('en')">EN</div></div>
+    <div id="nb-guest" style="display:flex;gap:6px;">
+      <a class="nb-btn out" href="{{ route('amrtm.login') }}?redirect={{ urlencode(request()->fullUrl()) }}"><i class="ti ti-login"></i><span id="nl-li">دخول</span></a>
+      <a class="nb-btn sol" href="{{ route('amrtm.register') }}"><i class="ti ti-user-plus"></i><span id="nl-re">تسجيل</span></a>
+    </div>
+    <div id="nb-auth" style="display:none;gap:6px;align-items:center;">
+      <a class="nb-btn out" id="nb-dash-lnk" href="{{ route('amrtm.user.dashboard') }}"><i class="ti ti-layout-dashboard"></i><span id="nl-da">حسابي</span></a>
+      <div class="nb-user" id="nb-user-chip">
+        <img class="nb-user-av" id="nb-av" src="" alt=""/>
+        <span class="nb-user-nm" id="nb-un"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="bc-bar">
+  <div class="bc">
+    <a href="{{ route('amrtm.index') }}" id="bc-home"><i class="ti ti-home-2" style="font-size:13px;"></i> الرئيسية</a>
+    <span class="bc-sep"><i class="ti ti-chevron-left" style="font-size:11px;"></i></span>
+    <a href="{{ route('amrtm.catalog.category', $category->key) }}" id="bc-cat">{{ $category->name_ar }}</a>
+    <span class="bc-sep"><i class="ti ti-chevron-left" style="font-size:11px;"></i></span>
+    <span class="bc-cur" id="bc-ent">{{ $entity->name_ar }}</span>
+  </div>
+</div>
+
+<!-- ENTITY HERO -->
+<div class="ent-hero">
+  <div class="ent-hero-in">
+    <div class="ent-hero-ico"><i class="ti {{ $entity->icon ?? 'ti-building' }}"></i></div>
+    <div>
+      <div class="ent-hero-nm" id="ent-nm">{{ $entity->name_ar }}</div>
+      <div class="ent-hero-tag" id="ent-tag">{{ $entity->tag_ar ?? '' }}</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM CARD -->
+<div class="form-wrap">
+  <div class="form-card">
+
+    @guest('business')
+    <!-- LOGIN GATE (not logged in) -->
+    <div class="login-gate">
+      <div class="lg-ico"><i class="ti ti-lock"></i></div>
+      <div class="lg-ttl" id="lg-ttl">تسجيل الدخول مطلوب</div>
+      <p class="lg-sub" id="lg-sub">لتقديم طلب خدمة يجب أن يكون لديك حساب مسجل في المنصة. سجّل دخولك أو أنشئ حساباً جديداً مجاناً.</p>
+      <div class="lg-btns">
+        <a class="lg-btn-pri" href="{{ route('amrtm.login') }}?redirect={{ urlencode(request()->fullUrl()) }}">
+          <i class="ti ti-login"></i> <span id="lg-login-lbl">تسجيل الدخول</span>
+        </a>
+        <a class="lg-btn-sec" href="{{ route('amrtm.register') }}">
+          <i class="ti ti-user-plus"></i> <span id="lg-reg-lbl">إنشاء حساب جديد</span>
+        </a>
+      </div>
+    </div>
+    @else
+    <!-- SERVICE FORM (logged in) -->
+
+    <!-- Success state -->
+    <div class="succ" id="fm-succ">
+      <div class="succ-ico"><i class="ti ti-circle-check"></i></div>
+      <div class="succ-ttl" id="sc-t">تم تقديم طلبك بنجاح!</div>
+      <div class="succ-sub" id="sc-s">سيتم مراجعة طلبك والتواصل معك خلال المدة المحددة.</div>
+      <div class="succ-ref" id="sc-r">رقم الطلب: —</div>
+      <div class="succ-btns">
+        <a class="s-b1" href="{{ route('amrtm.user.dashboard') }}" id="sc-d">
+          <i class="ti ti-layout-dashboard"></i><span id="sc-dl">تابع طلبك</span>
+        </a>
+        <button class="s-b2" onclick="rstFm()" id="sc-n"><span id="sc-nl">طلب جديد</span></button>
+      </div>
+    </div>
+
+    <!-- Form inner -->
+    <div id="fm-in">
+      <!-- Service selector -->
+      <div class="svc-sel-wrap">
+        <select id="fm-sel" onchange="onSelChange(this)">
+          <option value="">اختر الخدمة المطلوبة...</option>
+          @foreach($entity->govServices as $svc)
+            <option value="{{ $svc->id }}" data-price="{{ $svc->price }}" data-icon="{{ $svc->icon ?? 'ti-file-text' }}"
+                    data-name-ar="{{ $svc->name_ar }}" data-name-en="{{ $svc->name_en }}"
+                    data-days="{{ $svc->estimated_days ?? 0 }}">
+              {{ $svc->name_ar }} — {{ $svc->price }} ر.س
+            </option>
+          @endforeach
+        </select>
+      </div>
+
+      <!-- Service info bar -->
+      <div class="svc-bar" id="svc-bar" style="display:none;">
+        <div class="svc-ico" id="svc-ico"><i class="ti ti-file-text" id="svc-ico-i"></i></div>
+        <div style="flex:1;">
+          <div class="svc-nm" id="svc-nm">—</div>
+          <div class="svc-cat" id="svc-days">—</div>
+        </div>
+        <div class="svc-price" id="svc-price">—</div>
+      </div>
+
+      <!-- Balance bar -->
+      <div class="bal-bar" id="bal-bar">
+        <span class="bal-lbl" id="bal-lbl">رصيدك الحالي:</span>
+        <span class="bal-val" id="bal-val">...</span>
+      </div>
+
+      <!-- Fields -->
+      <div class="fm-body">
+        <div class="fm-row">
+          <div class="fld">
+            <label><span class="req">*</span><span id="ln">الاسم الكامل</span></label>
+            <input type="text" id="fn" value="{{ auth('business')->user()->name ?? '' }}"/>
+            <div class="ferr" id="en"><i class="ti ti-alert-circle"></i><span id="ent">مطلوب</span></div>
+          </div>
+          <div class="fld">
+            <label><span class="req">*</span><span id="lid">رقم الهوية / الإقامة</span></label>
+            <input type="text" id="fid" maxlength="10"/>
+            <div class="ferr" id="eid"><i class="ti ti-alert-circle"></i><span id="eidt">غير صحيح</span></div>
+          </div>
+        </div>
+        <div class="fm-row">
+          <div class="fld">
+            <label><span class="req">*</span><span id="lph">رقم الجوال</span></label>
+            <input type="tel" id="fph" value="{{ auth('business')->user()->phone ?? '' }}"/>
+            <div class="ferr" id="eph"><i class="ti ti-alert-circle"></i><span id="epht">غير صحيح</span></div>
+          </div>
+          <div class="fld">
+            <label><span class="req">*</span><span id="lem">البريد الإلكتروني</span></label>
+            <input type="email" id="fem" value="{{ auth('business')->user()->email ?? '' }}"/>
+            <div class="ferr" id="eem"><i class="ti ti-alert-circle"></i><span id="eemt">غير صحيح</span></div>
+          </div>
+        </div>
+        <div class="fm-row">
+          <div class="fld"><label><span id="lco">اسم الشركة</span></label><input type="text" id="fco"/></div>
+          <div class="fld"><label><span id="lcr">السجل التجاري</span></label><input type="text" id="fcr"/></div>
+        </div>
+        <div class="fld">
+          <label><span id="lno">ملاحظات</span></label>
+          <textarea id="fno"></textarea>
+        </div>
+        <div class="fld">
+          <label id="lfi">إرفاق ملفات</label>
+          <div class="f-area" id="f-area">
+            <input type="file" id="ffi" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="hndFiles(this)"/>
+            <div class="f-area-ico"><i class="ti ti-cloud-upload"></i></div>
+            <div class="f-area-t" id="fat">اضغط لرفع الملفات أو اسحبها هنا</div>
+            <div class="f-area-s" id="fas">PDF, JPG, PNG — حد أقصى 10MB</div>
+            <div class="f-chips" id="f-chips"></div>
+          </div>
+        </div>
+        <div class="prv"><i class="ti ti-shield-check"></i><span id="prv-t">بياناتك محمية ومشفرة. لن يتم مشاركتها مع أي جهة خارجية دون موافقتك.</span></div>
+        <button class="fm-sub" id="fm-sub" onclick="sbmFm()">
+          <span class="stxt" id="fm-st"><i class="ti ti-send"></i> تقديم الطلب</span>
+          <div class="spin"></div>
+        </button>
+      </div>
+    </div><!-- /fm-in -->
+
+    @endguest
+  </div><!-- /form-card -->
+</div><!-- /form-wrap -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="f-cp" id="fcp">© 2025 <b style="color:rgba(255,255,255,.85);">آمر تم</b> — جميع الحقوق محفوظة</div>
+</footer>
+
+<script>
+window.AMRTM_USER = {!! auth('business')->check() ? json_encode([
+    'id'      => auth('business')->id(),
+    'name'    => auth('business')->user()->name,
+    'email'   => auth('business')->user()->email,
+    'phone'   => auth('business')->user()->phone ?? '',
+    'role'    => auth('business')->user()->role,
+    'balance' => 0,
+]) : 'null' !!};
+window.AMRTM_CSRF     = '{{ csrf_token() }}';
+window.AMRTM_API_BASE = '{{ url("/amrtm/api") }}';
+window.AMRTM_ROUTES = {
+    login:         '{{ route("amrtm.login") }}',
+    logout:        '{{ route("amrtm.logout") }}',
+    home:          '{{ route("amrtm.index") }}',
+    userDashboard: '{{ route("amrtm.user.dashboard") }}',
+    adminDashboard:'{{ route("amrtm.admin.dashboard") }}',
+    catalogCat:    '{{ route("amrtm.catalog.category", $category->key) }}',
+};
+
+const pageData = {
+    entityId:   {{ $entity->id }},
+    entityKey:  '{{ $category->key }}',
+    entityName: { ar:'{{ $entity->name_ar }}', en:'{{ $entity->name_en }}' },
+    entityTag:  { ar:'{{ $entity->tag_ar ?? "" }}', en:'{{ $entity->tag_en ?? "" }}' },
+    catName:    { ar:'{{ $category->name_ar }}', en:'{{ $category->name_en }}' },
+};
+
+const T = {
+  ar:{
+    home:'الرئيسية',li:'دخول',re:'تسجيل',da:'حسابي',dash:'لوحة التحكم',
+    sel:'اختر الخدمة المطلوبة...',days:'مدة الإنجاز:',dayUnit:' يوم',
+    bl:'رصيدك الحالي:',sar:'ر.س',
+    ln:'الاسم الكامل',lid:'رقم الهوية / الإقامة',lph:'رقم الجوال',lem:'البريد الإلكتروني',
+    lco:'اسم الشركة',lcr:'السجل التجاري',lno:'ملاحظات',lfi:'إرفاق ملفات',
+    fat:'اضغط لرفع الملفات أو اسحبها هنا',fas:'PDF, JPG, PNG — حد أقصى 10MB',
+    prv:'بياناتك محمية ومشفرة. لن يتم مشاركتها مع أي جهة خارجية دون موافقتك.',
+    sub:'تقديم الطلب',erq:'مطلوب',eid:'غير صحيح',eph:'غير صحيح',eem:'غير صحيح',
+    sct:'تم تقديم طلبك بنجاح!',scs:'سيتم مراجعة طلبك والتواصل معك خلال المدة المحددة.',
+    scr:'رقم الطلب: ',scd:'تابع طلبك',scn:'طلب جديد',
+    noSvc:'اختر الخدمة أولاً',noBal:'رصيدك غير كافٍ — اشحن رصيدك من حسابك.',
+    lgTtl:'تسجيل الدخول مطلوب',lgSub:'لتقديم طلب خدمة يجب أن يكون لديك حساب مسجل في المنصة.',
+    lgLogin:'تسجيل الدخول',lgReg:'إنشاء حساب جديد',
+  },
+  en:{
+    home:'Home',li:'Sign In',re:'Register',da:'My Account',dash:'Dashboard',
+    sel:'Select required service...',days:'Completion time:',dayUnit:' days',
+    bl:'Your balance:',sar:'SAR',
+    ln:'Full Name',lid:'ID / Residency Number',lph:'Mobile Number',lem:'Email Address',
+    lco:'Company Name',lcr:'Commercial Registration',lno:'Notes',lfi:'Attach Files',
+    fat:'Click to upload or drag & drop',fas:'PDF, JPG, PNG — Max 10MB',
+    prv:'Your data is protected and encrypted. It will not be shared with any third party.',
+    sub:'Submit Application',erq:'Required',eid:'Invalid',eph:'Invalid',eem:'Invalid',
+    sct:'Application Submitted Successfully!',scs:'Your application will be reviewed and we will contact you within the specified time.',
+    scr:'Reference: ',scd:'Track Request',scn:'New Request',
+    noSvc:'Select a service first',noBal:'Insufficient balance — top up from your account.',
+    lgTtl:'Login Required',lgSub:'You need a registered account to submit a service request.',
+    lgLogin:'Sign In',lgReg:'Create New Account',
+  },
+};
+
+let lang = localStorage.getItem('amrtm_lang') || 'ar';
+let files = [];
+let curBalance = 0;
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('amrtm_lang', l);
+  document.body.className = l;
+  document.getElementById('la').className = 'lt' + (l==='ar'?' on':'');
+  document.getElementById('le').className = 'lt' + (l==='en'?' on':'');
+  applyLang();
+}
+
+function applyLang() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir  = lang==='ar' ? 'rtl' : 'ltr';
+  document.getElementById('nl-li').textContent  = t.li;
+  document.getElementById('nl-re').textContent  = t.re;
+  document.getElementById('nl-da').textContent  = t.da;
+  document.getElementById('bc-home').childNodes[1].textContent = ' ' + t.home;
+  document.getElementById('bc-cat').textContent  = pageData.catName[lang];
+  document.getElementById('bc-ent').textContent  = pageData.entityName[lang];
+  document.getElementById('ent-nm').textContent  = pageData.entityName[lang];
+  document.getElementById('ent-tag').textContent = pageData.entityTag[lang];
+
+  // Form labels
+  const ids = ['ln','lid','lph','lem','lco','lcr','lno','lfi','fat','fas','prv-t'];
+  ids.forEach(id => { const el=document.getElementById(id); if(el) el.textContent=t[id]||t[id.replace('l','').toLowerCase()]||t[id]; });
+  // Re-map specific ids
+  if(document.getElementById('ln'))    document.getElementById('ln').textContent    = t.ln;
+  if(document.getElementById('lid'))   document.getElementById('lid').textContent   = t.lid;
+  if(document.getElementById('lph'))   document.getElementById('lph').textContent   = t.lph;
+  if(document.getElementById('lem'))   document.getElementById('lem').textContent   = t.lem;
+  if(document.getElementById('lco'))   document.getElementById('lco').textContent   = t.lco;
+  if(document.getElementById('lcr'))   document.getElementById('lcr').textContent   = t.lcr;
+  if(document.getElementById('lno'))   document.getElementById('lno').textContent   = t.lno;
+  if(document.getElementById('lfi'))   document.getElementById('lfi').textContent   = t.lfi;
+  if(document.getElementById('fat'))   document.getElementById('fat').textContent   = t.fat;
+  if(document.getElementById('fas'))   document.getElementById('fas').textContent   = t.fas;
+  if(document.getElementById('prv-t')) document.getElementById('prv-t').textContent = t.prv;
+  if(document.getElementById('fm-st')) document.getElementById('fm-st').innerHTML   = `<i class="ti ti-send"></i> ${t.sub}`;
+  if(document.getElementById('bal-lbl')) document.getElementById('bal-lbl').textContent = t.bl;
+  if(document.getElementById('sc-t'))  document.getElementById('sc-t').textContent  = t.sct;
+  if(document.getElementById('sc-s'))  document.getElementById('sc-s').textContent  = t.scs;
+  if(document.getElementById('sc-dl')) document.getElementById('sc-dl').textContent = t.scd;
+  if(document.getElementById('sc-nl')) document.getElementById('sc-nl').textContent = t.scn;
+  if(document.getElementById('ent'))   document.getElementById('ent').textContent   = t.erq;
+  if(document.getElementById('eidt'))  document.getElementById('eidt').textContent  = t.eid;
+  if(document.getElementById('epht'))  document.getElementById('epht').textContent  = t.eph;
+  if(document.getElementById('eemt'))  document.getElementById('eemt').textContent  = t.eem;
+
+  // Service select placeholder
+  const sel = document.getElementById('fm-sel');
+  if(sel && sel.options[0] && sel.options[0].value==='') sel.options[0].text = t.sel;
+  // Update service option labels
+  if(sel) {
+    Array.from(sel.options).forEach(opt => {
+      if(!opt.value) return;
+      const nameAr = opt.dataset.nameAr;
+      const nameEn = opt.dataset.nameEn;
+      const price  = opt.dataset.price;
+      opt.text = (lang==='ar' ? nameAr : nameEn) + ' — ' + price + ' ' + t.sar;
+    });
+  }
+  // Re-render service bar if a service is selected
+  const selEl = document.getElementById('fm-sel');
+  if(selEl && selEl.value) onSelChange(selEl);
+  // Login gate labels
+  if(document.getElementById('lg-ttl'))      document.getElementById('lg-ttl').textContent      = t.lgTtl;
+  if(document.getElementById('lg-sub'))      document.getElementById('lg-sub').textContent      = t.lgSub;
+  if(document.getElementById('lg-login-lbl')) document.getElementById('lg-login-lbl').textContent = t.lgLogin;
+  if(document.getElementById('lg-reg-lbl'))  document.getElementById('lg-reg-lbl').textContent  = t.lgReg;
+}
+
+function updateNavAuth() {
+  const u = window.AMRTM_USER;
+  if (u) {
+    document.getElementById('nb-guest').style.display = 'none';
+    const a = document.getElementById('nb-auth'); a.style.display = 'flex';
+    document.getElementById('nb-un').textContent = u.name.split(' ')[0];
+    const av = document.getElementById('nb-av');
+    av.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=1A237E&color=fff&size=64`;
+    const dashUrl = u.role==='admin' ? (AMRTM_ROUTES.adminDashboard||'/amrtm/admin') : (AMRTM_ROUTES.userDashboard||'/amrtm/dashboard');
+    document.getElementById('nb-dash-lnk').href = dashUrl;
+    document.getElementById('nb-user-chip').onclick = () => location.href = dashUrl;
+    document.getElementById('nl-da').textContent = u.role==='admin' ? (lang==='ar'?'لوحة التحكم':'Dashboard') : (lang==='ar'?'حسابي':'My Account');
+  }
+}
+
+async function loadBalance() {
+  try {
+    const res = await fetch(window.AMRTM_API_BASE + '/dashboard/user', {
+      headers:{ 'Accept':'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF },
+      credentials:'same-origin',
+    });
+    if(res.ok) {
+      const d = await res.json();
+      curBalance = parseFloat(d.balance ?? d.stats?.balance ?? 0);
+      const el = document.getElementById('bal-val');
+      if(el) el.textContent = curBalance.toFixed(2) + ' ' + T[lang].sar;
+      if(window.AMRTM_USER) window.AMRTM_USER.balance = curBalance;
+    }
+  } catch(_) {}
+}
+
+function onSelChange(sel) {
+  const t = T[lang];
+  const opt = sel.options[sel.selectedIndex];
+  const bar = document.getElementById('svc-bar');
+  if(!opt || !opt.value) { if(bar) bar.style.display='none'; return; }
+  if(bar) bar.style.display='flex';
+  const icon  = opt.dataset.icon || 'ti-file-text';
+  const price = parseFloat(opt.dataset.price||0);
+  const days  = parseInt(opt.dataset.days||0);
+  const nm    = lang==='ar' ? opt.dataset.nameAr : opt.dataset.nameEn;
+  document.getElementById('svc-ico-i').className = 'ti ' + icon;
+  document.getElementById('svc-ico').style.background = '{{ $entity->bg ?? "rgba(26,35,126,.09)" }}';
+  document.getElementById('svc-nm').textContent    = nm;
+  document.getElementById('svc-days').textContent  = days ? t.days + ' ' + days + t.dayUnit : '';
+  document.getElementById('svc-price').textContent = price.toFixed(2) + ' ' + t.sar;
+  document.getElementById('svc-price').style.color = '{{ $entity->color ?? "#1565C0" }}';
+}
+
+/* ── FILE HANDLING ── */
+function hndFiles(inp) {
+  Array.from(inp.files).forEach(f => {
+    if(f.size > 10*1024*1024) return;
+    files.push(f);
+  });
+  renderChips();
+  inp.value = '';
+}
+function renderChips() {
+  document.getElementById('f-chips').innerHTML = files.map((f,i)=>
+    `<div class="chip"><i class="ti ti-file"></i>${f.name.length>18?f.name.slice(0,15)+'...':f.name}<span class="chip-x" onclick="rmFile(${i})"><i class="ti ti-x"></i></span></div>`
+  ).join('');
+}
+function rmFile(i) { files.splice(i,1); renderChips(); }
+
+/* ── VALIDATION ── */
+function validate() {
+  const t = T[lang];
+  let ok = true;
+  const req = (id, errId, msg) => {
+    const v = document.getElementById(id)?.value.trim();
+    const e = document.getElementById(errId);
+    if(!v){ if(e){e.querySelector('span').textContent=msg;e.classList.add('show');} document.getElementById(id)?.classList.add('err'); ok=false; }
+    else  { if(e) e.classList.remove('show'); document.getElementById(id)?.classList.remove('err'); }
+  };
+  req('fn','en',t.erq);
+  req('fid','eid',t.erq);
+  req('fph','eph',t.erq);
+  req('fem','eem',t.erq);
+  const idv = document.getElementById('fid')?.value.trim();
+  if(idv && !/^\d{10}$/.test(idv)){
+    const e=document.getElementById('eid');
+    if(e){e.querySelector('span').textContent=t.eid;e.classList.add('show');}
+    document.getElementById('fid')?.classList.add('err');ok=false;
+  }
+  const phv = document.getElementById('fph')?.value.trim();
+  if(phv && !/^[0-9+]{9,15}$/.test(phv)){
+    const e=document.getElementById('eph');
+    if(e){e.querySelector('span').textContent=t.eph;e.classList.add('show');}
+    document.getElementById('fph')?.classList.add('err');ok=false;
+  }
+  return ok;
+}
+
+/* ── SUBMIT ── */
+async function sbmFm() {
+  const t = T[lang];
+  const selEl = document.getElementById('fm-sel');
+  if(!selEl?.value) { showToast(t.noSvc, 'warning'); return; }
+  if(!validate()) return;
+  const opt   = selEl.options[selEl.selectedIndex];
+  const price = parseFloat(opt.dataset.price||0);
+  if(price > 0 && curBalance < price) { showToast(t.noBal, 'error'); return; }
+  const btn = document.getElementById('fm-sub');
+  btn.classList.add('ld');
+  const fd = new FormData();
+  fd.append('service_id', selEl.value);
+  fd.append('full_name',   document.getElementById('fn')?.value.trim()||'');
+  fd.append('national_id', document.getElementById('fid')?.value.trim()||'');
+  fd.append('phone',       document.getElementById('fph')?.value.trim()||'');
+  fd.append('email',       document.getElementById('fem')?.value.trim()||'');
+  fd.append('company_name',document.getElementById('fco')?.value.trim()||'');
+  fd.append('cr_number',   document.getElementById('fcr')?.value.trim()||'');
+  fd.append('notes',       document.getElementById('fno')?.value.trim()||'');
+  files.forEach((f,i) => fd.append(`attachments[${i}]`, f));
+  try {
+    const res = await fetch(window.AMRTM_API_BASE + '/requests', {
+      method:'POST',
+      headers:{'Accept':'application/json','X-CSRF-TOKEN':window.AMRTM_CSRF},
+      credentials:'same-origin',
+      body:fd,
+    });
+    const d = await res.json();
+    if(res.ok) {
+      document.getElementById('fm-in').style.display='none';
+      const succ = document.getElementById('fm-succ');
+      succ.classList.add('on');
+      const ref = d.request?.reference_number || d.reference_number || '';
+      document.getElementById('sc-r').textContent = t.scr + (ref || '—');
+      succ.scrollIntoView({behavior:'smooth',block:'start'});
+    } else {
+      const msg = d.message || d.error || 'فشل تقديم الطلب';
+      showToast(msg,'error');
+    }
+  } catch(err) {
+    showToast('حدث خطأ — تحقق من اتصالك وأعد المحاولة','error');
+  }
+  btn.classList.remove('ld');
+}
+
+function rstFm() {
+  document.getElementById('fm-in').style.display='';
+  document.getElementById('fm-succ').classList.remove('on');
+  document.getElementById('fm-sel').value='';
+  const bar = document.getElementById('svc-bar');
+  if(bar) bar.style.display='none';
+  ['fn','fid','fph','fem','fco','fcr','fno'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el && id==='fn') el.value = window.AMRTM_USER?.name||'';
+    else if(el && id==='fph') el.value = window.AMRTM_USER?.phone||'';
+    else if(el && id==='fem') el.value = window.AMRTM_USER?.email||'';
+    else if(el) el.value='';
+  });
+  files=[];renderChips();
+}
+
+/* ── TOAST ── */
+function showToast(message, type='success', duration=3500) {
+  const existing = document.getElementById('amrtm-toast');
+  if(existing) existing.remove();
+  const colors = {
+    success:{bg:'rgba(27,94,32,.95)',icon:'ti-circle-check'},
+    error:  {bg:'rgba(198,40,40,.95)',icon:'ti-alert-circle'},
+    info:   {bg:'rgba(26,35,126,.95)',icon:'ti-info-circle'},
+    warning:{bg:'rgba(230,81,0,.95)',icon:'ti-alert-triangle'},
+  };
+  const c = colors[type]||colors.info;
+  const toast = document.createElement('div');
+  toast.id='amrtm-toast';
+  toast.style.cssText=`position:fixed;bottom:24px;${lang==='ar'?'right':'left'}:24px;z-index:9999;background:${c.bg};color:#fff;padding:12px 18px;border-radius:12px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:0 8px 24px rgba(0,0,0,.25);font-family:'Cairo',sans-serif;max-width:340px;`;
+  toast.innerHTML=`<i class="ti ${c.icon}" style="font-size:18px;flex-shrink:0;"></i><span>${message}</span>`;
+  document.body.appendChild(toast);
+  setTimeout(()=>{toast.style.opacity='0';toast.style.transition='opacity .3s';setTimeout(()=>toast.remove(),300);},duration);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  applyLang();
+  updateNavAuth();
+  const stored = localStorage.getItem('amrtm_lang')||'ar';
+  if(stored !== 'ar') setLang(stored);
+  if(window.AMRTM_USER) loadBalance();
+});
+</script>
+</body>
+</html>

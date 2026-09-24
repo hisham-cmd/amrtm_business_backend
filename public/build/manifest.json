@@ -1,0 +1,39 @@
+{
+  "_index-D8uwPWPx.js": {
+    "file": "assets/index-D8uwPWPx.js",
+    "name": "index"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-CciOqfLd.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-JIlngQ_L.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_index-D8uwPWPx.js"
+    ]
+  },
+  "resources/js/consultants2.js": {
+    "file": "assets/consultants2-C4SJVNkm.js",
+    "name": "consultants2",
+    "src": "resources/js/consultants2.js",
+    "isEntry": true,
+    "imports": [
+      "_index-D8uwPWPx.js"
+    ]
+  },
+  "resources/js/qr.js": {
+    "file": "assets/qr-SvWNh55s.js",
+    "name": "qr",
+    "src": "resources/js/qr.js",
+    "isEntry": true
+  }
+}

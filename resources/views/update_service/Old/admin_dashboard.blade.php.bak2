@@ -1,0 +1,2684 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>لوحة التحكم | آمر تم</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/new-logo1.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--pri:#1A237E;--pri2:#283593;--pri3:#1565C0;--bg:#F0F2F8;--sur:#fff;--sur2:#F4F6FB;--b1:rgba(26,35,126,.1);--b2:rgba(26,35,126,.2);--bc:rgba(26,35,126,.07);--t1:#0D1257;--t2:#3A4490;--t3:#7A82B8;--t4:#BDC2E0;--pd:rgba(26,35,126,.08);--pd2:rgba(26,35,126,.14);--sh:rgba(26,35,126,.07);--sh2:rgba(26,35,126,.15);--hf:#1A237E;--ht:#1565C0;--sb-w:230px;--green:#1B5E20;--orange:#E65100;--red:#C62828;--blue:#0277BD;--yellow:#F9A825;--purple:#6A1B9A;}
+html,body{height:100%;background:var(--bg);color:var(--t1);overflow:hidden;}
+body.ar{font-family:'Cairo',sans-serif;direction:rtl;}
+body.en{font-family:'Inter',sans-serif;direction:ltr;}
+.layout{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sb{width:var(--sb-w);flex-shrink:0;background:linear-gradient(180deg,var(--hf) 0%,#0D1560 100%);display:flex;flex-direction:column;height:100vh;overflow-y:auto;z-index:50;}
+.sb::-webkit-scrollbar{width:3px;}
+.sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:3px;}
+.sb-logo{display:flex;align-items:center;gap:9px;padding:1.2rem 1rem;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-logo-img{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.sb-logo-img img{width:30px;height:30px;object-fit:contain;}
+.sb-logo-nm{font-size:15px;font-weight:900;color:#fff;}
+.sb-logo-sb{font-size:9px;color:rgba(255,255,255,.55);}
+.sb-nav{flex:1;padding:.7rem .6rem;}
+.sb-sec{font-size:9.5px;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.35);font-weight:700;padding:.4rem .6rem;margin-top:.5rem;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:.62rem .85rem;border-radius:10px;cursor:pointer;transition:all .2s;color:rgba(255,255,255,.55);font-size:13px;font-weight:600;margin-bottom:2px;}
+.sb-item:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9);}
+.sb-item.on{background:rgba(255,255,255,.15);color:#fff;}
+.sb-item i{font-size:17px;flex-shrink:0;}
+.sb-badge{margin-right:auto;padding:2px 6px;border-radius:8px;background:rgba(198,40,40,.4);color:#fff;font-size:10px;font-weight:700;}
+body.en .sb-badge{margin-right:0;margin-left:auto;}
+.sb-bottom{padding:.7rem .6rem;border-top:1px solid rgba(255,255,255,.08);}
+.sb-profile{display:flex;align-items:center;gap:8px;padding:.7rem .85rem;border-radius:10px;background:rgba(255,255,255,.08);}
+.sb-av{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.3);flex-shrink:0;background:var(--pri);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;}
+.sb-un{font-size:12.5px;font-weight:700;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sb-role{font-size:10px;color:rgba(255,255,255,.5);}
+.sb-logout{font-size:16px;color:rgba(255,255,255,.4);cursor:pointer;transition:.2s;flex-shrink:0;}
+.sb-logout:hover{color:#fff;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.topbar{height:60px;display:flex;align-items:center;padding:0 1.8rem;gap:1rem;background:var(--sur);border-bottom:1px solid var(--b1);position:sticky;top:0;z-index:40;box-shadow:0 2px 8px var(--sh);flex-shrink:0;}
+.tb-title{font-size:16px;font-weight:800;color:var(--t1);}
+.tb-right{margin-right:auto;display:flex;align-items:center;gap:7px;}
+body.en .tb-right{margin-right:0;margin-left:auto;}
+.tb-srch{position:relative;}
+.tb-srch input{height:36px;width:220px;padding:0 36px 0 13px;border-radius:9px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13px;outline:none;transition:border-color .2s;}
+body.en .tb-srch input{padding:0 13px 0 36px;}
+.tb-srch input:focus{border-color:var(--pri);}
+.tb-srch input::placeholder{color:var(--t3);}
+.tb-srch-ico{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:15px;pointer-events:none;}
+body.en .tb-srch-ico{right:auto;left:10px;}
+.lng{display:flex;padding:2px;border-radius:8px;background:var(--sur2);border:1px solid var(--b1);gap:1px;}
+.lt{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:var(--t3);transition:all .2s;}
+.lt.on{background:var(--pri);color:#fff;}
+.tb-icon{width:34px;height:34px;border-radius:8px;border:1px solid var(--b1);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);font-size:16px;transition:all .2s;position:relative;}
+.tb-icon:hover{background:var(--pd);color:var(--pri);}
+.notif-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid var(--sur);font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
+body.en .notif-badge{right:auto;left:-3px;}
+
+/* CONTENT */
+.content{padding:1.6rem 1.8rem;flex:1;}
+.page{display:none;}
+.page.on{display:block;animation:fu .28s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.pg-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:.8rem;}
+.pg-ttl{font-size:19px;font-weight:800;color:var(--t1);}
+.pg-sub{font-size:12.5px;color:var(--t3);margin-top:3px;}
+.btn-pri{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;background:var(--pri);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;box-shadow:0 3px 10px var(--sh2);transition:all .2s;}
+.btn-pri:hover{background:var(--pri2);transform:translateY(-1px);}
+
+
+/**welcome cards */
+
+.welcome-card{
+    max-width:700px;
+    margin:60px auto;
+    padding:45px;
+    background:#fff;
+    border-radius:20px;
+    text-align:center;
+    border:1px solid #e8edf5;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+}
+
+.welcome-icon{
+    width:90px;
+    height:90px;
+    margin:0 auto 25px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#1a6d7e,#1565C0);
+    color:#fff;
+    font-size:42px;
+}
+
+.welcome-card h2{
+    margin:0 0 15px;
+    font-size:28px;
+    color:#1f2937;
+}
+
+.welcome-card p{
+    max-width:550px;
+    margin:0 auto 30px;
+    color:#6b7280;
+    line-height:2;
+}
+
+.welcome-actions{
+    display:flex;
+    justify-content:center;
+}
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:.9rem;margin-bottom:1.5rem;}
+.sc{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:1.2rem;box-shadow:0 2px 8px var(--sh);display:flex;align-items:center;gap:.9rem;transition:transform .2s;}
+.sc:hover{transform:translateY(-3px);}
+.sc-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0;}
+.sc-n{font-size:24px;font-weight:900;color:var(--t1);}
+.sc-l{font-size:11.5px;color:var(--t3);margin-top:2px;}
+.sc-tr{font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px;margin-top:4px;}
+.sc-tr.up{color:var(--green);}
+.sc-tr.dn{color:var(--red);}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1.6fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.chart-card{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:1.3rem;box-shadow:0 2px 8px var(--sh);}
+.ch-ttl{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:3px;}
+.ch-sub{font-size:11.5px;color:var(--t3);margin-bottom:1rem;}
+/* Bar chart */
+.bar-chart{display:flex;align-items:flex-end;gap:.4rem;height:100px;position:relative;padding-bottom:20px;}
+.bar-item{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.bar{width:100%;border-radius:5px 5px 0 0;transition:height .6s ease;cursor:pointer;position:relative;}
+.bar:hover{filter:brightness(1.1);}
+.bar-v{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;color:var(--t2);}
+.bar-l{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--t3);white-space:nowrap;}
+/* Donut */
+.donut-wrap{display:flex;align-items:center;gap:1.2rem;}
+.donut{position:relative;width:100px;height:100px;flex-shrink:0;}
+.donut svg{width:100%;height:100%;}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.donut-n{font-size:18px;font-weight:900;color:var(--t1);}
+.donut-l{font-size:9px;color:var(--t3);}
+.donut-legend{display:flex;flex-direction:column;gap:.5rem;}
+.dl-item{display:flex;align-items:center;gap:.5rem;font-size:11.5px;color:var(--t2);}
+.dl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+/* TOP SERVICES */
+.top-card{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:1.3rem;box-shadow:0 2px 8px var(--sh);margin-bottom:1.5rem;}
+.ts-row{display:flex;align-items:center;gap:.85rem;padding:.65rem 0;border-bottom:1px solid var(--bc);}
+.ts-row:last-child{border-bottom:none;}
+.ts-rank{width:22px;height:22px;border-radius:6px;background:var(--pd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--pri);flex-shrink:0;}
+.ts-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ts-ico i{font-size:16px;}
+.ts-nm{font-size:12.5px;font-weight:700;color:var(--t1);flex:1;}
+.ts-cat{font-size:10.5px;color:var(--t3);}
+.ts-bar-w{width:80px;height:6px;border-radius:3px;background:var(--pd);overflow:hidden;}
+.ts-bar{height:100%;border-radius:3px;}
+.ts-cnt{font-size:12px;font-weight:700;color:var(--pri);min-width:28px;text-align:center;}
+
+/* REQUESTS */
+.req-filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1.1rem;}
+.rf-btn{padding:6px 13px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--b1);background:transparent;color:var(--t2);transition:all .2s;font-family:inherit;}
+.rf-btn.on{background:var(--pri);color:#fff;border-color:var(--pri);}
+.rf-btn:hover:not(.on){background:var(--pd);}
+.req-card{background:var(--sur);border-radius:14px;border:1px solid var(--b1);margin-bottom:.85rem;overflow:hidden;box-shadow:0 2px 8px var(--sh);}
+.req-hd{display:flex;align-items:center;gap:.85rem;padding:.9rem 1.2rem;cursor:pointer;}
+.req-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.req-ico i{font-size:19px;}
+.req-info{flex:1;min-width:0;}
+.req-nm{font-size:13px;font-weight:700;color:var(--t1);}
+.req-meta{font-size:11px;color:var(--t3);margin-top:2px;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
+.dot{width:3px;height:3px;border-radius:50%;background:var(--t4);}
+.req-time{font-size:11px;color:var(--t3);flex-shrink:0;}
+.req-st{padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:700;flex-shrink:0;}
+.req-st.pending    {background:rgba(230,81,0,.1);color:var(--orange);}
+.req-st.processing {background:rgba(2,119,189,.1);color:var(--blue);}
+.req-st.in_progress{background:rgba(249,168,37,.1);color:var(--yellow);}
+.req-st.done       {background:rgba(27,94,32,.1);color:var(--green);}
+.req-st.rejected   {background:rgba(198,40,40,.1);color:var(--red);}
+.req-chv{font-size:15px;color:var(--t4);transition:transform .2s;}
+.req-card.open .req-chv{transform:rotate(180deg);}
+/* Detail */
+.req-body{display:none;border-top:1px solid var(--b1);padding:1.1rem 1.2rem;}
+.req-card.open .req-body{display:block;}
+.req-dg{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.65rem;margin-bottom:1rem;}
+.rd{background:var(--sur2);border-radius:9px;padding:.65rem .85rem;}
+.rd-l{font-size:10px;color:var(--t3);margin-bottom:2px;}
+.rd-v{font-size:13px;font-weight:700;color:var(--t1);}
+/* Status actions */
+.st-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.85rem;}
+.sa{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .2s;}
+.sa.proc{background:rgba(2,119,189,.1);color:var(--blue);border-color:rgba(2,119,189,.2);}
+.sa.proc:hover{background:var(--blue);color:#fff;}
+.sa.inprog{background:rgba(249,168,37,.1);color:var(--yellow);border-color:rgba(249,168,37,.2);}
+.sa.inprog:hover{background:var(--yellow);color:#fff;}
+.sa.done{background:rgba(27,94,32,.1);color:var(--green);border-color:rgba(27,94,32,.2);}
+.sa.done:hover{background:var(--green);color:#fff;}
+.sa.rej{background:rgba(198,40,40,.1);color:var(--red);border-color:rgba(198,40,40,.2);}
+.sa.rej:hover{background:var(--red);color:#fff;}
+/* Set time */
+.time-row{display:flex;gap:.7rem;align-items:center;margin-bottom:.7rem;flex-wrap:wrap;}
+.time-inp{height:38px;padding:0 12px;border-radius:9px;border:1.5px solid var(--b1);background:var(--sur);color:var(--t1);font-family:inherit;font-size:13px;outline:none;flex:1;min-width:160px;transition:border-color .2s;}
+.time-inp:focus{border-color:var(--pri);}
+.time-btn{height:38px;padding:0 14px;border-radius:9px;background:var(--pri);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;white-space:nowrap;}
+/* Reject note */
+.rej-area{display:none;margin-top:.7rem;}
+.rej-area.show{display:block;}
+.rej-area textarea{width:100%;height:76px;padding:10px 12px;border-radius:10px;border:1.5px solid rgba(198,40,40,.3);background:rgba(198,40,40,.05);color:var(--t1);font-family:inherit;font-size:13px;outline:none;resize:none;margin-bottom:.6rem;transition:border-color .2s;}
+.rej-area textarea:focus{border-color:var(--red);}
+.rej-send{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:9px;background:var(--red);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+.sa.note{background:rgba(106,27,154,.1);color:var(--purple);border-color:rgba(106,27,154,.2);}
+.sa.note:hover{background:var(--purple);color:#fff;}
+.sa.info{background:rgba(230,81,0,.1);color:var(--orange);border-color:rgba(230,81,0,.2);}
+.sa.info:hover{background:var(--orange);color:#fff;}
+.note-area,.info-area{display:none;margin-top:.7rem;}
+.note-area.show,.info-area.show{display:block;}
+.note-area textarea,.info-area textarea{width:100%;height:76px;padding:10px 12px;border-radius:10px;border:1.5px solid rgba(106,27,154,.3);background:rgba(106,27,154,.05);color:var(--t1);font-family:inherit;font-size:13px;outline:none;resize:none;margin-bottom:.6rem;transition:border-color .2s;}
+.info-area textarea{border-color:rgba(230,81,0,.3);background:rgba(230,81,0,.05);}
+.note-send{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:9px;background:var(--purple);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+.info-send{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;border-radius:9px;background:var(--orange);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;}
+/* NOTIFICATION PANEL (admin) */
+.notif-panel{position:fixed;top:65px;right:1rem;width:340px;max-height:480px;background:var(--sur);border-radius:14px;border:1px solid var(--b1);box-shadow:0 8px 32px rgba(26,35,126,.18);z-index:200;display:none;flex-direction:column;overflow:hidden;}
+body.en .notif-panel{right:auto;left:1rem;}
+.notif-panel.show{display:flex;}
+.notif-ph{padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--b1);}
+.notif-ph-ttl{font-size:14px;font-weight:800;color:var(--t1);}
+.notif-ph-ra{font-size:11.5px;color:var(--pri);cursor:pointer;font-weight:600;}
+.notif-list-p{overflow-y:auto;flex:1;}
+.notif-item{display:flex;gap:.75rem;padding:.85rem 1.1rem;border-bottom:1px solid rgba(26,35,126,.05);cursor:pointer;transition:background .15s;}
+.notif-item:hover{background:var(--sur2);}
+.notif-item.unread{background:rgba(26,35,126,.04);}
+.notif-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.notif-body{flex:1;min-width:0;}
+.notif-title{font-size:12.5px;font-weight:700;color:var(--t1);margin-bottom:2px;}
+.notif-text{font-size:11.5px;color:var(--t3);line-height:1.4;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.notif-time{font-size:10px;color:var(--t4);margin-top:3px;}
+.notif-empty-p{padding:2rem;text-align:center;color:var(--t3);font-size:13px;}
+/* Log */
+.req-log-ttl{font-size:12px;font-weight:700;color:var(--t2);margin-bottom:.5rem;margin-top:.8rem;display:flex;align-items:center;gap:5px;}
+.log-row{display:flex;gap:.7rem;padding:.45rem 0;border-bottom:1px solid var(--bc);font-size:12px;}
+.log-row:last-child{border-bottom:none;}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.log-txt{color:var(--t2);flex:1;line-height:1.5;}
+.log-time{font-size:10.5px;color:var(--t3);}
+
+/* PRICING */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.9rem;}
+.price-card{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:1.2rem;box-shadow:0 2px 8px var(--sh);}
+.pc-head{display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px solid var(--bc);}
+.pc-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pc-nm{font-size:13px;font-weight:700;color:var(--t1);flex:1;}
+.pc-ent{font-size:11px;color:var(--t3);}
+.price-row{display:flex;align-items:center;gap:.7rem;}
+.price-inp{flex:1;height:40px;padding:0 12px;border-radius:9px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13.5px;font-weight:700;outline:none;transition:border-color .2s;}
+.price-inp:focus{border-color:var(--pri);}
+.price-unit{font-size:12px;color:var(--t3);flex-shrink:0;}
+.price-save{height:40px;padding:0 14px;border-radius:9px;background:var(--pri);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;}
+.price-save:hover{background:var(--pri2);}
+
+/* FINANCE TABLE */
+.fin-table-wrap{background:var(--sur);border-radius:14px;border:1px solid var(--b1);overflow:hidden;box-shadow:0 2px 8px var(--sh);}
+.fin-row{display:flex;align-items:center;gap:.9rem;padding:.8rem 1.2rem;border-bottom:1px solid var(--bc);}
+.fin-row:last-child{border-bottom:none;}
+.fin-row:first-child{background:var(--sur2);font-size:11.5px;font-weight:700;color:var(--t3);}
+.fin-ref{font-size:12.5px;font-weight:700;color:var(--pri);min-width:100px;}
+.fin-svc{font-size:12.5px;color:var(--t1);flex:1;}
+.fin-client{font-size:12.5px;color:var(--t2);min-width:130px;}
+.fin-amt{font-size:13.5px;font-weight:800;min-width:90px;}
+.fin-amt.credit{color:var(--green);}
+.fin-status{min-width:90px;}
+.fin-date{font-size:11px;color:var(--t3);min-width:90px;}
+
+/* CATALOG MANAGEMENT */
+.cat-tabs{display:flex;gap:.5rem;margin-bottom:1.4rem;border-bottom:2px solid var(--b1);padding-bottom:0;}
+.cat-tab{padding:.6rem 1.1rem;font-size:13px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.cat-tab.on{color:var(--pri);border-color:var(--pri);}
+.cat-tab-panel{display:none;}
+.cat-tab-panel.on{display:block;}
+.cat-add-form{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:1.3rem;margin-bottom:1.2rem;box-shadow:0 2px 8px var(--sh);}
+.cat-form-ttl{font-size:14px;font-weight:800;color:var(--t1);margin-bottom:1rem;display:flex;align-items:center;gap:7px;}
+.cat-form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.8rem;margin-bottom:.9rem;}
+.cat-form-grid input,.cat-form-grid select{height:42px;padding:0 12px;border-radius:9px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13px;outline:none;width:100%;transition:border-color .2s;}
+.cat-form-grid input:focus,.cat-form-grid select:focus{border-color:var(--pri);}
+.cat-form-grid label{font-size:11.5px;font-weight:700;color:var(--t2);display:block;margin-bottom:4px;}
+.cat-list{background:var(--sur);border-radius:14px;border:1px solid var(--b1);overflow:hidden;box-shadow:0 2px 8px var(--sh);}
+.cat-list-hd{display:grid;align-items:center;padding:.7rem 1.2rem;background:var(--sur2);border-bottom:1px solid var(--b1);font-size:11.5px;font-weight:700;color:var(--t3);}
+.cat-row{display:grid;align-items:center;padding:.75rem 1.2rem;border-bottom:1px solid var(--bc);transition:background .15s;}
+.cat-row:last-child{border-bottom:none;}
+.cat-row:hover{background:var(--sur2);}
+.cat-row .ico-prev{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;}
+.cat-nm{font-size:13px;font-weight:700;color:var(--t1);}
+.cat-sub{font-size:11px;color:var(--t3);}
+.cat-actions{display:flex;gap:.5rem;justify-content:flex-end;}
+.cat-act-btn{height:30px;padding:0 10px;border-radius:7px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .2s;}
+.cat-act-btn.edit{background:rgba(26,35,126,.08);color:var(--pri);border-color:var(--b1);}
+.cat-act-btn.edit:hover{background:var(--pri);color:#fff;}
+.cat-act-btn.del{background:rgba(198,40,40,.08);color:var(--red);border-color:rgba(198,40,40,.2);}
+.cat-act-btn.del:hover{background:var(--red);color:#fff;}
+.cat-act-btn.tog{background:rgba(27,94,32,.08);color:var(--green);border-color:rgba(27,94,32,.2);}
+.cat-act-btn.tog:hover{background:var(--green);color:#fff;}
+.cat-act-btn.tog.off{background:rgba(249,168,37,.08);color:var(--yellow);border-color:rgba(249,168,37,.2);}
+.cat-act-btn.tog.off:hover{background:var(--yellow);color:#fff;}
+.badge-count{display:inline-flex;align-items:center;justify-content:center;padding:2px 8px;border-radius:20px;background:rgba(26,35,126,.1);color:var(--pri);font-size:11px;font-weight:700;}
+.cat-empty{padding:2.5rem;text-align:center;color:var(--t3);font-size:13px;}
+.cat-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cat-status-dot.active{background:var(--green);}
+.cat-status-dot.inactive{background:var(--t4);}
+/* USER CARDS */
+.usr-card{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:.95rem 1.2rem;margin-bottom:.6rem;box-shadow:0 2px 8px var(--sh);display:grid;grid-template-columns:42px 1fr auto auto;align-items:center;gap:.9rem;transition:transform .15s;}
+.usr-card:hover{transform:translateY(-2px);}
+.usr-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pri3));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;}
+.usr-nm{font-size:13.5px;font-weight:800;color:var(--t1);margin-bottom:3px;}
+.usr-meta{font-size:11.5px;color:var(--t3);}
+.usr-bal{font-size:15px;font-weight:900;text-align:center;}
+.usr-bal.pos{color:var(--green);}
+.usr-bal.neg{color:var(--red);}
+.usr-actions{display:flex;gap:.4rem;}
+/* LOG ROWS */
+.log-entry{background:var(--sur);border-radius:12px;border:1px solid var(--b1);padding:.85rem 1.1rem;margin-bottom:.5rem;display:grid;grid-template-columns:36px 1fr auto;align-items:start;gap:.8rem;}
+.log-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.log-main-nm{font-size:13px;font-weight:700;color:var(--t1);}
+.log-main-meta{font-size:11.5px;color:var(--t3);margin-top:3px;}
+.log-note{font-size:11.5px;color:var(--t2);margin-top:4px;font-style:italic;}
+.log-date{font-size:10.5px;color:var(--t3);white-space:nowrap;}
+/* ANALYTICS TOP SVC */
+.an-svc-row{display:flex;align-items:center;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--bc);}
+.an-svc-row:last-child{border-bottom:none;}
+.an-svc-bar-w{flex:1;height:8px;border-radius:4px;background:var(--sur2);overflow:hidden;}
+.an-svc-bar{height:100%;border-radius:4px;transition:width .6s ease;}
+/* OFFICE CARDS */
+.off-office-card{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:1.1rem 1.3rem;margin-bottom:.7rem;box-shadow:0 2px 8px var(--sh);display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center;transition:transform .15s;}
+.off-office-card:hover{transform:translateY(-2px);}
+.off-type-badge{padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;white-space:nowrap;}
+.off-type-badge.law{background:rgba(26,35,126,.1);color:#1A237E;}
+.off-type-badge.services{background:rgba(2,119,189,.1);color:#0277BD;}
+.off-type-badge.customs{background:rgba(0,105,92,.1);color:#00695C;}
+.off-verify-badge{padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;}
+.off-verify-badge.verified{background:rgba(27,94,32,.1);color:var(--green);}
+.off-verify-badge.pending{background:rgba(249,168,37,.1);color:#F57F17;}
+.off-verify-badge.inactive{background:rgba(198,40,40,.1);color:var(--red);}
+.off-card-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.off-card-meta{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-top:4px;}
+.off-card-actions{display:flex;gap:.5rem;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;}
+/* ADMIN / PERMISSIONS CARDS */
+.admin-card{background:var(--sur);border-radius:14px;border:1px solid var(--b1);padding:1.2rem 1.4rem;margin-bottom:.8rem;box-shadow:0 2px 8px var(--sh);}
+.admin-card-hd{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem;}
+.admin-card-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--pri2));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#fff;flex-shrink:0;}
+.admin-card-nm{font-size:14px;font-weight:800;color:var(--t1);}
+.admin-card-em{font-size:11.5px;color:var(--t3);}
+.perm-row{display:flex;align-items:center;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid var(--bc);}
+.perm-row:last-child{border-bottom:none;}
+.perm-lbl{font-size:13px;font-weight:600;color:var(--t2);}
+.perm-lbl small{display:block;font-size:10.5px;color:var(--t3);font-weight:400;}
+.perm-toggle{position:relative;width:40px;height:22px;flex-shrink:0;}
+.perm-toggle input{opacity:0;width:0;height:0;position:absolute;}
+.perm-slider{position:absolute;inset:0;background:#ccc;border-radius:11px;cursor:pointer;transition:.3s;}
+.perm-slider::before{content:'';position:absolute;width:16px;height:16px;bottom:3px;right:3px;background:#fff;border-radius:50%;transition:.3s;}
+body.en .perm-slider::before{right:auto;left:3px;}
+.perm-toggle input:checked+.perm-slider{background:var(--pri);}
+.perm-toggle input:checked+.perm-slider::before{transform:translateX(-18px);}
+body.en .perm-toggle input:checked+.perm-slider::before{transform:translateX(18px);}
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:center;justify-content:center;}
+.modal-ov.show{display:flex;}
+.modal-box{background:var(--sur);border-radius:20px;padding:1.8rem;width:100%;max-width:460px;box-shadow:0 16px 64px rgba(26,35,126,.25);}
+.modal-ttl{font-size:16px;font-weight:800;color:var(--t1);margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;}
+.modal-fld{margin-bottom:.9rem;}
+.modal-fld label{font-size:12px;font-weight:700;color:var(--t2);display:block;margin-bottom:4px;}
+.modal-fld input{width:100%;height:42px;padding:0 13px;border-radius:10px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13.5px;outline:none;}
+.modal-fld input:focus{border-color:var(--pri);}
+.modal-btns{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.2rem;}
+.btn-sec{height:38px;padding:0 16px;border-radius:9px;background:transparent;border:1.5px solid var(--b1);color:var(--t2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;}
+/* REVENUE CHART */
+.rev-chart-row{display:flex;align-items:flex-end;gap:.35rem;height:120px;margin-top:1rem;}
+.rev-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.rev-bar{width:100%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#1A237E,#1565C0);min-height:4px;transition:height .5s ease;}
+.rev-bar-lbl{font-size:9px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;text-align:center;}
+.rev-bar-val{font-size:9px;font-weight:700;color:var(--t2);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sb{width:60px;}
+  .sb-logo-nm,.sb-logo-sb,.sb-item span,.sb-badge,.sb-sec,.sb-un,.sb-role{display:none;}
+  .sb-item{justify-content:center;padding:.65rem;}
+  .sb-logo{justify-content:center;padding:.9rem .5rem;}
+  .sb-profile{justify-content:center;padding:.5rem;}
+  .charts-row{grid-template-columns:1fr;}
+  .tb-srch{display:none;}
+  .content{padding:1.2rem 1rem;}
+}
+@media(max-width:580px){
+  .topbar{padding:0 1rem;height:54px;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+  .req-dg{grid-template-columns:1fr 1fr;}
+  .price-grid{grid-template-columns:1fr;}
+}
+/* ── Color Picker ── */
+.cp-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.cp-swatch{width:34px;height:34px;border-radius:9px;cursor:pointer;border:2.5px solid transparent;transition:border-color .15s,transform .15s,box-shadow .15s;flex-shrink:0;}
+.cp-swatch:hover{transform:scale(1.13);}
+.cp-swatch.on{border-color:#0D1257;box-shadow:0 0 0 2px #fff,0 0 0 4px #0D1257;}
+.cp-sel-label{font-size:11px;color:var(--t3);margin-top:5px;font-weight:700;min-height:15px;}
+</style>
+</head>
+<body class="ar">
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo" onclick="location.href=(AMRTM_ROUTES&&AMRTM_ROUTES.home)||'/amrtm'">
+    <div class="sb-logo-img"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAK2ArkDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAYHBQgDBAkBAv/EAEgQAAEDBAECAwQFCQYEBQUBAAABAgMEBQYRBxIhEzFBCCJRYRQVMnGBFhcjQlZXlaHSCYKRlLHBM1JiciRDorLRJURTdbPC/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIEAQMFBgf/xAA9EQEAAgECAwQHBgYABQUAAAAAAQIDBBEhMUEFElFhBhMicYGRoRRSscHR8BUjMkJT4QckM4LxJWJykrL/2gAMAwEAAhEDEQA/ANywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/2Q==" alt="" onerror="this.style.display='none'"/></div>
+    <div><div class="sb-logo-nm" id="sb-nm">آمر تم</div><div class="sb-logo-sb" id="sb-sb">لوحة التحكم</div></div>
+  </div>
+  <nav class="sb-nav">
+
+    @if(auth('business')->user()->role === 'supervisor')
+        <div class="sb-sec" id="sb-s1">الرئيسية</div>
+
+        <div class="sb-item on" onclick="showPage('overview')">
+            <i class="ti ti-layout-dashboard"></i>
+            <span id="si-ov">نظرة عامة</span>
+        </div>
+
+        <div class="sb-sec" id="sb-s2">الطلبات والمستخدمون</div>
+
+        <div class="sb-item" onclick="showPage('requests')">
+            <i class="ti ti-file-text"></i>
+            <span id="si-req">الطلبات</span>
+            <span class="sb-badge" id="sb-notif">0</span>
+        </div>
+
+        <div class="sb-item" onclick="showPage('users')">
+            <i class="ti ti-users"></i>
+            <span id="si-users">المستخدمون</span>
+        </div>
+    @endif
+
+    <div class="sb-sec" id="sb-s3">الإدارة</div>
+
+    @if(auth('business')->user()->hasPermission('approve_offices'))
+        <div class="sb-item" onclick="showPage('offices')">
+            <i class="ti ti-building-community"></i>
+            <span id="si-offices">المكاتب</span>
+            <span class="sb-badge" id="sb-off-pend"
+                  style="display:none;background:rgba(249,168,37,.5);">0</span>
+        </div>
+
+        <div class="sb-item" onclick="showPage('off-finance')">
+            <i class="ti ti-report-money"></i>
+            <span>مالية المكاتب</span>
+        </div>
+    @endif
+
+    @if(auth('business')->user()->hasPermission('manage_catalog'))
+        <div class="sb-item" onclick="showPage('catalog')">
+            <i class="ti ti-category"></i>
+            <span id="si-catalog">إدارة الكتالوج</span>
+        </div>
+
+        <div class="sb-item" onclick="showPage('pricing')">
+            <i class="ti ti-tag"></i>
+            <span id="si-price">التسعير</span>
+        </div>
+    @endif
+
+    @if(auth('business')->user()->hasPermission('view_revenue'))
+        <div class="sb-item" onclick="showPage('finance')">
+            <i class="ti ti-coin"></i>
+            <span id="si-fin">المالية</span>
+        </div>
+    @endif
+
+    @if(auth('business')->user()->hasPermission('view_reports'))
+        <div class="sb-item" onclick="showPage('analytics')">
+            <i class="ti ti-chart-bar"></i>
+            <span id="si-analytics">التحليلات</span>
+        </div>
+    @endif
+
+    @if(auth('business')->user()->role === 'supervisor')
+
+        <div class="sb-item" onclick="showPage('logs')">
+            <i class="ti ti-history"></i>
+            <span id="si-logs">سجل النشاط</span>
+        </div>
+
+        <div class="sb-item" onclick="showPage('permissions')">
+            <i class="ti ti-shield-check"></i>
+            <span id="si-perms">الصلاحيات</span>
+        </div>
+
+        <div class="sb-sec" id="sb-s4">أخرى</div>
+
+        <div class="sb-item"
+             onclick="location.href=(AMRTM_ROUTES&&AMRTM_ROUTES.home)||'/amrtm'">
+            <i class="ti ti-world"></i>
+            <span id="si-site">الموقع</span>
+        </div>
+
+        <div class="sb-item" onclick="showPage('settings')">
+            <i class="ti ti-settings"></i>
+            <span id="si-set">الإعدادات</span>
+        </div>
+
+    @endif
+
+</nav>
+  <div class="sb-bottom">
+    <div class="sb-profile">
+      <div class="sb-av" id="sb-av-txt">أ</div>
+      <div style="flex:1;min-width:0;"><div class="sb-un" id="sb-un">المدير</div><div class="sb-role" id="sb-role">مدير النظام</div></div>
+      <i class="ti ti-logout sb-logout" onclick="doLogout()" title="خروج"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-title" id="tb-title">نظرة عامة</div>
+    <div class="tb-right">
+      <div class="tb-srch"><i class="ti ti-search tb-srch-ico"></i><input type="text" id="srch-inp" placeholder="بحث في الطلبات..."/></div>
+      <div class="tb-icon" onclick="loadData()"><i class="ti ti-refresh"></i></div>
+      <div class="tb-icon" onclick="toggleAdminNotifPanel()" id="admin-notif-btn">
+        <i class="ti ti-bell"></i>
+        <div class="notif-badge" id="notif-badge" style="display:none;">0</div>
+      </div>
+      <div class="lng"><div class="lt on" id="la" onclick="setLang('ar')">AR</div><div class="lt" id="le" onclick="setLang('en')">EN</div></div>
+      <form id="nb-logout-form"
+      method="POST"
+      action="{{ route('amrtm.logout') }}"
+      style="display:none;">
+    @csrf
+</form>
+
+<button
+    onclick="document.getElementById('nb-logout-form').submit()"
+    style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.55);font-size:18px;padding:4px 6px;transition:color .2s;"
+    title="تسجيل الخروج">
+<i class="ti ti-logout" style="color:#0f2d5c;"></i></button>
+    </div>
+  </div>
+
+  <!-- Admin Notification Panel -->
+  <div class="notif-panel" id="admin-notif-panel">
+    <div class="notif-ph">
+      <span class="notif-ph-ttl">الإشعارات</span>
+      <span class="notif-ph-ra" onclick="adminMarkAllRead()">تعليم الكل كمقروء</span>
+    </div>
+    <div class="notif-list-p" id="admin-notif-list">
+      <div class="notif-empty-p">لا توجد إشعارات</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+@if(auth('business')->user()->role === 'supervisor')
+    <!-- OVERVIEW -->
+    <div class="page on" id="page-overview">
+      <div class="pg-hd">
+        <div><div class="pg-ttl" id="ov-ttl">نظرة عامة على المنصة</div><div class="pg-sub" id="ov-sub">آخر تحديث: منذ لحظات</div></div>
+        <button class="btn-pri" onclick="showPage('requests')"><i class="ti ti-file-text"></i><span id="ov-view-req">عرض الطلبات</span></button>
+      </div>
+      <div class="stat-grid">
+        <div class="sc"><div class="sc-ico" style="background:rgba(2,119,189,.1)"><i class="ti ti-file-text" style="color:var(--blue)"></i></div><div><div class="sc-n" id="sc-total">0</div><div class="sc-l" id="sc-total-l">إجمالي الطلبات</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(230,81,0,.1)"><i class="ti ti-loader" style="color:var(--orange)"></i></div><div><div class="sc-n" id="sc-pend">0</div><div class="sc-l" id="sc-pend-l">قيد الانتظار</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(2,119,189,.1)"><i class="ti ti-settings" style="color:var(--blue)"></i></div><div><div class="sc-n" id="sc-proc">0</div><div class="sc-l" id="sc-proc-l">جاري المعالجة</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(27,94,32,.1)"><i class="ti ti-circle-check" style="color:var(--green)"></i></div><div><div class="sc-n" id="sc-done">0</div><div class="sc-l" id="sc-done-l">مكتملة</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(198,40,40,.1)"><i class="ti ti-x" style="color:var(--red)"></i></div><div><div class="sc-n" id="sc-rej">0</div><div class="sc-l" id="sc-rej-l">مرفوضة</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(106,27,154,.1)"><i class="ti ti-users" style="color:var(--purple)"></i></div><div><div class="sc-n" id="sc-users">0</div><div class="sc-l" id="sc-users-l">المستخدمين</div></div></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <div class="ch-ttl" id="ch1-ttl">الطلبات خلال 7 أيام</div>
+          <div class="ch-sub" id="ch1-sub">عدد الطلبات اليومية</div>
+          <div class="bar-chart" id="bar-chart"></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-ttl" id="ch2-ttl">توزيع الطلبات</div>
+          <div class="ch-sub" id="ch2-sub">حسب الحالة</div>
+          <div class="donut-wrap">
+            <div class="donut">
+              <svg viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="#EBEEf8" stroke-width="3"/>
+                <circle id="d-proc" cx="18" cy="18" r="15.9" fill="none" stroke="var(--blue)" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25" stroke-linecap="round"/>
+                <circle id="d-pend" cx="18" cy="18" r="15.9" fill="none" stroke="var(--orange)" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="0" stroke-linecap="round"/>
+                <circle id="d-done" cx="18" cy="18" r="15.9" fill="none" stroke="var(--green)" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="0" stroke-linecap="round"/>
+                <circle id="d-rej" cx="18" cy="18" r="15.9" fill="none" stroke="var(--red)" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="0" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center"><div class="donut-n" id="d-total">0</div><div class="donut-l" id="d-lbl">طلب</div></div>
+            </div>
+            <div class="donut-legend">
+              <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div><span id="dl1">جاري (0)</span></div>
+              <div class="dl-item"><div class="dl-dot" style="background:var(--orange)"></div><span id="dl2">انتظار (0)</span></div>
+              <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><span id="dl3">مكتملة (0)</span></div>
+              <div class="dl-item"><div class="dl-dot" style="background:var(--red)"></div><span id="dl4">مرفوضة (0)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="top-card">
+        <div class="ch-ttl" id="top-ttl">أكثر الخدمات طلباً (آخر 30 يوم)</div>
+        <div class="ch-sub" id="top-sub">بناءً على عدد الطلبات المستلمة</div>
+        <div id="top-list"></div>
+      </div>
+    </div>
+
+
+@else
+
+<div class="page on" id="page-overview">
+
+    <div class="welcome-card">
+
+        <div class="welcome-icon">
+            <i class="ti ti-building-bank"></i>
+        </div>
+
+        <h2>مرحبًا بك في لوحة تحكم آمر تم</h2>
+
+        <p>
+            تم تسجيل دخولك بنجاح.
+            يمكنك استخدام القائمة الجانبية للوصول إلى الأقسام المسموح بها حسب الصلاحيات التي منحها لك المشرف.
+        </p>
+
+        <div class="welcome-actions">
+            <button class="btn-pri"
+                    onclick="location.href=(AMRTM_ROUTES && AMRTM_ROUTES.home) || '/amrtm'">
+                <i class="ti ti-world"></i>
+                الانتقال إلى منصة آمر تم
+            </button>
+        </div>
+
+    </div>
+
+</div>
+    @endif
+    <!-- REQUESTS -->
+    <div class="page" id="page-requests">
+      <div class="pg-hd">
+        <div><div class="pg-ttl" id="req-ttl">قائمة الطلبات</div><div class="pg-sub" id="req-sub">إجمالي 0 طلب</div></div>
+      </div>
+      <div class="req-filters">
+        <button class="rf-btn on" onclick="filterReqs('all',this)" id="rf-all">الكل</button>
+        <button class="rf-btn" onclick="filterReqs('pending',this)" id="rf-pend">قيد الانتظار</button>
+        <button class="rf-btn" onclick="filterReqs('processing',this)" id="rf-proc">جاري المعالجة</button>
+        <button class="rf-btn" onclick="filterReqs('done',this)" id="rf-done">مكتملة</button>
+        <button class="rf-btn" onclick="filterReqs('rejected',this)" id="rf-rej">مرفوضة</button>
+      </div>
+      <div id="req-list"></div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="page" id="page-pricing">
+      <div class="pg-hd"><div><div class="pg-ttl" id="price-ttl">إدارة التسعير</div><div class="pg-sub" id="price-sub">تحكم في أسعار الخدمات</div></div></div>
+      <div class="price-grid" id="price-grid"></div>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="page" id="page-finance">
+      <div class="pg-hd">
+        <div><div class="pg-ttl" id="fin-ttl">الحركة المالية</div><div class="pg-sub" id="fin-sub">جميع المعاملات المالية</div></div>
+        <button class="btn-pri"><i class="ti ti-download"></i><span id="fin-exp">تصدير</span></button>
+      </div>
+      <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.3rem;">
+        <div class="sc"><div class="sc-ico" style="background:rgba(27,94,32,.1)"><i class="ti ti-trending-up" style="color:var(--green)"></i></div><div><div class="sc-n" id="fin-total">0</div><div class="sc-l" id="fin-total-l">إجمالي الإيرادات (ر.س)</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(2,119,189,.1)"><i class="ti ti-calendar" style="color:var(--blue)"></i></div><div><div class="sc-n" id="fin-week">0</div><div class="sc-l" id="fin-week-l">هذا الأسبوع (ر.س)</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(230,81,0,.1)"><i class="ti ti-receipt" style="color:var(--orange)"></i></div><div><div class="sc-n" id="fin-avg">0</div><div class="sc-l" id="fin-avg-l">متوسط قيمة الطلب</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(249,168,37,.1)"><i class="ti ti-clock" style="color:var(--yellow)"></i></div><div><div class="sc-n" id="fin-pend">0</div><div class="sc-l" id="fin-pend-l">معلقة (ر.س)</div></div></div>
+      </div>
+      <div class="fin-table-wrap" id="fin-table"></div>
+    </div>
+
+    <!-- OFFICE FINANCIAL REPORT -->
+    <div class="page" id="page-off-finance">
+      <div class="pg-hd">
+        <div><div class="pg-ttl">مالية المكاتب</div><div class="pg-sub">إيرادات عمولات المنصة من الطلبات المباشرة للمكاتب</div></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="date" id="ofl-from" style="padding:7px 10px;border:1.5px solid #E0E0E0;border-radius:8px;font-size:12px;font-family:inherit">
+          <input type="date" id="ofl-to"   style="padding:7px 10px;border:1.5px solid #E0E0E0;border-radius:8px;font-size:12px;font-family:inherit">
+          <button class="btn-pri" onclick="loadOfficeFinancial()"><i class="ti ti-refresh"></i></button>
+          <button class="btn-pri" style="background:#1B5E20" onclick="exportOfficeFinancialCSV()"><i class="ti ti-download"></i> تصدير</button>
+        </div>
+      </div>
+      <div class="stat-grid" style="margin-bottom:1.3rem">
+        <div class="sc"><div class="sc-ico" style="background:rgba(26,35,126,.1)"><i class="ti ti-files" style="color:var(--pri)"></i></div><div><div class="sc-n" id="ofl-total">—</div><div class="sc-l">إجمالي الطلبات</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(27,94,32,.1)"><i class="ti ti-trending-up" style="color:var(--green)"></i></div><div><div class="sc-n" id="ofl-gross">—</div><div class="sc-l">إجمالي القيمة</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(2,119,189,.1)"><i class="ti ti-coins" style="color:var(--blue)"></i></div><div><div class="sc-n" id="ofl-comm">—</div><div class="sc-l">عمولة المنصة</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(230,81,0,.1)"><i class="ti ti-building-community" style="color:var(--orange)"></i></div><div><div class="sc-n" id="ofl-net">—</div><div class="sc-l">صافي للمكاتب</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(27,94,32,.1)"><i class="ti ti-circle-check" style="color:var(--green)"></i></div><div><div class="sc-n" id="ofl-completed">—</div><div class="sc-l">طلبات مكتملة</div></div></div>
+      </div>
+
+      <!-- By Office Table -->
+      <div style="background:var(--sur);border-radius:14px;border:1px solid var(--b1);box-shadow:0 2px 8px var(--sh);margin-bottom:1rem;overflow:hidden">
+        <div style="padding:1rem 1.2rem;font-weight:800;font-size:14px;border-bottom:1px solid var(--b1)">أداء كل مكتب</div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr><th>المكتب</th><th>العمولة %</th><th>الطلبات</th><th>الإجمالي</th><th>عمولة المنصة</th><th>الصافي للمكتب</th><th>مكتمل</th></tr></thead>
+          <tbody id="ofl-by-office"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--t3)">جارٍ التحميل...</td></tr></tbody>
+        </table></div>
+      </div>
+
+      <!-- Monthly Chart -->
+      <div style="background:var(--sur);border-radius:14px;border:1px solid var(--b1);box-shadow:0 2px 8px var(--sh);overflow:hidden">
+        <div style="padding:1rem 1.2rem;font-weight:800;font-size:14px;border-bottom:1px solid var(--b1)">الأداء الشهري</div>
+        <div style="overflow-x:auto"><table>
+          <thead><tr><th>الشهر</th><th>الطلبات</th><th>إجمالي القيمة</th><th>عمولة المنصة</th></tr></thead>
+          <tbody id="ofl-monthly"><tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--t3)">جارٍ التحميل...</td></tr></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- CATALOG MANAGEMENT -->
+    <div class="page" id="page-catalog">
+      <div class="pg-hd">
+        <div><div class="pg-ttl">إدارة الكتالوج</div><div class="pg-sub">أضف وعدّل التصنيفات والجهات والخدمات ديناميكياً</div></div>
+      </div>
+
+      <div class="cat-tabs">
+        <div class="cat-tab on onclick="catTab('categories',this)"><i class="ti ti-folder"></i> التصنيفات</div>
+        <div class="cat-tab" onclick="catTab('entities',this)"><i class="ti ti-building"></i> الجهات</div>
+        <div class="cat-tab" onclick="catTab('services',this)"><i class="ti ti-list-check"></i> الخدمات</div>
+      </div>
+
+      <!-- TAB: CATEGORIES -->
+      <div class="cat-tab-panel on" id="cat-panel-categories">
+        <div class="cat-add-form">
+          <div class="cat-form-ttl"><i class="ti ti-plus" style="color:var(--pri)"></i> إضافة تصنيف جديد</div>
+          <div class="cat-form-grid">
+            <div><label>الاسم (عربي) *</label><input type="text" id="cat-name-ar" placeholder="مثال: الوزارات"/></div>
+            <div><label>الاسم (إنجليزي) *</label><input type="text" id="cat-name-en" placeholder="e.g. Ministries"/></div>
+            <div><label>المفتاح (key) *</label><input type="text" id="cat-key" placeholder="ministries"/></div>
+            <div><label>الأيقونة *</label><div style="display:flex;gap:5px;"><input type="text" id="cat-icon" placeholder="ti-building-bank" style="flex:1;min-width:0;"/><button type="button" onclick="openIconPicker(document.getElementById('cat-icon'))" title="اختر من المكتبة" style="height:42px;padding:0 11px;border-radius:9px;border:1.5px solid rgba(26,35,126,.2);background:rgba(26,35,126,.06);color:#1A237E;cursor:pointer;flex-shrink:0;font-size:15px;line-height:1;"><i class="ti ti-photo"></i></button></div></div>
+            <div style="grid-column:span 2">
+              <label>اللون *</label>
+              <input type="hidden" id="cat-color"/>
+              <input type="hidden" id="cat-bg"/>
+              <div class="cp-row" id="cat-cp-row"></div>
+              <div class="cp-sel-label" id="cat-cp-label"></div>
+            </div>
+            <div><label>الترتيب</label><input type="number" id="cat-sort" placeholder="1" min="0"/></div>
+          </div>
+          <button class="btn-pri" onclick="doCreateCategory()"><i class="ti ti-plus"></i> حفظ التصنيف</button>
+        </div>
+        <div class="cat-list">
+          <div class="cat-list-hd" style="grid-template-columns:36px 1fr 1fr 80px 60px 120px;">
+            <div></div><div>الاسم</div><div>المفتاح</div><div>الجهات</div><div>الحالة</div><div style="text-align:left;">إجراءات</div>
+          </div>
+          <div id="cat-list-body"><div class="cat-empty">جارٍ التحميل...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB: ENTITIES -->
+      <div class="cat-tab-panel" id="cat-panel-entities">
+        <div class="cat-add-form">
+          <div class="cat-form-ttl"><i class="ti ti-plus" style="color:var(--pri)"></i> إضافة جهة جديدة</div>
+          <div class="cat-form-grid">
+            <div><label>التصنيف *</label>
+              <select id="ent-category-id"><option value="">-- اختر تصنيفاً --</option></select>
+            </div>
+            <div><label>الاسم (عربي) *</label><input type="text" id="ent-name-ar" placeholder="مثال: وزارة الداخلية"/></div>
+            <div><label>الاسم (إنجليزي) *</label><input type="text" id="ent-name-en" placeholder="e.g. Ministry of Interior"/></div>
+            <div><label>الأيقونة *</label><div style="display:flex;gap:5px;"><input type="text" id="ent-icon" placeholder="ti-shield" style="flex:1;min-width:0;"/><button type="button" onclick="openIconPicker(document.getElementById('ent-icon'))" title="اختر من المكتبة" style="height:42px;padding:0 11px;border-radius:9px;border:1.5px solid rgba(26,35,126,.2);background:rgba(26,35,126,.06);color:#1A237E;cursor:pointer;flex-shrink:0;font-size:15px;line-height:1;"><i class="ti ti-photo"></i></button></div></div>
+            <div style="grid-column:span 2">
+              <label>اللون *</label>
+              <input type="hidden" id="ent-color"/>
+              <input type="hidden" id="ent-bg"/>
+              <div class="cp-row" id="ent-cp-row"></div>
+              <div class="cp-sel-label" id="ent-cp-label"></div>
+            </div>
+            <div><label>التاق (عربي)</label><input type="text" id="ent-tag-ar" placeholder="الأمن والمواطنة"/></div>
+            <div><label>التاق (إنجليزي)</label><input type="text" id="ent-tag-en" placeholder="Security &amp; Citizenship"/></div>
+            <div><label>الترتيب</label><input type="number" id="ent-sort" placeholder="1" min="0"/></div>
+          </div>
+          <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-bottom:.8rem;">
+            <label style="font-size:12.5px;font-weight:700;color:var(--t2);">فلترة القائمة حسب التصنيف:</label>
+            <select id="ent-filter-cat" style="height:38px;padding:0 12px;border-radius:9px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13px;outline:none;" onchange="loadEntities(this.value)">
+              <option value="">الكل</option>
+            </select>
+          </div>
+          <button class="btn-pri" onclick="doCreateEntity()"><i class="ti ti-plus"></i> حفظ الجهة</button>
+        </div>
+        <div class="cat-list">
+          <div class="cat-list-hd" style="grid-template-columns:36px 1fr 1fr 80px 60px 120px;">
+            <div></div><div>الاسم</div><div>التصنيف</div><div>الخدمات</div><div>الحالة</div><div style="text-align:left;">إجراءات</div>
+          </div>
+          <div id="ent-list-body"><div class="cat-empty">جارٍ التحميل...</div></div>
+        </div>
+      </div>
+
+      <!-- TAB: SERVICES -->
+      <div class="cat-tab-panel" id="cat-panel-services">
+        <div class="cat-add-form">
+          <div class="cat-form-ttl"><i class="ti ti-plus" style="color:var(--pri)"></i> إضافة خدمة جديدة</div>
+          <div class="cat-form-grid">
+            <div><label>الجهة *</label>
+              <select id="svc-entity-id"><option value="">-- اختر جهة --</option></select>
+            </div>
+            <div><label>الاسم (عربي) *</label><input type="text" id="svc-name-ar" placeholder="مثال: استخراج جواز السفر"/></div>
+            <div><label>الاسم (إنجليزي) *</label><input type="text" id="svc-name-en" placeholder="e.g. Passport Issuance"/></div>
+            <div><label>الأيقونة *</label><div style="display:flex;gap:5px;"><input type="text" id="svc-icon" placeholder="ti-id" style="flex:1;min-width:0;"/><button type="button" onclick="openIconPicker(document.getElementById('svc-icon'))" title="اختر من المكتبة" style="height:42px;padding:0 11px;border-radius:9px;border:1.5px solid rgba(26,35,126,.2);background:rgba(26,35,126,.06);color:#1A237E;cursor:pointer;flex-shrink:0;font-size:15px;line-height:1;"><i class="ti ti-photo"></i></button></div></div>
+            <div><label>السعر (ر.س) *</label><input type="number" id="svc-price" placeholder="300" min="0" step="0.01"/></div>
+            <div><label>أيام الإنجاز المتوقعة *</label><input type="number" id="svc-days" placeholder="5" min="1"/></div>
+            <div><label>وصف (عربي)</label><input type="text" id="svc-desc-ar" placeholder="وصف الخدمة..."/></div>
+            <div><label>وصف (إنجليزي)</label><input type="text" id="svc-desc-en" placeholder="Service description..."/></div>
+            <div><label>الترتيب</label><input type="number" id="svc-sort" placeholder="1" min="0"/></div>
+          </div>
+          <div style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-bottom:.8rem;">
+            <label style="font-size:12.5px;font-weight:700;color:var(--t2);">فلترة القائمة حسب الجهة:</label>
+            <select id="svc-filter-ent" style="height:38px;padding:0 12px;border-radius:9px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13px;outline:none;" onchange="loadSvcList(this.value)">
+              <option value="">الكل</option>
+            </select>
+          </div>
+          <button class="btn-pri" onclick="doCreateService()"><i class="ti ti-plus"></i> حفظ الخدمة</button>
+        </div>
+        <div class="cat-list">
+          <div class="cat-list-hd" style="grid-template-columns:36px 1fr 1fr 80px 70px 60px 120px;">
+            <div></div><div>الخدمة</div><div>الجهة</div><div>السعر</div><div>الأيام</div><div>الحالة</div><div style="text-align:left;">إجراءات</div>
+          </div>
+          <div id="svc-list-body"><div class="cat-empty">جارٍ التحميل...</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- USERS -->
+    <div class="page" id="page-users">
+      <div class="pg-hd">
+        <div><div class="pg-ttl" id="usr-pg-ttl">إدارة المستخدمين</div><div class="pg-sub" id="usr-pg-sub">جميع المستخدمين المسجلين في المنصة</div></div>
+        <button class="btn-pri" onclick="exportUsersCSV()"><i class="ti ti-download"></i><span>تصدير CSV</span></button>
+      </div>
+      <div class="stat-grid" style="margin-bottom:1.3rem;">
+        <div class="sc"><div class="sc-ico" style="background:rgba(26,35,126,.1)"><i class="ti ti-users" style="color:var(--pri)"></i></div><div><div class="sc-n" id="usr-sc-total">0</div><div class="sc-l">إجمالي المستخدمين</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(27,94,32,.1)"><i class="ti ti-user-check" style="color:var(--green)"></i></div><div><div class="sc-n" id="usr-sc-active">0</div><div class="sc-l">مستخدمون نشطون</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(198,40,40,.1)"><i class="ti ti-user-off" style="color:var(--red)"></i></div><div><div class="sc-n" id="usr-sc-banned">0</div><div class="sc-l">محظورون</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(2,119,189,.1)"><i class="ti ti-user-plus" style="color:var(--blue)"></i></div><div><div class="sc-n" id="usr-sc-new">0</div><div class="sc-l">جدد هذا الشهر</div></div></div>
+      </div>
+      <div class="req-filters" style="margin-bottom:1rem;">
+        <button class="rf-btn on" onclick="filterUsers('all',this)">الكل</button>
+        <button class="rf-btn" onclick="filterUsers('active',this)">نشطون</button>
+        <button class="rf-btn" onclick="filterUsers('banned',this)">محظورون</button>
+      </div>
+      <div style="display:flex;gap:.7rem;margin-bottom:1rem;">
+        <div class="tb-srch" style="flex:1;max-width:340px;"><i class="ti ti-search tb-srch-ico"></i><input type="text" id="usr-srch" placeholder="ابحث بالاسم أو البريد أو الجوال..." oninput="debounceUserSearch(this.value)"/></div>
+      </div>
+      <div id="usr-list"><div style="text-align:center;padding:3rem;color:var(--t3);">جارٍ التحميل...</div></div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="page" id="page-analytics">
+      <div class="pg-hd">
+        <div><div class="pg-ttl" id="an-pg-ttl">التحليلات والتقارير</div><div class="pg-sub">إحصائيات المنصة والأداء</div></div>
+        <button class="btn-pri" onclick="exportAnalyticsCSV()"><i class="ti ti-download"></i><span>تصدير</span></button>
+      </div>
+      <div class="stat-grid" style="margin-bottom:1.3rem;">
+        <div class="sc"><div class="sc-ico" style="background:rgba(27,94,32,.1)"><i class="ti ti-trending-up" style="color:var(--green)"></i></div><div><div class="sc-n" id="an-revenue">0</div><div class="sc-l">إجمالي الإيرادات (ر.س)</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(26,35,126,.1)"><i class="ti ti-circle-check" style="color:var(--pri)"></i></div><div><div class="sc-n" id="an-rate">0%</div><div class="sc-l">معدل إتمام الطلبات</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(198,40,40,.1)"><i class="ti ti-x" style="color:var(--red)"></i></div><div><div class="sc-n" id="an-rej-rate">0%</div><div class="sc-l">معدل الرفض</div></div></div>
+      </div>
+      <div class="charts-row" style="margin-bottom:1.3rem;">
+        <div class="chart-card">
+          <div class="ch-ttl">الإيرادات الشهرية (ر.س)</div>
+          <div class="ch-sub" id="an-months-lbl">آخر 6 أشهر</div>
+          <div class="rev-chart-row" id="an-rev-chart"></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-ttl">الطلبات الشهرية</div>
+          <div class="ch-sub">عدد الطلبات الجديدة</div>
+          <div class="rev-chart-row" id="an-req-chart"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="ch-ttl">أكثر الخدمات تحقيقاً للإيراد</div>
+        <div class="ch-sub">مكتملة فقط</div>
+        <div id="an-top-svcs" style="margin-top:.8rem;"></div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY LOGS -->
+    <div class="page" id="page-logs">
+      <div class="pg-hd">
+        <div><div class="pg-ttl">سجل النشاط</div><div class="pg-sub">جميع الإجراءات المتخذة على الطلبات</div></div>
+      </div>
+      <div class="req-filters" style="margin-bottom:1rem;">
+        <button class="rf-btn on" onclick="filterLogs('all',this)">الكل</button>
+        <button class="rf-btn" onclick="filterLogs('status_change',this)">تغيير الحالة</button>
+        <button class="rf-btn" onclick="filterLogs('admin_note',this)">ملاحظات الإدارة</button>
+        <button class="rf-btn" onclick="filterLogs('info_request',this)">طلب معلومات</button>
+      </div>
+      <div style="display:flex;gap:.7rem;margin-bottom:1rem;">
+        <div class="tb-srch" style="flex:1;max-width:340px;"><i class="ti ti-search tb-srch-ico"></i><input type="text" id="log-srch" placeholder="ابحث برقم الطلب أو اسم العميل..." oninput="debounceLogSearch(this.value)"/></div>
+      </div>
+      <div id="log-list"><div style="text-align:center;padding:3rem;color:var(--t3);">جارٍ التحميل...</div></div>
+    </div>
+
+    <!-- OFFICES -->
+    <div class="page" id="page-offices">
+      <div class="pg-hd">
+        <div><div class="pg-ttl" id="off-pg-ttl">إدارة المكاتب</div><div class="pg-sub" id="off-pg-sub">مكاتب القطاع الخاص المسجلة في المنصة</div></div>
+      </div>
+      <div class="stat-grid" style="margin-bottom:1.3rem;" id="off-stats-grid">
+        <div class="sc"><div class="sc-ico" style="background:rgba(2,119,189,.1)"><i class="ti ti-building" style="color:var(--blue)"></i></div><div><div class="sc-n" id="off-sc-total">0</div><div class="sc-l">إجمالي المكاتب</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(27,94,32,.1)"><i class="ti ti-circle-check" style="color:var(--green)"></i></div><div><div class="sc-n" id="off-sc-verified">0</div><div class="sc-l">معتمدة ونشطة</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(249,168,37,.1)"><i class="ti ti-clock" style="color:var(--yellow)"></i></div><div><div class="sc-n" id="off-sc-pending">0</div><div class="sc-l">تنتظر الاعتماد</div></div></div>
+        <div class="sc"><div class="sc-ico" style="background:rgba(198,40,40,.1)"><i class="ti ti-ban" style="color:var(--red)"></i></div><div><div class="sc-n" id="off-sc-inactive">0</div><div class="sc-l">موقوفة</div></div></div>
+      </div>
+      <div class="req-filters" style="margin-bottom:1rem;">
+        <button class="rf-btn on" onclick="filterOffices('all',this)">الكل</button>
+        <button class="rf-btn" onclick="filterOffices('pending',this)">تنتظر الاعتماد</button>
+        <button class="rf-btn" onclick="filterOffices('verified',this)">معتمدة</button>
+        <button class="rf-btn" onclick="filterOffices('inactive',this)">موقوفة</button>
+      </div>
+      <div class="off-type-tabs" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+        <button class="rf-btn on" style="font-size:11px;" onclick="filterOfficeType('all',this)">جميع الأنواع</button>
+        <button class="rf-btn" style="font-size:11px;" onclick="filterOfficeType('law',this)">محاماة</button>
+        <button class="rf-btn" style="font-size:11px;" onclick="filterOfficeType('services',this)">تعقيب وخدمات</button>
+        <button class="rf-btn" style="font-size:11px;" onclick="filterOfficeType('customs',this)">جمارك</button>
+      </div>
+      <div id="off-list"><div style="text-align:center;padding:3rem;color:var(--t3);">جارٍ التحميل...</div></div>
+    </div>
+
+    <!-- PERMISSIONS (supervisor only) -->
+    <div class="page" id="page-permissions">
+      <div class="pg-hd">
+        <div><div class="pg-ttl" id="perms-pg-ttl">إدارة الصلاحيات</div><div class="pg-sub" id="perms-pg-sub">منح وسحب صلاحيات المدراء</div></div>
+        <button class="btn-pri" onclick="showCreateAdminModal()"><i class="ti ti-user-plus"></i><span>إضافة مدير</span></button>
+      </div>
+      <div id="admins-list"><div style="text-align:center;padding:3rem;color:var(--t3);">جارٍ التحميل...</div></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="pg-hd"><div><div class="pg-ttl" id="set-ttl">الإعدادات</div></div></div>
+      <div class="chart-card" style="max-width:520px;">
+        <div class="ch-ttl" style="margin-bottom:1.2rem;" id="set-profile-ttl">الملف الشخصي</div>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div><label style="font-size:12.5px;font-weight:700;color:var(--t1);display:block;margin-bottom:5px;" id="set-lbl-nm">الاسم</label><input type="text" value="مدير النظام" style="width:100%;height:44px;padding:0 13px;border-radius:10px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13.5px;outline:none;"/></div>
+          <div><label style="font-size:12.5px;font-weight:700;color:var(--t1);display:block;margin-bottom:5px;" id="set-lbl-em">البريد الإلكتروني</label><input type="email" value="admin@amrtm.com.sa" style="width:100%;height:44px;padding:0 13px;border-radius:10px;border:1.5px solid var(--b1);background:var(--sur2);color:var(--t1);font-family:inherit;font-size:13.5px;outline:none;"/></div>
+          <button class="btn-pri" style="align-self:flex-start;" id="set-save"><i class="ti ti-check"></i><span id="set-save-l">حفظ التغييرات</span></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- BALANCE ADJUSTMENT MODAL -->
+<div class="modal-ov" id="balance-modal">
+  <div class="modal-box">
+    <div class="modal-ttl"><i class="ti ti-wallet" style="color:var(--pri)"></i><span id="bal-modal-ttl">تعديل الرصيد</span></div>
+    <div style="background:var(--sur2);border-radius:10px;padding:.8rem 1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:13px;font-weight:700;color:var(--t2);" id="bal-user-name">—</span>
+      <span style="font-size:13px;color:var(--t3);">الرصيد الحالي: <strong id="bal-current" style="color:var(--pri)">0 ر.س</strong></span>
+    </div>
+    <div class="modal-fld">
+      <label>نوع العملية</label>
+      <div style="display:flex;gap:.5rem;">
+        <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.7rem;border-radius:9px;border:1.5px solid var(--b1);cursor:pointer;" id="bal-charge-lbl">
+          <input type="radio" name="bal-type" value="charge" checked onchange="updateBalTypeUI()"/> <span style="font-size:13px;font-weight:700;color:var(--green);">شحن رصيد</span>
+        </label>
+        <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.7rem;border-radius:9px;border:1.5px solid var(--b1);cursor:pointer;" id="bal-deduct-lbl">
+          <input type="radio" name="bal-type" value="payment" onchange="updateBalTypeUI()"/> <span style="font-size:13px;font-weight:700;color:var(--red);">خصم رصيد</span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-fld"><label>المبلغ (ر.س)</label><input type="number" id="bal-amount" min="0.01" step="0.01" placeholder="0.00"/></div>
+    <div class="modal-fld"><label>السبب (اختياري)</label><input type="text" id="bal-reason" placeholder="سبب التعديل..."/></div>
+    <div class="modal-btns">
+      <button class="btn-sec" onclick="closeBalanceModal()">إلغاء</button>
+      <button class="btn-pri" id="bal-submit-btn" onclick="doAdjustBalance()"><i class="ti ti-check"></i>تأكيد</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE ADMIN MODAL -->
+<div class="modal-ov" id="create-admin-modal">
+  <div class="modal-box">
+    <div class="modal-ttl"><i class="ti ti-user-plus" style="color:var(--pri)"></i>إضافة مدير جديد</div>
+    <div class="modal-fld"><label>الاسم</label><input type="text" id="new-admin-name" placeholder="الاسم الكامل"/></div>
+    <div class="modal-fld"><label>البريد الإلكتروني</label><input type="email" id="new-admin-email" placeholder="admin@example.com"/></div>
+    <div class="modal-fld"><label>رقم الجوال</label><input type="tel" id="new-admin-phone" placeholder="05xxxxxxxx"/></div>
+    <div class="modal-fld"><label>كلمة المرور</label><input type="password" id="new-admin-pass" placeholder="8 أحرف على الأقل"/></div>
+    <div class="modal-btns">
+      <button class="btn-sec" onclick="closeCreateAdminModal()">إلغاء</button>
+      <button class="btn-pri" onclick="doCreateAdmin()"><i class="ti ti-check"></i>إنشاء الحساب</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.AMRTM_USER = {!! auth('business')->check() ? json_encode([
+    'id'    => auth('business')->id(),
+    'name'  => auth('business')->user()->name,
+    'email' => auth('business')->user()->email,
+    'phone' => auth('business')->user()->phone ?? '',
+    'role'  => auth('business')->user()->role,
+    'balance' => 0,
+]) : 'null' !!};
+window.AMRTM_CSRF = '{{ csrf_token() }}';
+window.AMRTM_API_BASE = '{{ url("/amrtm/api") }}';
+
+// ── Notifications SDK ──
+window.Notifications = {
+  _base: window.AMRTM_API_BASE + '/notifications',
+  _h: () => ({ 'Accept':'application/json','X-CSRF-TOKEN':window.AMRTM_CSRF,'Content-Type':'application/json' }),
+  getAll:     async function()    { const r = await fetch(this._base, {headers:this._h(),credentials:'same-origin'}); return r.json(); },
+  unreadCount:async function()    { const r = await fetch(this._base+'/unread-count', {headers:this._h(),credentials:'same-origin'}); return r.json(); },
+  markRead:   async function(id)  { await fetch(this._base+'/'+id+'/read', {method:'POST',headers:this._h(),credentials:'same-origin'}); },
+  markAllRead:async function()    { await fetch(this._base+'/read-all',    {method:'POST',headers:this._h(),credentials:'same-origin'}); },
+};
+window.AMRTM_ROUTES = {
+    login:         '{{ route("amrtm.login") }}',
+    register:      '{{ route("amrtm.register") }}',
+    logout:        '{{ route("amrtm.logout") }}',
+    home:          '{{ route("amrtm.index") }}',
+    adminDashboard:'{{ route("amrtm.admin.dashboard") }}',
+    mainSite:      '{{ url("/") }}',
+};
+</script>
+<script src="{{ asset('js/amrtm-web.js') }}"></script>
+<script>
+const T={
+  ar:{nm:'آمر تم',da:'لوحة التحكم',s1:'الرئيسية',s2:'الطلبات',s3:'الإدارة',s4:'أخرى',siOv:'نظرة عامة',siReq:'الطلبات',siPrice:'التسعير',siFin:'المالية',siSite:'الموقع',siSet:'الإعدادات',
+  ovTtl:'نظرة عامة على المنصة',ovSub:'آخر تحديث: منذ لحظات',ovViewReq:'عرض الطلبات',
+  scTotal:'إجمالي الطلبات',scPend:'قيد الانتظار',scProc:'جاري المعالجة',scDone:'مكتملة',scRej:'مرفوضة',scUsers:'المستخدمين',
+  ch1:'الطلبات خلال 7 أيام',ch1s:'عدد الطلبات اليومية',ch2:'توزيع الطلبات',ch2s:'حسب الحالة',dLbl:'طلب',
+  topTtl:'أكثر الخدمات طلباً (آخر 30 يوم)',topSub:'بناءً على عدد الطلبات المستلمة',
+  reqTtl:'قائمة الطلبات',rfAll:'الكل',rfPend:'قيد الانتظار',rfProc:'جاري المعالجة',rfDone:'مكتملة',rfRej:'مرفوضة',
+  saProc:'جاري المعالجة',saInprog:'قيد التنفيذ',saDone:'تمت العملية',saRej:'رفض',setTime:'تحديد وقت الإنجاز',timePh:'مثال: 5 أيام عمل',timeSave:'حفظ',rejPlh:'اكتب سبب الرفض...',rejSend:'إرسال',logTtl:'سجل النشاط',
+  priceTtl:'إدارة التسعير',priceSub:'تحكم في أسعار الخدمات',
+  finTtl:'الحركة المالية',finSub:'جميع المعاملات المالية',finExp:'تصدير',finTotalL:'إجمالي الإيرادات (ر.س)',finWeekL:'هذا الأسبوع (ر.س)',finAvgL:'متوسط قيمة الطلب',finPendL:'معلقة (ر.س)',
+  setTtl:'الإعدادات',setProfileTtl:'الملف الشخصي',setLblNm:'الاسم',setLblEm:'البريد الإلكتروني',setSaveL:'حفظ التغييرات',
+  sar:'ر.س',noReqs:'لا توجد طلبات',admin:'مدير النظام',
+  stPend:'قيد الانتظار',stProc:'جاري المعالجة',stInprog:'قيد التنفيذ',stDone:'تمت العملية',stRej:'مرفوض',
+  days:['أح','إث','ثل','أر','خم','جم','سب'],
+  updateSuc:'تم التحديث بنجاح',priceSaved:'تم حفظ السعر',},
+  en:{nm:'Amrtm',da:'Dashboard',s1:'Main',s2:'Requests',s3:'Management',s4:'Other',siOv:'Overview',siReq:'Requests',siPrice:'Pricing',siFin:'Finance',siSite:'Website',siSet:'Settings',
+  ovTtl:'Platform Overview',ovSub:'Last updated: moments ago',ovViewReq:'View Requests',
+  scTotal:'Total Requests',scPend:'Pending',scProc:'Processing',scDone:'Completed',scRej:'Rejected',scUsers:'Users',
+  ch1:'Requests over 7 days',ch1s:'Daily request count',ch2:'Request Distribution',ch2s:'By status',dLbl:'Requests',
+  topTtl:'Top Requested Services (Last 30 Days)',topSub:'Based on number of requests received',
+  reqTtl:'Request List',rfAll:'All',rfPend:'Pending',rfProc:'Processing',rfDone:'Completed',rfRej:'Rejected',
+  saProc:'Processing',saInprog:'In Progress',saDone:'Complete',saRej:'Reject',setTime:'Set Completion Time',timePh:'e.g. 5 business days',timeSave:'Save',rejPlh:'Write rejection reason...',rejSend:'Send',logTtl:'Activity Log',
+  priceTtl:'Pricing Management',priceSub:'Control service prices',
+  finTtl:'Financial Activity',finSub:'All financial transactions',finExp:'Export',finTotalL:'Total Revenue (SAR)',finWeekL:'This Week (SAR)',finAvgL:'Avg. Request Value',finPendL:'Pending (SAR)',
+  setTtl:'Settings',setProfileTtl:'Profile',setLblNm:'Name',setLblEm:'Email',setSaveL:'Save Changes',
+  sar:'SAR',noReqs:'No requests found',admin:'System Admin',
+  stPend:'Pending',stProc:'Processing',stInprog:'In Progress',stDone:'Completed',stRej:'Rejected',
+  days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+  updateSuc:'Updated successfully',priceSaved:'Price saved',},
+};
+
+let lang=localStorage.getItem('amrtm_lang')||'ar';
+let curPage='overview';
+let allReqs=[];
+let reqFilter='all';
+let reqPage=1;
+let reqMeta={};
+let statsData={};
+let allServices=[];
+let _reqSearchTimer=null;
+
+/* ══ INIT ══ */
+async function init(){
+  if(typeof Auth!=='undefined'&&!Auth.isLoggedIn()){window.location.href=(AMRTM_ROUTES&&AMRTM_ROUTES.login)||'/login';return;}
+  applyLang(lang);
+  const u=typeof Auth!=='undefined'?Auth.getUser():window.AMRTM_USER;
+  if(u){S('sb-un',u.name||T[lang].admin);S('sb-av-txt',(u.name||'A')[0]);}
+  // Show supervisor-only items
+  if(u && u.role==='supervisor'){
+    const w=document.getElementById('si-perms-wrap');
+    if(w) w.style.display='';
+  }
+  await loadData();
+  loadOfficeStats();
+}
+
+async function loadData(){
+  try{
+    const srch=document.getElementById('srch-inp')?.value?.trim()||'';
+    const [stats,reqs,services]=await Promise.all([Dashboard.adminStats(),Admin.getRequests(reqFilter,srch,reqPage),Services.getAll()]);
+    statsData=stats;
+    allReqs=(reqs&&reqs.data)||[];
+    reqMeta=reqs?{current_page:reqs.current_page||1,last_page:reqs.last_page||1,total:reqs.total||0,per_page:reqs.per_page||15}:{};
+    allServices=services||[];
+    renderAll();
+  }catch(e){
+    console.error('Dashboard load error:',e);
+    if(typeof showToast!=='undefined')showToast(lang==='ar'?'حدث خطأ في تحميل البيانات':'Failed to load data','error');
+  }
+}
+function renderAll() {
+
+    const t = T[lang];
+    const r = statsData.requests || {};
+
+    // Stats
+    S('sc-total', r.total || 0);
+    S('sc-pend', r.pending || 0);
+    S('sc-proc', r.processing || 0);
+    S('sc-done', r.done || 0);
+    S('sc-rej', r.rejected || 0);
+    S('sc-users', statsData.users || 0);
+
+    S('sb-notif', r.pending || 0);
+    S('notif-badge', r.pending || 0);
+
+    S('req-sub', `${t.rfAll}: ${r.total || 0} ${lang === 'ar' ? 'طلب' : 'requests'}`);
+
+    // Donut (للمشرف فقط)
+    if (document.getElementById('d-total')) {
+
+        const tot = r.total || 1;
+
+        S('d-total', r.total || 0);
+
+        const toDA = (v) => Math.round((v / tot) * 100);
+
+        updateDonut(
+            'd-proc', toDA(r.processing || 0),
+            'd-pend', toDA(r.pending || 0),
+            'd-done', toDA(r.done || 0),
+            'd-rej', toDA(r.rejected || 0)
+        );
+
+        S('dl1', `${lang === 'ar' ? 'جاري' : 'Processing'} (${r.processing || 0})`);
+        S('dl2', `${lang === 'ar' ? 'انتظار' : 'Pending'} (${r.pending || 0})`);
+        S('dl3', `${lang === 'ar' ? 'مكتملة' : 'Completed'} (${r.done || 0})`);
+        S('dl4', `${lang === 'ar' ? 'مرفوضة' : 'Rejected'} (${r.rejected || 0})`);
+    }
+
+    // Revenue
+    const rev = statsData.revenue || {};
+
+    S('fin-total', (rev.total || 0).toFixed(0));
+    S('fin-week', (rev.week || 0).toFixed(0));
+    S('fin-avg', (rev.avg || 0).toFixed(0));
+    S('fin-pend', (rev.pending || 0).toFixed(0));
+
+    // Render فقط إذا كانت الصفحة موجودة
+    if (document.getElementById('bar-chart')) {
+        renderBarChart();
+    }
+
+    if (document.getElementById('top-list')) {
+        renderTopSvcs();
+    }
+
+    if (document.getElementById('req-list')) {
+        renderReqList();
+    }
+
+    if (document.getElementById('price-grid')) {
+        renderPricing();
+    }
+
+    if (document.getElementById('fin-table')) {
+        renderFinTable();
+    }
+}
+
+function updateDonut(id1, p1, id2, p2, id3, p3, id4, p4) {
+
+    const setDA = (id, pct, offset) => {
+        const el = document.getElementById(id);
+
+        if (!el) return;
+
+        el.setAttribute('stroke-dasharray', `${pct} ${100 - pct}`);
+        el.setAttribute('stroke-dashoffset', offset);
+    };
+
+    setDA(id1, p1, 25);
+    setDA(id2, p2, 25 - p1);
+    setDA(id3, p3, 25 - p1 - p2);
+    setDA(id4, p4, 25 - p1 - p2 - p3);
+}
+
+function renderBarChart() {
+
+    const chart = document.getElementById('bar-chart');
+
+    if (!chart) return;
+
+    const t = T[lang];
+
+    const data = statsData.chart_last7 || Array.from({ length: 7 }, (_, i) => ({
+        count: Math.floor(Math.random() * 30 + 5),
+        label: t.days[i]
+    }));
+
+    const max = Math.max(...data.map(d => d.count), 1);
+
+    const colors = [
+        '#1A237E',
+        '#1565C0',
+        '#283593',
+        '#0277BD',
+        '#1A237E',
+        '#1565C0',
+        '#283593'
+    ];
+
+    chart.innerHTML = data.map((d, i) => {
+
+        const h = Math.round((d.count / max) * 90);
+
+        return `
+            <div class="bar-item">
+                <div class="bar" style="height:${h}px;background:${colors[i]};">
+                    <span class="bar-v">${d.count}</span>
+                    <span class="bar-l">${d.label || t.days[i] || ''}</span>
+                </div>
+            </div>
+        `;
+
+    }).join('');
+}
+
+function renderTopSvcs() {
+
+    const topList = document.getElementById('top-list');
+
+    if (!topList) return;
+
+    const t = T[lang];
+    const tops = statsData.top_services || [];
+
+    const max = Math.max(...tops.map(s => s.count), 1);
+
+    topList.innerHTML = tops.map((s, i) => `
+        <div class="ts-row">
+            <div class="ts-rank">${i + 1}</div>
+
+            <div class="ts-ico" style="background:${s.bg || 'rgba(26,35,126,.1)'}">
+                ${renderIcon(s.icon, s.color || '#1A237E', 'ti-file-text')}
+            </div>
+
+            <div style="flex:1;min-width:0;">
+                <div class="ts-nm">
+                    ${lang === 'ar' ? (s.name_ar || s.name_en) : (s.name_en || s.name_ar)}
+                </div>
+
+                <div class="ts-cat">
+                    ${lang === 'ar' ? (s.entity_ar || '') : (s.entity_en || '')}
+                </div>
+            </div>
+
+            <div class="ts-bar-w">
+                <div class="ts-bar"
+                     style="width:${Math.round((s.count / max) * 100)}%;background:${s.color || 'var(--pri)'}">
+                </div>
+            </div>
+
+            <div class="ts-cnt">${s.count}</div>
+        </div>
+    `).join('');
+}
+
+/* ══ REQUESTS ══ */
+function filterReqs(f,btn){
+  reqFilter=f;reqPage=1;
+  document.querySelectorAll('.rf-btn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  loadAdminRequests();
+}
+
+async function loadAdminRequests(page,status,search){
+  if(page!==undefined)reqPage=page;
+  if(status!==undefined)reqFilter=status;
+  const srch=search!==undefined?search:(document.getElementById('srch-inp')?.value?.trim()||'');
+  try{
+    const res=await Admin.getRequests(reqFilter,srch,reqPage);
+    if(!res){return;}
+    allReqs=res.data||[];
+    reqMeta={current_page:res.current_page||1,last_page:res.last_page||1,total:res.total||0,per_page:res.per_page||15};
+    renderReqList();
+    renderReqPagination();
+  }catch(e){
+    console.error('loadAdminRequests error:',e);
+    if(typeof showToast!=='undefined')showToast(lang==='ar'?'خطأ في تحميل الطلبات':'Failed to load requests','error');
+  }
+}
+
+function renderReqPagination(){
+  const container=document.getElementById('req-list-wrap')||document.getElementById('page-requests');
+  const existing=document.getElementById('req-pag');
+  if(existing)existing.remove();
+  if(!reqMeta.last_page||reqMeta.last_page<=1)return;
+  const pag=document.createElement('div');
+  pag.id='req-pag';
+  pag.style.cssText='display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;';
+  const cur=reqMeta.current_page||1;
+  const last=reqMeta.last_page||1;
+  let html='';
+  if(cur>1)html+=`<button onclick="loadAdminRequests(${cur-1})" style="height:36px;padding:0 12px;border-radius:8px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">${lang==='ar'?'السابق':'Prev'}</button>`;
+  for(let i=Math.max(1,cur-2);i<=Math.min(last,cur+2);i++){
+    const on=i===cur;
+    html+=`<button onclick="loadAdminRequests(${i})" style="width:36px;height:36px;border-radius:8px;border:1.5px solid ${on?'var(--pri)':'var(--b1)'};background:${on?'var(--pri)':'transparent'};color:${on?'#fff':'var(--t2)'};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">${i}</button>`;
+  }
+  if(cur<last)html+=`<button onclick="loadAdminRequests(${cur+1})" style="height:36px;padding:0 12px;border-radius:8px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">${lang==='ar'?'التالي':'Next'}</button>`;
+  pag.innerHTML=html;
+  document.getElementById('req-list')?.insertAdjacentElement('afterend',pag);
+}
+
+function renderReqList(){
+  const t=T[lang];
+  const filtered=reqFilter==='all'?allReqs:allReqs.filter(r=>r.status===reqFilter);
+  const el=document.getElementById('req-list');if(!el)return;
+  if(!filtered.length){el.innerHTML=`<div style="text-align:center;padding:3rem;color:var(--t3);">${t.noReqs}</div>`;return;}
+  el.innerHTML=filtered.map((req,i)=>{
+    const {label,color,bg}=stInfo(req.status);
+    const gs=req.gov_service||{};
+    const ent=req.entity||{};
+    const svcNm=lang==='ar'?(gs.name_ar||gs.name_en||'—'):(gs.name_en||gs.name_ar||'—');
+    const entNm=lang==='ar'?(ent.name_ar||'—'):(ent.name_en||'—');
+    const c=ent.color||'#1A237E';
+    const bg2=ent.bg||'rgba(26,35,126,.09)';
+    const logs=req.logs||[];
+    return `<div class="req-card" id="rc-${i}">
+      <div class="req-hd" onclick="togReq(${i})">
+        <div class="req-ico" style="background:${bg2};">${renderIcon(gs.icon,c,'ti-file-text')}</div>
+        <div class="req-info">
+          <div class="req-nm">${svcNm}</div>
+          <div class="req-meta"><span>${req.client_name||'—'}</span><div class="dot"></div><span>${entNm}</span><div class="dot"></div><span>${req.ref_number||'—'}</span></div>
+        </div>
+        <div class="req-time">${fmtDate(req.created_at)}</div>
+        <div class="req-st ${req.status}">${label}</div>
+        <i class="ti ti-chevron-down req-chv"></i>
+      </div>
+      <div class="req-body">
+        <!-- Details -->
+        <div class="req-dg">
+          <div class="rd"><div class="rd-l">${lang==='ar'?'الاسم':'Name'}</div><div class="rd-v">${req.client_name||'—'}</div></div>
+          <div class="rd"><div class="rd-l">${lang==='ar'?'البريد':'Email'}</div><div class="rd-v">${req.client_email||'—'}</div></div>
+          <div class="rd"><div class="rd-l">${lang==='ar'?'الجوال':'Phone'}</div><div class="rd-v">${req.client_phone||'—'}</div></div>
+          <div class="rd"><div class="rd-l">${lang==='ar'?'الهوية':'ID'}</div><div class="rd-v">${req.client_id_number||'—'}</div></div>
+          ${req.company_name?`<div class="rd"><div class="rd-l">${lang==='ar'?'الشركة':'Company'}</div><div class="rd-v">${req.company_name}</div></div>`:''}
+          <div class="rd"><div class="rd-l">${lang==='ar'?'المبلغ':'Amount'}</div><div class="rd-v">${req.price||0} ${t.sar}</div></div>
+        </div>
+        <!-- Set estimated time -->
+        <div class="time-row">
+          <input class="time-inp" id="ti-${i}" placeholder="${t.timePh}" value="${req.estimated_completion||''}"/>
+          <button class="time-btn" onclick="setTime(${i},'${req.id||req.ref_number||i}')">${t.timeSave}</button>
+        </div>
+        <!-- Status actions -->
+        <div class="st-actions">
+          <button class="sa proc" onclick="updStatus(${i},'${req.id||i}','processing')"><i class="ti ti-loader"></i>${t.saProc}</button>
+          <button class="sa inprog" onclick="updStatus(${i},'${req.id||i}','in_progress')"><i class="ti ti-settings"></i>${t.saInprog}</button>
+          <button class="sa done" onclick="updStatus(${i},'${req.id||i}','done')"><i class="ti ti-circle-check"></i>${t.saDone}</button>
+          <button class="sa rej" onclick="togRejArea(${i})"><i class="ti ti-x"></i>${t.saRej}</button>
+          <button class="sa note" onclick="togNoteArea(${i})"><i class="ti ti-message"></i>${lang==='ar'?'ملاحظة':'Send Note'}</button>
+          <button class="sa info" onclick="togInfoArea(${i})"><i class="ti ti-info-circle"></i>${lang==='ar'?'طلب معلومات':'Request Info'}</button>
+        </div>
+        <!-- Reject area -->
+        <div class="rej-area" id="ra-${i}">
+          <textarea id="rt-${i}" placeholder="${t.rejPlh}"></textarea>
+          <button class="rej-send" onclick="sendRej(${i},'${req.id||i}')"><i class="ti ti-send"></i>${t.rejSend}</button>
+        </div>
+        <!-- Send Note area -->
+        <div class="note-area" id="na-${i}">
+          <textarea id="nt-${i}" placeholder="${lang==='ar'?'اكتب ملاحظة للمستخدم...':'Write a note to the user...'}"></textarea>
+          <button class="note-send" onclick="doSendNote(${i},'${req.id||i}')"><i class="ti ti-send"></i>${lang==='ar'?'إرسال الملاحظة':'Send Note'}</button>
+        </div>
+        <!-- Request Info area -->
+        <div class="info-area" id="ia-${i}">
+          <textarea id="it-${i}" placeholder="${lang==='ar'?'اكتب ما تحتاجه من معلومات...':'Describe the information needed...'}"></textarea>
+          <button class="info-send" onclick="doRequestInfo(${i},'${req.id||i}')"><i class="ti ti-send"></i>${lang==='ar'?'إرسال طلب المعلومات':'Send Info Request'}</button>
+        </div>
+        <!-- Log -->
+        ${logs.length?`<div class="req-log-ttl"><i class="ti ti-history" style="color:var(--pri3)"></i>${t.logTtl}</div>
+        ${logs.map(l=>`<div class="log-row"><div class="log-dot" style="background:${stInfo(l.status).color}"></div><div class="log-txt">${l.note||stInfo(l.status).label}</div><div class="log-time">${fmtDate(l.created_at)}</div></div>`).join('')}`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togReq(i){document.getElementById('rc-'+i)?.classList.toggle('open');}
+function togRejArea(i){document.getElementById('ra-'+i)?.classList.toggle('show');}
+
+async function updStatus(idx,reqId,status){
+  const t=T[lang];
+  try{
+    await Admin.updateStatus(reqId,status);
+    if(typeof showToast!=='undefined')showToast(t.updateSuc,'success');
+    await loadAdminRequests();
+  }catch(e){if(typeof showToast!=='undefined')showToast('حدث خطأ','error');}
+}
+
+async function sendRej(idx,reqId){
+  const reason=document.getElementById('rt-'+idx)?.value?.trim();
+  if(!reason)return;
+  try{
+    await Admin.updateStatus(reqId,'rejected',reason);
+    if(typeof showToast!=='undefined')showToast(T[lang].updateSuc,'success');
+    await loadAdminRequests();
+  }catch(e){if(typeof showToast!=='undefined')showToast('حدث خطأ','error');}
+}
+
+async function setTime(idx,reqId){
+  const time=document.getElementById('ti-'+idx)?.value?.trim();
+  if(!time)return;
+  try{
+    await Admin.setTime(reqId,time);
+    if(typeof showToast!=='undefined')showToast(T[lang].updateSuc,'success');
+    await loadAdminRequests();
+  }catch(e){if(typeof showToast!=='undefined')showToast('حدث خطأ','error');}
+}
+
+/* ══ PRICING ══ */
+function renderPricing(){
+  const t=T[lang];
+  const grid=document.getElementById('price-grid');if(!grid)return;
+  const svcs=[];
+  allServices.forEach(cat=>(cat.entities||[]).forEach(ent=>(ent.services||[]).forEach(s=>svcs.push({...s,entityNm_ar:ent.name_ar,entityNm_en:ent.name_en,color:ent.color||'#1A237E',bg:ent.bg||'rgba(26,35,126,.09)'}))));
+  if(!svcs.length){grid.innerHTML=`<div style="color:var(--t3);">${t.noReqs}</div>`;return;}
+  grid.innerHTML=svcs.map(s=>{
+    const nm=lang==='ar'?s.name_ar:s.name_en;
+    const entNm=lang==='ar'?s.entityNm_ar:s.entityNm_en;
+    return `<div class="price-card">
+      <div class="pc-head">
+        <div class="pc-ico" style="background:${s.bg}">${renderIcon(s.icon,s.color,'ti-file-text')}</div>
+        <div><div class="pc-nm">${nm}</div><div class="pc-ent">${entNm}</div></div>
+      </div>
+      <div class="price-row">
+        <input class="price-inp" type="number" id="pi-${s.id}" value="${s.price||0}" min="0"/>
+        <span class="price-unit">${t.sar}</span>
+        <button class="price-save" onclick="savePrice(${s.id},'pi-${s.id}')">${lang==='ar'?'حفظ':'Save'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function savePrice(svcId,inputId){
+  const price=parseFloat(document.getElementById(inputId)?.value||0);
+  try{
+    if(typeof Admin!=='undefined') await Admin.updatePrice(svcId,price);
+    if(typeof showToast!=='undefined')showToast(T[lang].priceSaved,'success');
+  }catch(e){if(typeof showToast!=='undefined')showToast('حدث خطأ','error');}
+}
+
+/* ══ FINANCE TABLE ══ */
+function renderFinTable(){
+  const t=T[lang];
+  const el=document.getElementById('fin-table');if(!el)return;
+  const pays=statsData.recent_payments||[];
+  if(!pays.length){el.innerHTML=`<div style="padding:2rem;text-align:center;color:var(--t3);">${t.noReqs}</div>`;return;}
+  el.innerHTML=`<div class="fin-row"><div class="fin-ref">${lang==='ar'?'رقم الطلب':'Ref #'}</div><div class="fin-svc">${lang==='ar'?'الخدمة':'Service'}</div><div class="fin-client">${lang==='ar'?'العميل':'Client'}</div><div class="fin-amt">${lang==='ar'?'المبلغ':'Amount'}</div><div class="fin-status">${lang==='ar'?'النوع':'Type'}</div><div class="fin-date">${lang==='ar'?'التاريخ':'Date'}</div></div>`+
+  pays.map(p=>{
+    const isCharge=p.type==='charge';
+    const sign=isCharge?'+':'-';
+    const amtCls=isCharge?'credit':'debit';
+    const desc=lang==='ar'?(p.description_ar||p.type):(p.description_en||p.type);
+    return `<div class="fin-row">
+      <div class="fin-ref">${p.transaction_ref||p.ref_number||'—'}</div>
+      <div class="fin-svc">${desc}</div>
+      <div class="fin-client">${p.user?.name||'—'}</div>
+      <div class="fin-amt ${amtCls}">${sign}${parseFloat(p.amount||0).toFixed(2)} ${t.sar}</div>
+      <div class="fin-status" style="font-size:12px;font-weight:600;color:${isCharge?'var(--green)':'var(--red)'};">${p.type}</div>
+      <div class="fin-date">${fmtDate(p.created_at)}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══ NAV ══ */
+function showPage(p){
+  curPage=p;
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(el=>el.classList.remove('on'));
+  document.getElementById('page-'+p)?.classList.add('on');
+  const map={overview:'si-ov',requests:'si-req',catalog:'si-catalog',pricing:'si-price',finance:'si-fin',settings:'si-set',offices:'si-offices',permissions:'si-perms',users:'si-users',analytics:'si-analytics',logs:'si-logs'};
+  document.getElementById(map[p])?.closest('.sb-item')?.classList.add('on');
+  if(p==='off-finance') document.querySelector('.sb-item[onclick*="off-finance"]')?.classList.add('on');
+  const titles={overview:T[lang].ovTtl,requests:T[lang].reqTtl,catalog:'إدارة الكتالوج',pricing:T[lang].priceTtl,finance:T[lang].finTtl,settings:T[lang].setTtl,offices:'إدارة المكاتب',permissions:'الصلاحيات',users:'إدارة المستخدمين',analytics:'التحليلات والتقارير',logs:'سجل النشاط','off-finance':'المالية — المكاتب'};
+  S('tb-title',titles[p]||'');
+  if(p==='catalog')     initCatalog();
+  if(p==='requests')    loadAdminRequests();
+  if(p==='offices')     { loadOfficeStats(); loadOffices(); }
+  if(p==='permissions') loadAdmins();
+  if(p==='users')       { loadUserStats(); loadUsers(); }
+  if(p==='analytics')   loadAnalytics();
+  if(p==='logs')        loadLogs();
+  if(p==='off-finance') loadOfficeFinancial();
+}
+
+/* ══ LANG ══ */
+function setLang(l){
+  lang=l;localStorage.setItem('amrtm_lang',l);
+  document.documentElement.setAttribute('lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');
+  document.body.className=l;
+  document.getElementById('la').classList.toggle('on',l==='ar');document.getElementById('le').classList.toggle('on',l==='en');
+  applyLang(l);renderAll();
+}
+function applyLang(l){
+  const t=T[l];
+  [['sb-nm','nm'],['sb-sb','da'],['sb-s1','s1'],['sb-s2','s2'],['sb-s3','s3'],['sb-s4','s4'],
+   ['si-ov','siOv'],['si-req','siReq'],['si-price','siPrice'],['si-fin','siFin'],['si-site','siSite'],['si-set','siSet'],
+   ['ov-ttl','ovTtl'],['ov-sub','ovSub'],['ov-view-req','ovViewReq'],
+   ['sc-total-l','scTotal'],['sc-pend-l','scPend'],['sc-proc-l','scProc'],['sc-done-l','scDone'],['sc-rej-l','scRej'],['sc-users-l','scUsers'],
+   ['ch1-ttl','ch1'],['ch1-sub','ch1s'],['ch2-ttl','ch2'],['ch2-sub','ch2s'],['d-lbl','dLbl'],
+   ['top-ttl','topTtl'],['top-sub','topSub'],
+   ['req-ttl','reqTtl'],['rf-all','rfAll'],['rf-pend','rfPend'],['rf-proc','rfProc'],['rf-done','rfDone'],['rf-rej','rfRej'],
+   ['price-ttl','priceTtl'],['price-sub','priceSub'],
+   ['fin-ttl','finTtl'],['fin-sub','finSub'],['fin-exp','finExp'],['fin-total-l','finTotalL'],['fin-week-l','finWeekL'],['fin-avg-l','finAvgL'],['fin-pend-l','finPendL'],
+   ['set-ttl','setTtl'],['set-profile-ttl','setProfileTtl'],['set-lbl-nm','setLblNm'],['set-lbl-em','setLblEm'],['set-save-l','setSaveL'],
+   ['sb-role','admin'],
+  ].forEach(([id,k])=>S(id,t[k]));
+}
+
+/* ══ HELPERS ══ */
+function S(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString(lang==='ar'?'ar-SA':'en-US',{year:'numeric',month:'short',day:'numeric'});}
+function stInfo(s){const m={pending:{label:T[lang].stPend,color:'var(--orange)',bg:'rgba(230,81,0,.1)'},processing:{label:T[lang].stProc,color:'var(--blue)',bg:'rgba(2,119,189,.1)'},in_progress:{label:T[lang].stInprog,color:'var(--yellow)',bg:'rgba(249,168,37,.1)'},done:{label:T[lang].stDone,color:'var(--green)',bg:'rgba(27,94,32,.1)'},rejected:{label:T[lang].stRej,color:'var(--red)',bg:'rgba(198,40,40,.1)'}};return m[s]||{label:s,color:'#999',bg:'rgba(0,0,0,.05)'};}
+function doLogout(){if(typeof Auth!=='undefined')Auth.logout();else{localStorage.removeItem('amrtm_token');localStorage.removeItem('amrtm_user');window.location.href=(AMRTM_ROUTES&&AMRTM_ROUTES.login)||'/login';}}
+
+
+/* RUN */
+init();
+
+document.getElementById('srch-inp')?.addEventListener('input',function(){
+  clearTimeout(_reqSearchTimer);
+  _reqSearchTimer=setTimeout(()=>{reqPage=1;loadAdminRequests();},400);
+});
+
+/* ══ ADMIN: NOTE & INFO ACTIONS ══ */
+function togNoteArea(i){
+  document.getElementById('na-'+i)?.classList.toggle('show');
+  document.getElementById('ia-'+i)?.classList.remove('show');
+  document.getElementById('ra-'+i)?.classList.remove('show');
+}
+function togInfoArea(i){
+  document.getElementById('ia-'+i)?.classList.toggle('show');
+  document.getElementById('na-'+i)?.classList.remove('show');
+  document.getElementById('ra-'+i)?.classList.remove('show');
+}
+
+async function doSendNote(idx, reqId) {
+  const note = document.getElementById('nt-'+idx)?.value?.trim();
+  if (!note) { showToast(lang==='ar'?'الرجاء كتابة ملاحظة':'Please write a note','warning'); return; }
+  showLoader();
+  try {
+    if (typeof Admin !== 'undefined') await Admin.sendNote(reqId, note);
+    showToast(lang==='ar'?'تم إرسال الملاحظة':'Note sent','success');
+    document.getElementById('na-'+idx)?.classList.remove('show');
+    document.getElementById('nt-'+idx).value = '';
+    await loadData();
+  } catch(e) {
+    showToast(lang==='ar'?'فشل الإرسال':'Failed to send','error');
+  } finally { hideLoader(); }
+}
+
+async function doRequestInfo(idx, reqId) {
+  const msg = document.getElementById('it-'+idx)?.value?.trim();
+  if (!msg) { showToast(lang==='ar'?'الرجاء كتابة رسالة':'Please write a message','warning'); return; }
+  showLoader();
+  try {
+    if (typeof Admin !== 'undefined') await Admin.requestInfo(reqId, msg);
+    showToast(lang==='ar'?'تم إرسال طلب المعلومات':'Info request sent','success');
+    document.getElementById('ia-'+idx)?.classList.remove('show');
+    document.getElementById('it-'+idx).value = '';
+    await loadData();
+  } catch(e) {
+    showToast(lang==='ar'?'فشل الإرسال':'Failed to send','error');
+  } finally { hideLoader(); }
+}
+
+/* ══ ADMIN NOTIFICATION PANEL ══ */
+let _adminNotifLoaded = false;
+
+function toggleAdminNotifPanel() {
+  const panel = document.getElementById('admin-notif-panel');
+  if (!panel) return;
+  const isOpen = panel.classList.contains('show');
+  panel.classList.toggle('show', !isOpen);
+  if (!isOpen && !_adminNotifLoaded) loadAdminNotifications();
+}
+
+async function loadAdminNotifications() {
+  if (typeof Notifications === 'undefined') return;
+  _adminNotifLoaded = true;
+  try {
+    const res = await Notifications.getAll();
+    const items = res?.data || [];
+    const list = document.getElementById('admin-notif-list');
+    if (!list) return;
+    if (!items.length) {
+      list.innerHTML = `<div class="notif-empty-p">${lang==='ar'?'لا توجد إشعارات':'No notifications'}</div>`;
+      return;
+    }
+    const typeColors = { status_update:'#1565C0', admin_note:'#6A1B9A', info_request:'#E65100', request_submitted:'#1B5E20' };
+    list.innerHTML = items.map(n => `
+      <div class="notif-item${n.is_read ? '' : ' unread'}" onclick="adminReadNotif(${n.id}, this)">
+        <div class="notif-dot" style="background:${typeColors[n.type]||'#1A237E'}"></div>
+        <div class="notif-body">
+          <div class="notif-title">${n.title}</div>
+          <div class="notif-text">${n.body}</div>
+          <div class="notif-time">${fmtDate(n.created_at)}</div>
+        </div>
+      </div>`).join('');
+  } catch(_) {}
+}
+
+async function adminReadNotif(id, el) {
+  el?.classList.remove('unread');
+  if (typeof Notifications !== 'undefined') {
+    await Notifications.markRead(id);
+    adminRefreshNotifCount();
+  }
+}
+
+async function adminMarkAllRead() {
+  if (typeof Notifications !== 'undefined') {
+    await Notifications.markAllRead();
+    document.querySelectorAll('#admin-notif-list .notif-item.unread').forEach(el => el.classList.remove('unread'));
+    adminRefreshNotifCount();
+  }
+}
+
+async function adminRefreshNotifCount() {
+  if (typeof Notifications === 'undefined') return;
+  try {
+    const res = await Notifications.unreadCount();
+    const count = res?.count || 0;
+    const badge = document.getElementById('notif-badge');
+    if (badge) { badge.textContent = count; badge.style.display = count > 0 ? '' : 'none'; }
+  } catch(_) {}
+}
+
+document.addEventListener('click', e => {
+  const panel = document.getElementById('admin-notif-panel');
+  const btn   = document.getElementById('admin-notif-btn');
+  if (panel?.classList.contains('show') && !panel.contains(e.target) && !btn?.contains(e.target)) {
+    panel.classList.remove('show');
+  }
+});
+
+window.addEventListener('amrtm:notif-count', e => {
+  const count = e.detail;
+  const badge = document.getElementById('notif-badge');
+  if (badge) { badge.textContent = count; badge.style.display = count > 0 ? '' : 'none'; }
+  if (count > 0) _adminNotifLoaded = false;
+});
+
+/* ══════════════════════════════════════════════════════════════
+   CATALOG MANAGEMENT
+══════════════════════════════════════════════════════════════ */
+let _catData = [], _entData = [], _svcData = [];
+let _catInitDone = false;
+
+function catTab(name, btn) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.cat-tab-panel').forEach(p => p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('cat-panel-' + name)?.classList.add('on');
+}
+
+async function initCatalog() {
+  if (_catInitDone) return;
+  _catInitDone = true;
+  await loadCategories();
+  await loadEntities();
+  await loadSvcList();
+}
+
+/* ── Categories ── */
+async function loadCategories() {
+  try {
+    _catData = await Admin.catalog.getCategories();
+    renderCatList();
+    populateCatSelects();
+  } catch(e) { showToast('خطأ في تحميل التصنيفات', 'error'); }
+}
+
+function renderCatList() {
+  const el = document.getElementById('cat-list-body');
+  if (!_catData.length) { el.innerHTML = '<div class="cat-empty">لا توجد تصنيفات بعد.</div>'; return; }
+  el.innerHTML = _catData.map(c => `
+    <div class="cat-row" style="grid-template-columns:36px 1fr 1fr 80px 60px 120px;" id="cat-row-${c.id}">
+      <div class="ico-prev" style="background:${c.bg||'rgba(26,35,126,.1)'}">${renderIcon(c.icon,c.color||'#1A237E','ti-folder')}</div>
+      <div><div class="cat-nm">${c.name_ar}</div><div class="cat-sub">${c.name_en}</div></div>
+      <div class="cat-sub">${c.key||'—'}</div>
+      <div><span class="badge-count">${c.entities_count||0}</span></div>
+      <div><span class="cat-status-dot ${c.is_active?'active':'inactive'}"></span></div>
+      <div class="cat-actions">
+        <button class="cat-act-btn tog ${c.is_active?'':'off'}" onclick="toggleCat(${c.id},${c.is_active?1:0})">${c.is_active?'نشط':'متوقف'}</button>
+        <button class="cat-act-btn del" onclick="deleteCat(${c.id})"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+function populateCatSelects() {
+  const opts = _catData.map(c => `<option value="${c.id}">${c.name_ar}</option>`).join('');
+  ['ent-category-id','ent-filter-cat'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const prev = el.value;
+    const prefix = id === 'ent-filter-cat' ? '<option value="">الكل</option>' : '<option value="">-- اختر تصنيفاً --</option>';
+    el.innerHTML = prefix + opts;
+    el.value = prev;
+  });
+}
+
+async function doCreateCategory() {
+  const get = id => document.getElementById(id)?.value?.trim();
+  const data = {
+    key: get('cat-key'), name_ar: get('cat-name-ar'), name_en: get('cat-name-en'),
+    icon: get('cat-icon'), color: get('cat-color'), bg: get('cat-bg'),
+    sort_order: parseInt(get('cat-sort')) || undefined,
+  };
+  if (!data.key || !data.name_ar || !data.name_en || !data.icon || !data.color || !data.bg) {
+    showToast('يرجى ملء جميع الحقول المطلوبة', 'warning'); return;
+  }
+  try {
+    showLoader();
+    await Admin.catalog.createCategory(data);
+    ['cat-key','cat-name-ar','cat-name-en','cat-icon','cat-color','cat-bg','cat-sort'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    cpReset('cat-cp-row','cat-cp-label');
+    await loadCategories();
+    showToast('تم إضافة التصنيف بنجاح', 'success');
+  } catch(e) { showToast(e?.data?.message||'حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+async function toggleCat(id, wasActive) {
+  try {
+    await Admin.catalog.updateCategory(id, { is_active: !wasActive });
+    await loadCategories();
+    showToast(wasActive ? 'تم إيقاف التصنيف' : 'تم تفعيل التصنيف', 'info');
+  } catch(e) { showToast('خطأ', 'error'); }
+}
+
+async function deleteCat(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا التصنيف؟')) return;
+  try {
+    showLoader();
+    await Admin.catalog.deleteCategory(id);
+    await loadCategories();
+    showToast('تم الحذف', 'success');
+  } catch(e) { showToast(e?.data?.message||'لا يمكن الحذف', 'error'); } finally { hideLoader(); }
+}
+
+/* ── Entities ── */
+async function loadEntities(catId) {
+  try {
+    _entData = await Admin.catalog.getEntities(catId||'');
+    renderEntList();
+    populateEntSelects();
+  } catch(e) { showToast('خطأ في تحميل الجهات', 'error'); }
+}
+
+function renderEntList() {
+  const el = document.getElementById('ent-list-body');
+  if (!_entData.length) { el.innerHTML = '<div class="cat-empty">لا توجد جهات بعد.</div>'; return; }
+  el.innerHTML = _entData.map(e => `
+    <div class="cat-row" style="grid-template-columns:36px 1fr 1fr 80px 60px 120px;">
+      <div class="ico-prev" style="background:${e.bg||'rgba(26,35,126,.1)'}">${renderIcon(e.icon,e.color||'#1A237E','ti-building')}</div>
+      <div><div class="cat-nm">${e.name_ar}</div><div class="cat-sub">${e.name_en}${e.tag_ar?' · '+e.tag_ar:''}</div></div>
+      <div class="cat-sub">${e.category?.name_ar||'—'}</div>
+      <div><span class="badge-count">${e.gov_services_count||0}</span></div>
+      <div><span class="cat-status-dot ${e.is_active?'active':'inactive'}"></span></div>
+      <div class="cat-actions">
+        <button class="cat-act-btn tog ${e.is_active?'':'off'}" onclick="toggleEnt(${e.id},${e.is_active?1:0})">${e.is_active?'نشط':'متوقف'}</button>
+        <button class="cat-act-btn del" onclick="deleteEnt(${e.id})"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+function populateEntSelects() {
+  const opts = _entData.map(e => `<option value="${e.id}">${e.name_ar}</option>`).join('');
+  ['svc-entity-id','svc-filter-ent'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const prev = el.value;
+    const prefix = id === 'svc-filter-ent' ? '<option value="">الكل</option>' : '<option value="">-- اختر جهة --</option>';
+    el.innerHTML = prefix + opts;
+    el.value = prev;
+  });
+}
+
+async function doCreateEntity() {
+  const get = id => document.getElementById(id)?.value?.trim();
+  const data = {
+    category_id: parseInt(get('ent-category-id')),
+    name_ar: get('ent-name-ar'), name_en: get('ent-name-en'),
+    icon: get('ent-icon'), color: get('ent-color'), bg: get('ent-bg'),
+    tag_ar: get('ent-tag-ar')||null, tag_en: get('ent-tag-en')||null,
+    sort_order: parseInt(get('ent-sort')) || undefined,
+  };
+  if (!data.category_id || !data.name_ar || !data.name_en || !data.icon || !data.color || !data.bg) {
+    showToast('يرجى ملء جميع الحقول المطلوبة', 'warning'); return;
+  }
+  try {
+    showLoader();
+    await Admin.catalog.createEntity(data);
+    ['ent-name-ar','ent-name-en','ent-icon','ent-color','ent-bg','ent-tag-ar','ent-tag-en','ent-sort'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    cpReset('ent-cp-row','ent-cp-label');
+    await loadEntities();
+    showToast('تم إضافة الجهة بنجاح', 'success');
+  } catch(e) { showToast(e?.data?.message||'حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+async function toggleEnt(id, wasActive) {
+  try {
+    await Admin.catalog.updateEntity(id, { is_active: !wasActive });
+    await loadEntities(document.getElementById('ent-filter-cat')?.value||'');
+    showToast(wasActive ? 'تم إيقاف الجهة' : 'تم تفعيل الجهة', 'info');
+  } catch(e) { showToast('خطأ', 'error'); }
+}
+
+async function deleteEnt(id) {
+  if (!confirm('هل أنت متأكد من حذف هذه الجهة؟')) return;
+  try {
+    showLoader();
+    await Admin.catalog.deleteEntity(id);
+    await loadEntities(document.getElementById('ent-filter-cat')?.value||'');
+    showToast('تم الحذف', 'success');
+  } catch(e) { showToast(e?.data?.message||'لا يمكن الحذف', 'error'); } finally { hideLoader(); }
+}
+
+/* ── Services ── */
+async function loadSvcList(entityId) {
+  try {
+    _svcData = await Admin.catalog.getServices(entityId||'');
+    renderSvcList();
+  } catch(e) { showToast('خطأ في تحميل الخدمات', 'error'); }
+}
+
+function renderSvcList() {
+  const el = document.getElementById('svc-list-body');
+  if (!_svcData.length) { el.innerHTML = '<div class="cat-empty">لا توجد خدمات بعد.</div>'; return; }
+  el.innerHTML = _svcData.map(s => `
+    <div class="cat-row" style="grid-template-columns:36px 1fr 1fr 80px 70px 60px 120px;">
+      <div class="ico-prev" style="background:${s.entity?.bg||'rgba(26,35,126,.1)'}">${renderIcon(s.icon,s.entity?.color||'#1A237E','ti-list')}</div>
+      <div><div class="cat-nm">${s.name_ar}</div><div class="cat-sub">${s.name_en}</div></div>
+      <div class="cat-sub">${s.entity?.name_ar||'—'}</div>
+      <div class="cat-nm" style="color:var(--pri)">${parseFloat(s.price||0).toFixed(0)} ر.س</div>
+      <div class="cat-sub">${s.estimated_days||'—'} يوم</div>
+      <div><span class="cat-status-dot ${s.is_active?'active':'inactive'}"></span></div>
+      <div class="cat-actions">
+        <button class="cat-act-btn tog ${s.is_active?'':'off'}" onclick="toggleSvc(${s.id},${s.is_active?1:0})">${s.is_active?'نشط':'متوقف'}</button>
+        <button class="cat-act-btn del" onclick="deleteSvc(${s.id})"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('');
+}
+
+async function doCreateService() {
+  const get = id => document.getElementById(id)?.value?.trim();
+  const data = {
+    entity_id: parseInt(get('svc-entity-id')),
+    name_ar: get('svc-name-ar'), name_en: get('svc-name-en'),
+    icon: get('svc-icon'), price: parseFloat(get('svc-price')),
+    estimated_days: parseInt(get('svc-days')),
+    description_ar: get('svc-desc-ar')||null, description_en: get('svc-desc-en')||null,
+    sort_order: parseInt(get('svc-sort')) || undefined,
+  };
+  if (!data.entity_id || !data.name_ar || !data.name_en || !data.icon || isNaN(data.price) || isNaN(data.estimated_days)) {
+    showToast('يرجى ملء جميع الحقول المطلوبة', 'warning'); return;
+  }
+  try {
+    showLoader();
+    await Admin.catalog.createService(data);
+    ['svc-name-ar','svc-name-en','svc-icon','svc-price','svc-days','svc-desc-ar','svc-desc-en','svc-sort'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    await loadSvcList(document.getElementById('svc-filter-ent')?.value||'');
+    showToast('تم إضافة الخدمة بنجاح', 'success');
+  } catch(e) { showToast(e?.data?.message||'حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+async function toggleSvc(id, wasActive) {
+  try {
+    await Admin.catalog.updateService(id, { is_active: !wasActive });
+    await loadSvcList(document.getElementById('svc-filter-ent')?.value||'');
+    showToast(wasActive ? 'تم إيقاف الخدمة' : 'تم تفعيل الخدمة', 'info');
+  } catch(e) { showToast('خطأ', 'error'); }
+}
+
+async function deleteSvc(id) {
+  if (!confirm('هل أنت متأكد من حذف هذه الخدمة؟')) return;
+  try {
+    showLoader();
+    await Admin.catalog.deleteService(id);
+    await loadSvcList(document.getElementById('svc-filter-ent')?.value||'');
+    showToast('تم الحذف', 'success');
+  } catch(e) { showToast(e?.data?.message||'لا يمكن الحذف — قد تكون للخدمة طلبات مرتبطة بها', 'error'); } finally { hideLoader(); }
+}
+
+/* ── Icon renderer: handles both Tabler class names and custom 'img:file' values ── */
+function renderIcon(val, color, fallback) {
+  if (val && val.startsWith('img:')) {
+    const file = val.slice(4);
+    return '<img src="/icons/' + encodeURIComponent(file) + '" style="max-width:80%;max-height:80%;object-fit:contain;" onerror="this.style.opacity=\'.2\'">';
+  }
+  return '<i class="ti ' + (val || fallback || 'ti-folder') + '" style="color:' + (color || '#1A237E') + '"></i>';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   OFFICES PAGE
+══════════════════════════════════════════════════════════════ */
+let _offStatus = 'all', _offType = 'all', _offPage = 1, _offData = [], _offMeta = {};
+
+function filterOffices(s, btn) {
+  _offStatus = s; _offPage = 1;
+  document.querySelectorAll('#page-offices .req-filters .rf-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  loadOffices();
+}
+
+function filterOfficeType(t, btn) {
+  _offType = t; _offPage = 1;
+  document.querySelectorAll('.off-type-tabs .rf-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  loadOffices();
+}
+
+async function loadOfficeStats() {
+  try {
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/offices/stats`, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' },
+      credentials: 'same-origin',
+    });
+    if (!res.ok) return;
+    const d = await res.json();
+    S('off-sc-total',    d.total    || 0);
+    S('off-sc-verified', d.verified || 0);
+    S('off-sc-pending',  d.pending  || 0);
+    S('off-sc-inactive', d.inactive || 0);
+    const badge = document.getElementById('sb-off-pend');
+    if (badge) { badge.textContent = d.pending || 0; badge.style.display = d.pending > 0 ? '' : 'none'; }
+  } catch(_) {}
+}
+
+async function loadOffices() {
+  const el = document.getElementById('off-list');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--t3);">جارٍ التحميل...</div>';
+  try {
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const params = new URLSearchParams({ page: _offPage });
+    if (_offStatus !== 'all') params.set('status', _offStatus);
+    if (_offType   !== 'all') params.set('type',   _offType);
+    const res = await fetch(`${base}/admin/offices?${params}`, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' },
+      credentials: 'same-origin',
+    });
+    if (!res.ok) { el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--red);">فشل في تحميل البيانات</div>'; return; }
+    const d  = await res.json();
+    _offData = d.data || [];
+    _offMeta = { current_page: d.current_page || 1, last_page: d.last_page || 1, total: d.total || 0 };
+    renderOffList();
+  } catch(e) { el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--red);">حدث خطأ</div>'; }
+}
+
+function renderOffList() {
+  const el = document.getElementById('off-list');
+  if (!el) return;
+  if (!_offData.length) { el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--t3);">لا توجد مكاتب</div>'; return; }
+
+  const typeLabels = { law: 'محاماة', services: 'تعقيب وخدمات', customs: 'جمارك' };
+  const typeIcons  = { law: 'ti-scale', services: 'ti-briefcase', customs: 'ti-container' };
+  const typeColors = { law: 'rgba(26,35,126,.1)', services: 'rgba(2,119,189,.1)', customs: 'rgba(0,105,92,.1)' };
+  const typeClr    = { law: '#1A237E', services: '#0277BD', customs: '#00695C' };
+
+  el.innerHTML = _offData.map((o, i) => {
+    const isVerified = o.is_verified;
+    const isActive   = o.is_active;
+    const verBadge   = !isActive
+      ? '<span class="off-verify-badge inactive">موقوف</span>'
+      : isVerified
+        ? '<span class="off-verify-badge verified"><i class="ti ti-circle-check"></i> معتمد</span>'
+        : '<span class="off-verify-badge pending"><i class="ti ti-clock"></i> ينتظر الاعتماد</span>';
+
+    return `<div class="off-office-card" id="ofc-${i}">
+      <div class="off-card-ico" style="background:${typeColors[o.type]||'rgba(26,35,126,.1)'}">
+        <i class="ti ${typeIcons[o.type]||'ti-building'}" style="color:${typeClr[o.type]||'#1A237E'}"></i>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:4px;">
+          <span style="font-size:14px;font-weight:800;color:var(--t1);">${o.name_ar||o.name_en||'—'}</span>
+          <span class="off-type-badge ${o.type||''}">${typeLabels[o.type]||o.type}</span>
+          ${verBadge}
+        </div>
+        <div class="off-card-meta">
+          ${o.email ? `<span style="font-size:11.5px;color:var(--t3);"><i class="ti ti-mail" style="font-size:11px;"></i> ${o.email}</span>` : ''}
+          ${o.phone ? `<span style="font-size:11.5px;color:var(--t3);margin-right:.5rem;"><i class="ti ti-phone" style="font-size:11px;"></i> ${o.phone}</span>` : ''}
+          ${o.city  ? `<span style="font-size:11.5px;color:var(--t3);margin-right:.5rem;"><i class="ti ti-map-pin" style="font-size:11px;"></i> ${o.city}</span>` : ''}
+          ${o.cr_number ? `<span style="font-size:11.5px;color:var(--t3);margin-right:.5rem;">س.ت: ${o.cr_number}</span>` : ''}
+        </div>
+      </div>
+      <div class="off-card-actions">
+        ${!isVerified ? `<button class="cat-act-btn" style="background:rgba(27,94,32,.08);color:var(--green);border-color:rgba(27,94,32,.2);" onclick="doVerifyOffice(${o.id})"><i class="ti ti-circle-check"></i> اعتماد</button>` : ''}
+        <button class="cat-act-btn tog${!isActive?' off':''}" onclick="doToggleOffice(${o.id})">${isActive ? 'إيقاف' : 'تفعيل'}</button>
+        <button class="cat-act-btn del" onclick="doDeleteOffice(${o.id})"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function doVerifyOffice(id) {
+  const rateStr = prompt('حدّد نسبة عمولة المنصة من كل طلب (%) :', '10');
+  if (rateStr === null) return;
+  const rate = parseFloat(rateStr);
+  if (isNaN(rate) || rate < 0 || rate > 100) { showToast('نسبة العمولة يجب أن تكون بين 0 و 100', 'error'); return; }
+  try {
+    showLoader();
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/offices/${id}/verify`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ commission_rate: rate }),
+    });
+    if (!res.ok) throw await res.json();
+    showToast(`تم اعتماد المكتب — عمولة ${rate}%`, 'success');
+    await loadOffices(); await loadOfficeStats();
+  } catch(e) { showToast(e?.message || 'حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+async function doToggleOffice(id) {
+  try {
+    showLoader();
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/offices/${id}/toggle`, {
+      method: 'POST', headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    const d = await res.json();
+    showToast(d.message || 'تم التحديث', 'success');
+    await loadOffices(); await loadOfficeStats();
+  } catch(e) { showToast('حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+async function doDeleteOffice(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا المكتب؟ لن يمكن التراجع عن هذا الإجراء.')) return;
+  try {
+    showLoader();
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/offices/${id}`, {
+      method: 'DELETE', headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    const d = await res.json();
+    showToast(d.message || 'تم الحذف', 'success');
+    await loadOffices(); await loadOfficeStats();
+  } catch(e) { showToast('حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PERMISSIONS PAGE (supervisor only)
+══════════════════════════════════════════════════════════════ */
+const PERMS_META = {
+  approve_offices: { ar: 'اعتماد المكاتب', en: 'Approve Offices', desc_ar: 'السماح بقبول ورفض المكاتب المسجلة' },
+  view_revenue:    { ar: 'عرض الإيرادات',  en: 'View Revenue',    desc_ar: 'الوصول إلى تقارير وبيانات الإيرادات' },
+  view_reports:    { ar: 'عرض التقارير',   en: 'View Reports',    desc_ar: 'الوصول إلى التقارير الشهرية والإحصائيات' },
+  manage_catalog:  { ar: 'إدارة الكتالوج', en: 'Manage Catalog',  desc_ar: 'إضافة وتعديل التصنيفات والخدمات' },
+};
+
+let _adminsData = [];
+
+async function loadAdmins() {
+  const el = document.getElementById('admins-list');
+  if (!el) return;
+  try {
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/supervisor/admins`, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    if (!res.ok) { el.innerHTML = '<div style="padding:2rem;color:var(--red);">فشل في تحميل البيانات</div>'; return; }
+    _adminsData = await res.json();
+    renderAdminsList();
+  } catch(e) { el.innerHTML = '<div style="padding:2rem;color:var(--red);">حدث خطأ</div>'; }
+}
+
+function renderAdminsList() {
+  const el = document.getElementById('admins-list');
+  if (!el) return;
+  if (!_adminsData.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--t3);">لا يوجد مدراء بعد</div>'; return; }
+
+  el.innerHTML = _adminsData.map((a, i) => {
+    const isSupervisor = a.role === 'supervisor';
+    const isActive     = a.is_active !== false;
+    const perms        = a.permissions || [];
+
+    const permsHtml = isSupervisor
+      ? '<div style="padding:.7rem 0;color:var(--green);font-size:13px;font-weight:700;"><i class="ti ti-shield"></i> صلاحيات كاملة (سوبرفايزر)</div>'
+      : Object.entries(PERMS_META).map(([key, meta]) => `
+          <div class="perm-row">
+            <div class="perm-lbl">${meta.ar}<small>${meta.desc_ar}</small></div>
+            <label class="perm-toggle">
+              <input type="checkbox" ${perms.includes(key) ? 'checked' : ''} onchange="togglePerm(${a.id}, '${key}', this.checked)"/>
+              <span class="perm-slider"></span>
+            </label>
+          </div>`).join('');
+
+    return `<div class="admin-card" id="admin-card-${a.id}">
+      <div class="admin-card-hd">
+        <div class="admin-card-av">${(a.name||'A')[0]}</div>
+        <div style="flex:1;">
+          <div class="admin-card-nm">${a.name}</div>
+          <div class="admin-card-em">${a.email}${a.phone ? ' · ' + a.phone : ''}</div>
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center;">
+          <span style="padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;background:${isSupervisor?'rgba(106,27,154,.1)':'rgba(26,35,126,.1)'};color:${isSupervisor?'var(--purple)':'var(--pri)'};">
+            ${isSupervisor ? 'سوبرفايزر' : 'مدير'}
+          </span>
+          ${!isActive ? '<span style="padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;background:rgba(198,40,40,.1);color:var(--red);">معطل</span>' : ''}
+          ${!isSupervisor ? `<button class="cat-act-btn tog${!isActive?' off':''}" onclick="doToggleAdmin(${a.id})">${isActive ? 'تعطيل' : 'تفعيل'}</button>` : ''}
+        </div>
+      </div>
+      ${permsHtml}
+    </div>`;
+  }).join('');
+}
+
+async function togglePerm(adminId, perm, isChecked) {
+  try {
+    const admin = _adminsData.find(a => a.id === adminId);
+    if (!admin) return;
+    let perms = [...(admin.permissions || [])];
+    if (isChecked) { if (!perms.includes(perm)) perms.push(perm); }
+    else { perms = perms.filter(p => p !== perm); }
+
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/supervisor/admins/${adminId}/permissions`, {
+      method: 'PUT',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ permissions: perms }),
+    });
+    const d = await res.json();
+    if (!res.ok) { showToast(d.message || 'حدث خطأ', 'error'); await loadAdmins(); return; }
+    admin.permissions = perms;
+    showToast('تم تحديث الصلاحيات', 'success');
+  } catch(e) { showToast('حدث خطأ', 'error'); await loadAdmins(); }
+}
+
+async function doToggleAdmin(id) {
+  try {
+    showLoader();
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/supervisor/admins/${id}/toggle`, {
+      method: 'POST', headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    const d = await res.json();
+    showToast(d.message || 'تم', 'success');
+    await loadAdmins();
+  } catch(e) { showToast('حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+function showCreateAdminModal() {
+  document.getElementById('create-admin-modal')?.classList.add('show');
+}
+function closeCreateAdminModal() {
+  document.getElementById('create-admin-modal')?.classList.remove('show');
+  ['new-admin-name','new-admin-email','new-admin-phone','new-admin-pass'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+}
+
+async function doCreateAdmin() {
+  const name  = document.getElementById('new-admin-name')?.value?.trim();
+  const email = document.getElementById('new-admin-email')?.value?.trim();
+  const phone = document.getElementById('new-admin-phone')?.value?.trim();
+  const pass  = document.getElementById('new-admin-pass')?.value;
+  if (!name || !email || !pass) { showToast('يرجى ملء جميع الحقول المطلوبة', 'warning'); return; }
+  try {
+    showLoader();
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/supervisor/admins`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ name, email, phone: phone || null, password: pass }),
+    });
+    const d = await res.json();
+    if (!res.ok) { showToast(d.message || 'حدث خطأ', 'error'); return; }
+    showToast('تم إنشاء حساب المدير', 'success');
+    closeCreateAdminModal();
+    await loadAdmins();
+  } catch(e) { showToast('حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+document.getElementById('create-admin-modal')?.addEventListener('click', e => {
+  if (e.target === document.getElementById('create-admin-modal')) closeCreateAdminModal();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   USERS PAGE
+══════════════════════════════════════════════════════════════ */
+let _usrFilter = 'all', _usrPage = 1, _usrSearch = '', _usrData = [], _usrMeta = {};
+let _balUserId = null, _usrSearchTimer = null;
+
+function filterUsers(f, btn) {
+  _usrFilter = f; _usrPage = 1;
+  document.querySelectorAll('#page-users .req-filters .rf-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  loadUsers();
+}
+
+function debounceUserSearch(v) {
+  _usrSearch = v; _usrPage = 1;
+  clearTimeout(_usrSearchTimer);
+  _usrSearchTimer = setTimeout(loadUsers, 380);
+}
+
+async function loadUserStats() {
+  try {
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/users/stats`, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    if (!res.ok) return;
+    const d = await res.json();
+    S('usr-sc-total',  d.total        || 0);
+    S('usr-sc-active', d.active       || 0);
+    S('usr-sc-banned', d.banned       || 0);
+    S('usr-sc-new',    d.newThisMonth || 0);
+  } catch(_) {}
+}
+
+async function loadUsers() {
+  const el = document.getElementById('usr-list');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;padding:2.5rem;color:var(--t3);">جارٍ التحميل...</div>';
+  try {
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const params = new URLSearchParams({ page: _usrPage });
+    if (_usrFilter !== 'all') params.set('status', _usrFilter === 'active' ? 'active' : 'banned');
+    if (_usrSearch) params.set('search', _usrSearch);
+    const res = await fetch(`${base}/admin/users?${params}`, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    if (!res.ok) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--red);">فشل في تحميل البيانات</div>'; return; }
+    const d = await res.json();
+    _usrData = d.data || [];
+    _usrMeta = { current_page: d.current_page || 1, last_page: d.last_page || 1, total: d.total || 0 };
+    renderUserList();
+    renderUserPagination();
+  } catch(e) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--red);">حدث خطأ</div>'; }
+}
+
+function renderUserList() {
+  const el = document.getElementById('usr-list');
+  if (!el) return;
+  if (!_usrData.length) { el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--t3);">لا يوجد مستخدمون</div>'; return; }
+  el.innerHTML = _usrData.map(u => {
+    const isActive = u.is_active !== false;
+    const bal = parseFloat(u.balance || 0);
+    const balCls = bal >= 0 ? 'pos' : 'neg';
+    return `<div class="usr-card">
+      <div class="usr-av">${(u.name||'?')[0]}</div>
+      <div>
+        <div class="usr-nm">${u.name}</div>
+        <div class="usr-meta">${u.email}${u.phone?' · '+u.phone:''}${u.req_total?' · '+u.req_total+' طلب':''}</div>
+        <div style="margin-top:4px;display:flex;gap:.4rem;flex-wrap:wrap;">
+          <span style="padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:700;background:${isActive?'rgba(27,94,32,.1)':'rgba(198,40,40,.1)'};color:${isActive?'var(--green)':'var(--red)'};">${isActive?'نشط':'محظور'}</span>
+          <span style="font-size:10.5px;color:var(--t3);">انضم: ${fmtDate(u.created_at)}</span>
+        </div>
+      </div>
+      <div>
+        <div class="usr-bal ${balCls}">${bal.toFixed(0)}</div>
+        <div style="font-size:10px;color:var(--t3);text-align:center;">ر.س</div>
+      </div>
+      <div class="usr-actions">
+        <button class="cat-act-btn" style="background:rgba(26,35,126,.08);color:var(--pri);border-color:var(--b1);" onclick="showBalanceModal(${u.id},'${(u.name||'').replace(/'/g,'')}',${ bal })"><i class="ti ti-wallet"></i></button>
+        <button class="cat-act-btn tog${!isActive?' off':''}" onclick="doToggleUser(${u.id})">${isActive?'حظر':'تفعيل'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderUserPagination() {
+  const existing = document.getElementById('usr-pag');
+  if (existing) existing.remove();
+  if (!_usrMeta.last_page || _usrMeta.last_page <= 1) return;
+  const pag = document.createElement('div');
+  pag.id = 'usr-pag';
+  pag.style.cssText = 'display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;';
+  const cur = _usrMeta.current_page || 1, last = _usrMeta.last_page || 1;
+  let html = '';
+  if (cur > 1) html += `<button onclick="_usrPage=${cur-1};loadUsers()" style="height:36px;padding:0 12px;border-radius:8px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">السابق</button>`;
+  for (let i = Math.max(1, cur-2); i <= Math.min(last, cur+2); i++) {
+    const on = i === cur;
+    html += `<button onclick="_usrPage=${i};loadUsers()" style="width:36px;height:36px;border-radius:8px;border:1.5px solid ${on?'var(--pri)':'var(--b1)'};background:${on?'var(--pri)':'transparent'};color:${on?'#fff':'var(--t2)'};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">${i}</button>`;
+  }
+  if (cur < last) html += `<button onclick="_usrPage=${cur+1};loadUsers()" style="height:36px;padding:0 12px;border-radius:8px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">التالي</button>`;
+  pag.innerHTML = html;
+  document.getElementById('usr-list')?.insertAdjacentElement('afterend', pag);
+}
+
+async function doToggleUser(id) {
+  try {
+    showLoader();
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/users/${id}/toggle`, {
+      method: 'POST', headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    const d = await res.json();
+    showToast(d.message || 'تم', 'success');
+    await loadUsers(); await loadUserStats();
+  } catch(e) { showToast('حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+
+function showBalanceModal(id, name, balance) {
+  _balUserId = id;
+  S('bal-user-name', name);
+  S('bal-current', parseFloat(balance).toFixed(2) + ' ر.س');
+  document.getElementById('bal-amount').value = '';
+  document.getElementById('bal-reason').value = '';
+  document.querySelector('input[name="bal-type"][value="charge"]').checked = true;
+  updateBalTypeUI();
+  document.getElementById('balance-modal')?.classList.add('show');
+}
+function closeBalanceModal() {
+  document.getElementById('balance-modal')?.classList.remove('show');
+  _balUserId = null;
+}
+function updateBalTypeUI() {
+  const isCharge = document.querySelector('input[name="bal-type"]:checked')?.value === 'charge';
+  document.getElementById('bal-submit-btn').style.background = isCharge
+    ? 'linear-gradient(135deg,#1B5E20,#2E7D32)' : 'linear-gradient(135deg,#C62828,#D32F2F)';
+}
+async function doAdjustBalance() {
+  if (!_balUserId) return;
+  const amount = parseFloat(document.getElementById('bal-amount')?.value);
+  const type   = document.querySelector('input[name="bal-type"]:checked')?.value;
+  const reason = document.getElementById('bal-reason')?.value?.trim();
+  if (!amount || amount <= 0) { showToast('يرجى إدخال مبلغ صحيح', 'warning'); return; }
+  try {
+    showLoader();
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/users/${_balUserId}/balance`, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' },
+      credentials: 'same-origin',
+      body: JSON.stringify({ amount, type, reason: reason || null }),
+    });
+    const d = await res.json();
+    if (!res.ok) { showToast(d.message || 'حدث خطأ', 'error'); return; }
+    showToast(d.message || 'تم', 'success');
+    closeBalanceModal();
+    await loadUsers();
+  } catch(e) { showToast('حدث خطأ', 'error'); } finally { hideLoader(); }
+}
+document.getElementById('balance-modal')?.addEventListener('click', e => {
+  if (e.target === document.getElementById('balance-modal')) closeBalanceModal();
+});
+
+function exportUsersCSV() {
+  if (!_usrData.length) { showToast('لا توجد بيانات للتصدير', 'warning'); return; }
+  const rows = _usrData.map(u => ({
+    ID: u.id, Name: u.name, Email: u.email, Phone: u.phone,
+    Balance: u.balance, Requests: u.req_total, Status: u.is_active ? 'Active' : 'Banned',
+    Joined: u.created_at,
+  }));
+  exportCSV(rows, 'users_export.csv');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ANALYTICS PAGE
+══════════════════════════════════════════════════════════════ */
+let _analyticsData = {};
+
+async function loadAnalytics() {
+  try {
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const res = await fetch(`${base}/admin/analytics?months=6`, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    if (!res.ok) { showToast('خطأ في تحميل التحليلات', 'error'); return; }
+    _analyticsData = await res.json();
+    renderAnalytics();
+  } catch(e) { showToast('حدث خطأ', 'error'); }
+}
+
+function renderAnalytics() {
+  const d = _analyticsData;
+  if (!d || !d.monthly) return;
+
+  S('an-revenue',  parseFloat(d.total_revenue || 0).toFixed(0));
+  S('an-rate',     (d.completion_rate || 0) + '%');
+  S('an-rej-rate', (d.rejection_rate  || 0) + '%');
+
+  // Revenue chart
+  const monthly = d.monthly || [];
+  const maxRev  = Math.max(...monthly.map(m => m.revenue), 1);
+  document.getElementById('an-rev-chart').innerHTML = monthly.map(m => {
+    const h = Math.max(Math.round((m.revenue / maxRev) * 110), 4);
+    return `<div class="rev-bar-wrap">
+      <div class="rev-bar-val">${parseFloat(m.revenue).toFixed(0)}</div>
+      <div class="rev-bar" style="height:${h}px;"></div>
+      <div class="rev-bar-lbl">${(m.label||'').replace(' ','\n')}</div>
+    </div>`;
+  }).join('');
+
+  // Requests chart
+  const maxReq = Math.max(...monthly.map(m => m.requests), 1);
+  document.getElementById('an-req-chart').innerHTML = monthly.map(m => {
+    const h = Math.max(Math.round((m.requests / maxReq) * 110), 4);
+    return `<div class="rev-bar-wrap">
+      <div class="rev-bar-val">${m.requests}</div>
+      <div class="rev-bar" style="height:${h}px;background:linear-gradient(180deg,#0277BD,#1565C0);"></div>
+      <div class="rev-bar-lbl">${(m.label||'').replace(' ','\n')}</div>
+    </div>`;
+  }).join('');
+
+  // Top services
+  const tops = d.top_services || [];
+  const maxCnt = Math.max(...tops.map(s => s.count), 1);
+  document.getElementById('an-top-svcs').innerHTML = tops.map(s => `
+    <div class="an-svc-row">
+      <div class="ts-ico" style="background:${s.bg||'rgba(26,35,126,.1)'};width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        ${renderIcon(s.icon, s.color||'#1A237E','ti-file-text')}
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px;">${lang==='ar'?s.name_ar:s.name_en}</div>
+        <div class="an-svc-bar-w"><div class="an-svc-bar" style="width:${Math.round((s.count/maxCnt)*100)}%;background:${s.color||'var(--pri)'}"></div></div>
+      </div>
+      <div style="text-align:left;min-width:80px;">
+        <div style="font-size:13px;font-weight:700;color:var(--t1);">${s.count} طلب</div>
+        <div style="font-size:11px;color:var(--green);">${parseFloat(s.revenue||0).toFixed(0)} ر.س</div>
+      </div>
+    </div>`).join('');
+}
+
+function exportAnalyticsCSV() {
+  const monthly = _analyticsData.monthly || [];
+  if (!monthly.length) { showToast('لا توجد بيانات', 'warning'); return; }
+  exportCSV(monthly.map(m => ({ Month: m.label, Revenue: m.revenue, Requests: m.requests, NewUsers: m.users })), 'analytics_export.csv');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ACTIVITY LOGS PAGE
+══════════════════════════════════════════════════════════════ */
+let _logFilter = 'all', _logPage = 1, _logSearch = '', _logSearchTimer = null;
+
+function filterLogs(f, btn) {
+  _logFilter = f; _logPage = 1;
+  document.querySelectorAll('#page-logs .req-filters .rf-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  loadLogs();
+}
+
+function debounceLogSearch(v) {
+  _logSearch = v; _logPage = 1;
+  clearTimeout(_logSearchTimer);
+  _logSearchTimer = setTimeout(loadLogs, 380);
+}
+
+async function loadLogs() {
+  const el = document.getElementById('log-list');
+  if (!el) return;
+  el.innerHTML = '<div style="text-align:center;padding:2.5rem;color:var(--t3);">جارٍ التحميل...</div>';
+  try {
+    const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+    const params = new URLSearchParams({ page: _logPage });
+    if (_logFilter !== 'all') params.set('log_type', _logFilter);
+    if (_logSearch) params.set('search', _logSearch);
+    const res = await fetch(`${base}/admin/logs?${params}`, {
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || '' }, credentials: 'same-origin',
+    });
+    if (!res.ok) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--red);">فشل في تحميل البيانات</div>'; return; }
+    const d = await res.json();
+    renderLogList(d.data || [], d);
+    renderLogPagination(d);
+  } catch(e) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--red);">حدث خطأ</div>'; }
+}
+
+function renderLogList(logs, meta) {
+  const el = document.getElementById('log-list');
+  if (!el) return;
+  if (!logs.length) { el.innerHTML = '<div style="text-align:center;padding:3rem;color:var(--t3);">لا توجد سجلات</div>'; return; }
+
+  const typeConf = {
+    status_change: { icon: 'ti-refresh',       color: '#0277BD', bg: 'rgba(2,119,189,.1)',  label: 'تغيير الحالة' },
+    admin_note:    { icon: 'ti-message',        color: '#6A1B9A', bg: 'rgba(106,27,154,.1)', label: 'ملاحظة إدارية' },
+    info_request:  { icon: 'ti-info-circle',    color: '#E65100', bg: 'rgba(230,81,0,.1)',   label: 'طلب معلومات' },
+  };
+
+  el.innerHTML = logs.map(l => {
+    const conf = typeConf[l.log_type] || { icon: 'ti-activity', color: '#999', bg: 'rgba(0,0,0,.05)', label: l.log_type };
+    const stLabel = l.status ? (stInfo(l.status)?.label || l.status) : '';
+    return `<div class="log-entry">
+      <div class="log-icon" style="background:${conf.bg}"><i class="ti ${conf.icon}" style="color:${conf.color}"></i></div>
+      <div>
+        <div class="log-main-nm">${conf.label}${stLabel ? ' → ' + stLabel : ''}</div>
+        <div class="log-main-meta">
+          <span>طلب: <strong>${l.ref_number}</strong></span>
+          <span style="margin:0 .4rem;">·</span>
+          <span>عميل: ${l.client_name}</span>
+          <span style="margin:0 .4rem;">·</span>
+          <span>مدير: ${l.admin_name}</span>
+        </div>
+        ${l.note ? `<div class="log-note">"${l.note}"</div>` : ''}
+      </div>
+      <div class="log-date">${fmtDate(l.created_at)}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderLogPagination(meta) {
+  const existing = document.getElementById('log-pag');
+  if (existing) existing.remove();
+  if (!meta.last_page || meta.last_page <= 1) return;
+  const pag = document.createElement('div');
+  pag.id = 'log-pag';
+  pag.style.cssText = 'display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;';
+  const cur = meta.current_page || 1, last = meta.last_page || 1;
+  let html = '';
+  if (cur > 1) html += `<button onclick="_logPage=${cur-1};loadLogs()" style="height:36px;padding:0 12px;border-radius:8px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">السابق</button>`;
+  for (let i = Math.max(1, cur-2); i <= Math.min(last, cur+2); i++) {
+    const on = i === cur;
+    html += `<button onclick="_logPage=${i};loadLogs()" style="width:36px;height:36px;border-radius:8px;border:1.5px solid ${on?'var(--pri)':'var(--b1)'};background:${on?'var(--pri)':'transparent'};color:${on?'#fff':'var(--t2)'};font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">${i}</button>`;
+  }
+  if (cur < last) html += `<button onclick="_logPage=${cur+1};loadLogs()" style="height:36px;padding:0 12px;border-radius:8px;border:1.5px solid var(--b1);background:transparent;color:var(--t2);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;">التالي</button>`;
+  pag.innerHTML = html;
+  document.getElementById('log-list')?.insertAdjacentElement('afterend', pag);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   OFFICE FINANCIAL REPORT
+══════════════════════════════════════════════════════════════ */
+let _oflData = null;
+
+async function loadOfficeFinancial() {
+  const from = document.getElementById('ofl-from')?.value || '';
+  const to   = document.getElementById('ofl-to')?.value   || '';
+  let url = `${AMRTM_API_BASE}/admin/office-financial`;
+  const params = [];
+  if (from) params.push('from=' + from);
+  if (to)   params.push('to='   + to);
+  if (params.length) url += '?' + params.join('&');
+
+  try {
+    const res  = await fetch(url, { headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window.AMRTM_CSRF || document.querySelector('meta[name="csrf-token"]')?.content } });
+    const json = await res.json();
+    if (!json.summary) return;
+    _oflData = json;
+
+    const s = json.summary;
+    S('ofl-total',     s.total_requests    ?? '—');
+    S('ofl-gross',     riyalsOfl(s.total_gross));
+    S('ofl-comm',      riyalsOfl(s.total_commission));
+    S('ofl-net',       riyalsOfl(s.total_net));
+    S('ofl-completed', s.completed_requests ?? '—');
+
+    // By-office table (API keys: name_ar, name_en, commission_rate, req_count, gross, commission, net, completed)
+    const tbody = document.getElementById('ofl-by-office');
+    if (tbody) {
+      if (!json.by_office?.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--t3)">لا توجد بيانات</td></tr>`;
+      } else {
+        tbody.innerHTML = json.by_office.map(o => `
+          <tr>
+            <td style="padding:.65rem .8rem;font-weight:700;">${esc(lang==='ar' ? o.name_ar : (o.name_en||o.name_ar))}</td>
+            <td style="padding:.65rem .8rem;text-align:center;">${o.commission_rate ?? 0}%</td>
+            <td style="padding:.65rem .8rem;text-align:center;">${o.req_count ?? 0}</td>
+            <td style="padding:.65rem .8rem;">${riyalsOfl(o.gross)}</td>
+            <td style="padding:.65rem .8rem;color:var(--blue);font-weight:700;">${riyalsOfl(o.commission)}</td>
+            <td style="padding:.65rem .8rem;">${riyalsOfl(o.net)}</td>
+            <td style="padding:.65rem .8rem;text-align:center;">${o.completed ?? 0}</td>
+          </tr>`).join('');
+      }
+    }
+
+    // Monthly table (API keys: month, req_count, gross, commission)
+    const mtbody = document.getElementById('ofl-monthly');
+    if (mtbody) {
+      if (!json.monthly?.length) {
+        mtbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:2rem;color:var(--t3)">لا توجد بيانات</td></tr>`;
+      } else {
+        mtbody.innerHTML = json.monthly.map(m => `
+          <tr>
+            <td style="padding:.65rem .8rem;font-weight:700;">${esc(m.month)}</td>
+            <td style="padding:.65rem .8rem;">${m.req_count ?? 0}</td>
+            <td style="padding:.65rem .8rem;">${riyalsOfl(m.gross)}</td>
+            <td style="padding:.65rem .8rem;color:var(--blue);font-weight:700;">${riyalsOfl(m.commission)}</td>
+          </tr>`).join('');
+      }
+    }
+  } catch(e) {
+    console.error('loadOfficeFinancial:', e);
+  }
+}
+
+function riyalsOfl(v) {
+  if (v == null || v === '' || v === '—') return '—';
+  return Number(v).toLocaleString('ar-SA', { style: 'currency', currency: 'SAR', minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function exportOfficeFinancialCSV() {
+  if (!_oflData) { alert('يرجى تحميل البيانات أولاً'); return; }
+  const rows = (_oflData.by_office || []).map(o => ({
+    'اسم المكتب':       lang==='ar' ? o.name_ar : (o.name_en||o.name_ar),
+    'نسبة العمولة %':   o.commission_rate,
+    'إجمالي الطلبات':   o.req_count,
+    'إجمالي القيمة':    o.gross,
+    'عمولة المنصة':     o.commission,
+    'صافي للمكتب':      o.net,
+    'طلبات مكتملة':     o.completed,
+  }));
+  if (!rows.length) { alert('لا توجد بيانات للتصدير'); return; }
+  exportCSV(rows, `office-financial-${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   COLOR PICKER
+══════════════════════════════════════════════════════════════ */
+(function(){
+  const PALETTE=[
+    {n:'نيلي',      h:'#1A237E',r:'26,35,126'},
+    {n:'أزرق',      h:'#1565C0',r:'21,101,192'},
+    {n:'سماوي',     h:'#0277BD',r:'2,119,189'},
+    {n:'فيروزي',    h:'#00695C',r:'0,105,92'},
+    {n:'أخضر',      h:'#1B5E20',r:'27,94,32'},
+    {n:'أخضر فاتح', h:'#2E7D32',r:'46,125,50'},
+    {n:'أحمر',      h:'#C62828',r:'198,40,40'},
+    {n:'برتقالي',   h:'#E65100',r:'230,81,0'},
+    {n:'ذهبي',      h:'#F57F17',r:'245,127,23'},
+    {n:'بنفسجي',    h:'#6A1B9A',r:'106,27,154'},
+    {n:'وردي',      h:'#880E4F',r:'136,14,79'},
+    {n:'رمادي',     h:'#37474F',r:'55,71,79'},
+  ];
+
+  function initCP(rowId,labelId,colorId,bgId){
+    const row=document.getElementById(rowId);
+    const lbl=document.getElementById(labelId);
+    const cin=document.getElementById(colorId);
+    const bin=document.getElementById(bgId);
+    if(!row) return;
+    PALETTE.forEach(function(c){
+      const sw=document.createElement('div');
+      sw.className='cp-swatch';
+      sw.style.background=c.h;
+      sw.title=c.n;
+      sw.addEventListener('click',function(){
+        row.querySelectorAll('.cp-swatch').forEach(b=>b.classList.remove('on'));
+        sw.classList.add('on');
+        cin.value=c.h;
+        bin.value='rgba('+c.r+',.1)';
+        if(lbl) lbl.textContent='✓ '+c.n;
+      });
+      row.appendChild(sw);
+    });
+  }
+
+  window.cpReset=function(rowId,labelId){
+    const row=document.getElementById(rowId);
+    const lbl=document.getElementById(labelId);
+    if(row) row.querySelectorAll('.cp-swatch').forEach(b=>b.classList.remove('on'));
+    if(lbl) lbl.textContent='';
+  };
+
+  document.addEventListener('DOMContentLoaded',function(){
+    initCP('cat-cp-row','cat-cp-label','cat-color','cat-bg');
+    initCP('ent-cp-row','ent-cp-label','ent-color','ent-bg');
+  });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   CSV EXPORT HELPER
+══════════════════════════════════════════════════════════════ */
+function exportCSV(data, filename) {
+  if (!data.length) return;
+  const keys = Object.keys(data[0]);
+  const csv  = [keys.join(','), ...data.map(row =>
+    keys.map(k => JSON.stringify(row[k] ?? '')).join(',')
+  )].join('\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+<script>window.ICON_PICKER_API = '{{ route('amrtm.api.admin.icons.list') }}';</script>
+<script src="{{ asset('js/platform-business/icon-picker.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Ignore large binary and generated directories to save AI context memory
+/vendor/
+/node_modules/
+/public/build/
+/public/dist/
+/public/storage/
+/storage/framework/
+/storage/logs/
+/bootstrap/cache/
+*.log
+*.sqlite
+*.zip
+*.tar.gz
+*.mp4
+*.avif
+*.webp
+*.jpg
+*.jpeg
+*.png
+*.svg

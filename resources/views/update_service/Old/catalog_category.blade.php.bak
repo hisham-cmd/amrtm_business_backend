@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>{{ $category->name_ar }} | منصة آمر تم</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/new-logo1.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--pri:#1A237E;--pri2:#283593;--pri3:#1565C0;--bg:#F4F6FB;--sur:#fff;--bc:rgba(26,35,126,.07);--t1:#0D1257;--t2:#3A4490;--t3:#7A82B8;--t4:#BDC2E0;--pd:rgba(26,35,126,.08);--sh:rgba(26,35,126,.08);--sh2:rgba(26,35,126,.18);}
+html,body{background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;}
+body.ar,body.ar *:not(i){font-family:'Cairo',sans-serif;direction:rtl;}
+body.en,body.en *:not(i){font-family:'Inter',sans-serif;direction:ltr;}
+
+/* NAVBAR */
+.nb{height:70px;display:flex;align-items:center;padding:0 2rem;gap:1rem;background:linear-gradient(135deg,#1A237E,#1565C0);box-shadow:0 2px 16px rgba(26,35,126,.3);position:sticky;top:0;z-index:200;}
+.nb-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.nb-logo-nm{font-size:20px;font-weight:900;color:#fff;}
+.nb-mid{flex:1;}
+.nb-right{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.lng{display:flex;padding:2px;border-radius:8px;background:rgba(255,255,255,.15);gap:1px;}
+.lt{padding:4px 8px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.55);transition:all .2s;}
+.lt.on{background:rgba(255,255,255,.22);color:#fff;}
+.nb-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:8px;font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .2s;border:none;text-decoration:none;}
+.nb-btn.out{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff;}
+.nb-btn.sol{background:#fff;color:var(--pri);}
+.nb-user{display:flex;align-items:center;gap:7px;padding:4px 10px;border-radius:9px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);cursor:pointer;}
+.nb-user-nm{font-size:12px;font-weight:700;color:#fff;}
+.nb-user-av{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,.35);}
+
+/* BREADCRUMB */
+.bc-bar{background:var(--sur);border-bottom:1px solid var(--bc);padding:.7rem 2rem;}
+.bc{display:flex;align-items:center;gap:6px;max-width:1100px;margin:0 auto;font-size:12.5px;color:var(--t3);}
+.bc a{color:var(--t3);text-decoration:none;transition:color .15s;}
+.bc a:hover{color:var(--pri);}
+.bc-sep{font-size:11px;}
+.bc-cur{color:var(--t2);font-weight:700;}
+
+/* PAGE HEADER */
+.ph{padding:2.5rem 2rem 2rem;max-width:1100px;margin:0 auto;}
+.ph-inner{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;}
+.ph-ico{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ph-ico i{font-size:34px;}
+.ph-title{font-size:26px;font-weight:900;color:var(--t1);}
+.ph-sub{font-size:14px;color:var(--t3);margin-top:4px;}
+.ph-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:var(--pd);font-size:12px;font-weight:700;color:var(--pri);margin-top:6px;}
+
+/* ENTITY CARDS */
+.ents-wrap{padding:0 2rem 3rem;max-width:1100px;margin:0 auto;}
+.ents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem;}
+.ec{border-radius:18px;border:1.5px solid var(--bc);background:var(--sur);overflow:hidden;box-shadow:0 4px 18px var(--sh);cursor:pointer;transition:all .25s;text-decoration:none;display:flex;flex-direction:column;}
+.ec:hover{transform:translateY(-6px);box-shadow:0 20px 44px var(--sh2);border-color:var(--ecc);}
+.ec-body{padding:1.6rem 1.5rem 1.1rem;display:flex;align-items:flex-start;gap:1rem;flex:1;}
+.ec-ico{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .25s;}
+.ec:hover .ec-ico{transform:scale(1.08);}
+.ec-ico i{font-size:26px;}
+.ec-info{flex:1;min-width:0;}
+.ec-nm{font-size:15px;font-weight:800;color:var(--t1);margin-bottom:3px;}
+.ec-tag{font-size:11.5px;color:var(--t3);}
+.ec-foot{padding:.8rem 1.5rem;border-top:1px solid var(--bc);background:#F8F9FF;display:flex;align-items:center;justify-content:space-between;}
+.ec-svcs{font-size:12px;font-weight:700;color:var(--t2);}
+.ec-arr{font-size:18px;transition:transform .2s;}
+.ec:hover .ec-arr{transform:translateX(-4px);}
+body.en .ec:hover .ec-arr{transform:translateX(4px);}
+.ec-price{font-size:11.5px;font-weight:700;color:var(--pri3);}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:4rem 2rem;color:var(--t3);}
+.empty i{font-size:48px;margin-bottom:1rem;opacity:.4;}
+.empty p{font-size:14px;}
+
+/* FOOTER */
+.footer{background:linear-gradient(135deg,#1A237E,#1565C0);margin-top:2rem;padding:1.2rem 2rem;text-align:center;}
+.f-cp{font-size:12px;color:rgba(255,255,255,.55);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(26,35,126,.2);border-radius:4px;}
+
+@media(max-width:600px){
+  .nb{padding:0 1rem;}
+  .ph{padding:1.8rem 1rem 1.5rem;}
+  .ents-wrap{padding:0 1rem 2rem;}
+  .ents-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body class="ar">
+
+<!-- NAVBAR -->
+<nav class="nb">
+  <a class="nb-logo" href="{{ route('amrtm.index') }}">
+    <div><div class="nb-logo-nm" id="nnm">آمر تم</div></div>
+  </a>
+  <div class="nb-mid"></div>
+  <div class="nb-right">
+    <div class="lng"><div class="lt on" id="la" onclick="setLang('ar')">AR</div><div class="lt" id="le" onclick="setLang('en')">EN</div></div>
+    <div id="nb-guest" style="display:flex;gap:6px;">
+      <a class="nb-btn out" href="{{ route('amrtm.login') }}"><i class="ti ti-login"></i><span id="nl-li">دخول</span></a>
+      <a class="nb-btn sol" href="{{ route('amrtm.register') }}"><i class="ti ti-user-plus"></i><span id="nl-re">تسجيل</span></a>
+    </div>
+    <div id="nb-auth" style="display:none;gap:6px;align-items:center;">
+      <a class="nb-btn out" id="nb-dash-lnk" href="{{ route('amrtm.user.dashboard') }}"><i class="ti ti-layout-dashboard"></i><span id="nl-da">حسابي</span></a>
+      <div class="nb-user" id="nb-user-chip">
+        <img class="nb-user-av" id="nb-av" src="" alt=""/>
+        <span class="nb-user-nm" id="nb-un"></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="bc-bar">
+  <div class="bc">
+    <a href="{{ route('amrtm.index') }}" id="bc-home"><i class="ti ti-home-2" style="font-size:13px;"></i> الرئيسية</a>
+    <span class="bc-sep"><i class="ti ti-chevron-left" style="font-size:11px;"></i></span>
+    <span class="bc-cur" id="bc-cat">{{ $category->name_ar }}</span>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="ph">
+  <div class="ph-inner">
+    <div class="ph-ico" style="background:{{ $category->bg }};border:2px solid {{ $category->color }}33;" id="ph-ico">
+      <i class="ti {{ $category->icon }}" style="color:{{ $category->color }};"></i>
+    </div>
+    <div>
+      <div class="ph-title" id="ph-title">{{ $category->name_ar }}</div>
+      <div class="ph-sub" id="ph-sub">اختر الجهة المطلوبة لتقديم طلبك</div>
+      <div class="ph-badge"><i class="ti ti-building"></i> <span id="ph-cnt">{{ $category->entities->count() }} جهة متاحة</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ENTITIES GRID -->
+<div class="ents-wrap">
+  @if($category->entities->isEmpty())
+    <div class="empty">
+      <i class="ti ti-inbox"></i>
+      <p id="empty-txt">لا توجد جهات متاحة في هذا القطاع حالياً</p>
+    </div>
+  @else
+    <div class="ents-grid">
+      @foreach($category->entities as $entity)
+        @php
+          $minPrice = $entity->govServices->min('price');
+          $svcCount = $entity->govServices->count();
+        @endphp
+        <a class="ec" href="{{ route('amrtm.catalog.entity', [$category->key, $entity->id]) }}"
+           style="--ecc:{{ $entity->color ?? $category->color }}">
+          <div class="ec-body">
+            <div class="ec-ico" style="background:{{ $entity->bg ?? $category->bg }};border:1.5px solid {{ $entity->color ?? $category->color }}33;">
+              <i class="ti {{ $entity->icon ?? 'ti-building' }}" style="color:{{ $entity->color ?? $category->color }};"></i>
+            </div>
+            <div class="ec-info">
+              <div class="ec-nm" data-ar="{{ $entity->name_ar }}" data-en="{{ $entity->name_en }}">{{ $entity->name_ar }}</div>
+              <div class="ec-tag" data-ar="{{ $entity->tag_ar ?? '' }}" data-en="{{ $entity->tag_en ?? '' }}">{{ $entity->tag_ar ?? '' }}</div>
+            </div>
+          </div>
+          <div class="ec-foot">
+            <span class="ec-svcs" id="svc-cnt-{{ $entity->id }}">{{ $svcCount }} خدمة متاحة</span>
+            @if($minPrice)
+              {{-- <span class="ec-price" id="min-price-{{ $entity->id }}">من {{ $minPrice }} ر.س</span> --}}
+            @endif
+            <i class="ti ti-arrow-left ec-arr" style="color:{{ $entity->color ?? $category->color }};"></i>
+          </div>
+        </a>
+      @endforeach
+    </div>
+  @endif
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="f-cp" id="fcp">© 2025 <b style="color:rgba(255,255,255,.85);">آمر تم</b> — جميع الحقوق محفوظة</div>
+</footer>
+
+<script>
+window.AMRTM_USER = {!! auth('business')->check() ? json_encode([
+    'id'    => auth('business')->id(),
+    'name'  => auth('business')->user()->name,
+    'role'  => auth('business')->user()->role,
+]) : 'null' !!};
+window.AMRTM_CSRF       = '{{ csrf_token() }}';
+window.AMRTM_API_BASE   = '{{ url("/amrtm/api") }}';
+window.AMRTM_ROUTES = {
+    login:         '{{ route("amrtm.login") }}',
+    logout:        '{{ route("amrtm.logout") }}',
+    home:          '{{ route("amrtm.index") }}',
+    userDashboard: '{{ route("amrtm.user.dashboard") }}',
+    adminDashboard:'{{ route("amrtm.admin.dashboard") }}',
+};
+
+const catData = {
+    key:    '{{ $category->key }}',
+    name_ar:'{{ $category->name_ar }}',
+    name_en:'{{ $category->name_en }}',
+};
+
+const T = {
+  ar:{li:'دخول',re:'تسجيل',da:'حسابي',dash:'لوحة التحكم',
+      home:'الرئيسية',svcAvail:'خدمة متاحة',entAvail:'جهة متاحة',
+      chooseEnt:'اختر الجهة المطلوبة لتقديم طلبك',from:'من',sar:'ر.س',
+      empty:'لا توجد جهات متاحة في هذا القطاع حالياً',fcp:'© 2025 آمر تم — جميع الحقوق محفوظة'},
+  en:{li:'Sign In',re:'Register',da:'My Account',dash:'Dashboard',
+      home:'Home',svcAvail:'services',entAvail:'entities available',
+      chooseEnt:'Select the entity to submit your request',from:'from',sar:'SAR',
+      empty:'No entities available in this sector currently',fcp:'© 2025 Amrtm — All Rights Reserved'},
+};
+
+let lang = localStorage.getItem('amrtm_lang') || 'ar';
+
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('amrtm_lang', l);
+  document.body.className = l;
+  document.getElementById('la').className = 'lt' + (l==='ar'?' on':'');
+  document.getElementById('le').className = 'lt' + (l==='en'?' on':'');
+  applyLang();
+}
+
+function applyLang() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+
+  document.getElementById('nl-li').textContent  = t.li;
+  document.getElementById('nl-re').textContent  = t.re;
+  document.getElementById('nl-da').textContent  = t.da;
+  document.getElementById('bc-home').childNodes[1].textContent = ' ' + t.home;
+  document.getElementById('bc-cat').textContent = lang==='ar' ? catData.name_ar : catData.name_en;
+  document.getElementById('ph-title').textContent = lang==='ar' ? catData.name_ar : catData.name_en;
+  document.getElementById('ph-sub').textContent  = t.chooseEnt;
+  document.getElementById('fcp').innerHTML = t.fcp.replace('آمر تم','<b style="color:rgba(255,255,255,.85);">آمر تم</b>').replace('Amrtm','<b style="color:rgba(255,255,255,.85);">Amrtm</b>');
+
+  // Entity cards text
+  document.querySelectorAll('.ec-nm').forEach(el => {
+    el.textContent = lang==='ar' ? el.dataset.ar : el.dataset.en;
+  });
+  document.querySelectorAll('.ec-tag').forEach(el => {
+    el.textContent = lang==='ar' ? el.dataset.ar : el.dataset.en;
+  });
+  document.querySelectorAll('[id^="svc-cnt-"]').forEach(el => {
+    const n = el.textContent.match(/\d+/)?.[0] || '0';
+    el.textContent = n + ' ' + t.svcAvail;
+  });
+  document.querySelectorAll('[id^="min-price-"]').forEach(el => {
+    const n = el.textContent.match(/[\d.]+/)?.[0] || '0';
+    el.textContent = t.from + ' ' + n + ' ' + t.sar;
+  });
+  if(document.getElementById('empty-txt'))
+    document.getElementById('empty-txt').textContent = t.empty;
+  if(document.getElementById('ph-cnt')) {
+    const cnt = document.querySelectorAll('.ec').length;
+    document.getElementById('ph-cnt').textContent = cnt + ' ' + t.entAvail;
+  }
+}
+
+function updateNavAuth() {
+  const u = window.AMRTM_USER;
+  if (u) {
+    document.getElementById('nb-guest').style.display = 'none';
+    const a = document.getElementById('nb-auth'); a.style.display = 'flex';
+    document.getElementById('nb-un').textContent = u.name.split(' ')[0];
+    const av = document.getElementById('nb-av');
+    av.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=1A237E&color=fff&size=64`;
+    const dashUrl = u.role==='admin' ? (AMRTM_ROUTES.adminDashboard||'/amrtm/admin') : (AMRTM_ROUTES.userDashboard||'/amrtm/dashboard');
+    document.getElementById('nb-dash-lnk').href = dashUrl;
+    document.getElementById('nb-user-chip').onclick = () => location.href = dashUrl;
+    document.getElementById('nl-da').textContent = u.role==='admin' ? (lang==='ar'?'لوحة التحكم':'Dashboard') : (lang==='ar'?'حسابي':'My Account');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  applyLang();
+  updateNavAuth();
+  const stored = localStorage.getItem('amrtm_lang') || 'ar';
+  if (stored !== 'ar') setLang(stored);
+});
+</script>
+</body>
+</html>

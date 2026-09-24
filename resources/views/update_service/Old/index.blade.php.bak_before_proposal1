@@ -1,0 +1,5954 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>منصة آمر تم | Amrtm Platform</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/new-logo1.png') }}">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<link rel="stylesheet" href="{{ asset('css/platform/main.css') }}"/>
+<link rel="stylesheet" href="{{ asset('css/platform/main_style.css') }}"/>
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+/* Root Variables */
+:root{
+  --pri:#1A237E;
+  --pri2:#283593;
+  --pri3:#1565C0;
+
+  --bg:#F4F6FB;
+  --bg2:#EBEEf8;
+
+  --sur:#fff;
+  --sur2:#F0F3FF;
+
+  --b1:rgba(26,35,126,.1);
+  --b2:rgba(26,35,126,.28);
+  --bc:rgba(26,35,126,.07);
+
+  --t1:#0D1257;
+  --t2:#3A4490;
+  --t3:#7A82B8;
+  --t4:#BDC2E0;
+
+  --pd:rgba(26,35,126,.08);
+  --pd2:rgba(26,35,126,.15);
+
+  --sh:rgba(26,35,126,.08);
+  --sh2:rgba(26,35,126,.18);
+
+  --hf:#1A237E;
+  --ht:#1565C0;
+}
+
+/* Body */
+html,
+body{
+  background:var(--bg);
+  color:var(--t1);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* Arabic */
+body.ar,
+body.ar *:not(i){
+  font-family:'Cairo',sans-serif;
+  direction:rtl;
+}
+
+/* English */
+body.en,
+body.en *:not(i){
+  font-family:'Inter',sans-serif;
+  direction:ltr;
+}
+
+/* =========================
+   NAVBAR - WHITE STYLE
+========================= */
+
+.nb{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:2000;
+
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    padding:0 5%;
+    gap:20px;
+
+    background:#fff;
+
+    border-bottom:1px solid #e2e8f0;
+    box-shadow:0 2px 15px rgba(0,0,0,.08);
+
+    transition:.35s;
+}
+
+/* LOGO */
+
+.nb-logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+}
+
+.nb-logo-img{
+    width:60px;
+    height:60px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+
+    overflow:hidden;
+}
+
+.nb-logo-img img{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+}
+
+.nb-logo-nm{
+    color:#1A237E;
+    font-size:20px;
+    font-weight:900;
+}
+
+.nb-logo-sb{
+    color:#64748b;
+    font-size:10px;
+}
+
+/* LINKS */
+
+.nb-mid{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    gap:4px;
+}
+
+.nb-lnk{
+    position:relative;
+
+    padding:8px 13px;
+
+    border-radius:10px;
+
+    color:#4a5568;
+
+    font-size:14px;
+    font-weight:600;
+
+    text-decoration:none;
+
+    transition:.25s;
+}
+
+.nb-lnk::after{
+    content:"";
+    position:absolute;
+
+    bottom:3px;
+    left:50%;
+    right:50%;
+
+    height:2px;
+
+    background:linear-gradient(90deg,#38bdf8,#7c3aed);
+
+    border-radius:2px;
+
+    transition:.3s;
+}
+
+.nb-lnk:hover::after,
+.nb-lnk.on::after{
+    left:13px;
+    right:13px;
+}
+
+.nb-lnk:hover,
+.nb-lnk.on{
+    color:#0ea5e9;
+    background:rgba(14,165,233,.08);
+}
+
+.nb-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+/* LANGUAGE */
+
+.lng{
+    display:flex;
+    align-items:center;
+
+    border:1.5px solid #cbd5e0;
+    border-radius:50px;
+
+    overflow:hidden;
+
+    background:#f8fafc;
+}
+
+.lt{
+    padding:6px 14px;
+
+    color:#94a3b8;
+
+    font-size:13px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.lt.on{
+    background:linear-gradient(135deg,#0ea5e9,#7c3aed);
+    color:#fff;
+}
+
+/* BUTTONS */
+
+.nb-btn{
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    padding:8px 20px;
+
+    border-radius:12px;
+
+    font-size:14px;
+    font-weight:700;
+
+    transition:.3s;
+
+    border:none;
+}
+
+.nb-btn.out{
+    background:#fff;
+    color:#1A237E;
+    border:1px solid #dbe3ef;
+}
+
+.nb-btn.out:hover{
+    background:#f8fafc;
+}
+
+.nb-btn.sol{
+    background:linear-gradient(135deg,#0ea5e9,#7c3aed);
+    color:#fff;
+
+    box-shadow:0 4px 15px rgba(14,165,233,.3);
+}
+
+.nb-btn.sol:hover{
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 25px rgba(14,165,233,.45);
+}
+
+/* USER */
+
+.nb-user{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:5px 10px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:10px;
+}
+
+.nb-user-av{
+    width:30px;
+    height:30px;
+
+    border-radius:50%;
+
+    border:2px solid #dbe3ef;
+}
+
+.nb-user-nm{
+    color:#1A237E;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* HAMBURGER */
+
+.nb-ham{
+    display:none;
+
+    width:36px;
+    height:36px;
+
+    border-radius:8px;
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    color:#4a5568;
+
+    cursor:pointer;
+}
+
+/* MOBILE */
+
+.mob-dd{
+    display:none;
+
+    position:fixed;
+
+    top:72px;
+    right:0;
+    left:0;
+
+    background:#fff;
+
+    border-bottom:1px solid #e2e8f0;
+
+    padding:15px;
+
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+}
+
+.mob-dd.open{
+    display:flex;
+    flex-direction:column;
+}
+
+.mob-lnk{
+    padding:12px 15px;
+
+    border-radius:10px;
+
+    color:#4a5568;
+
+    font-size:15px;
+    font-weight:600;
+
+    text-decoration:none;
+
+    transition:.25s;
+}
+
+.mob-lnk:hover{
+    background:rgba(14,165,233,.08);
+    color:#0ea5e9;
+}
+/* =========================
+   HERO
+========================= */
+.hero{
+    position:relative;
+    min-height:auto;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;   /* بدل center */
+    align-items:center;
+
+    padding-top:80px;             /* كان 70 */
+    padding-bottom:0px;          /* كان 50 */
+
+    overflow:hidden;
+}
+
+
+.hero::before{
+    content:"";
+    position:absolute;
+     inset :-20%;
+    top:-15%;
+    left:-20%;
+
+    width:140%;
+    height:130%;
+
+    background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)),
+        url('/images/ChatGPT Image Jul 28, 2026, 10_23_54 AM.png') ;
+
+    animation:heroMove 18s ease-in-out infinite alternate;
+
+    z-index:0;
+  
+}
+
+.hero>*{
+    position:relative;
+    z-index:2;
+}
+
+
+@keyframes heroMove{
+
+    0%{
+        transform:scale(1.08) translate(0,0);
+    }
+
+    25%{
+        transform:scale(1.10) translate(-20px,-10px);
+    }
+
+    50%{
+        transform:scale(1.12) translate(20px,8px);
+    }
+
+    75%{
+        transform:scale(1.10) translate(-15px,15px);
+    }
+
+    100%{
+        transform:scale(1.14) translate(15px,-12px);
+    }
+
+}
+/* =========================
+   HERO INNER
+========================= */
+.-heroin{
+    width:100%;
+    max-width:1200px;
+    margin:-20px auto 0px;   /* كان 20px auto 0 */
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+.cards-wrap-home{
+    width:100%;
+    max-width:1600px;
+    margin-top:-35px;
+    padding:0 30px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.s-eye,
+.s-ttl,
+.s-bar{
+    align-self:flex-start;
+    text-align:left;
+}
+
+.s-bar{
+    margin-left:0;
+    margin-right:auto;
+}
+
+body.en .hero-text{
+  text-align:center;
+
+  /* padding:2.5rem 4rem 2.5rem 3rem; */
+}
+
+.hero-vid{
+  width:280px;
+  flex-shrink:0;
+
+  display:flex;
+  align-items:stretch;
+}
+
+body.ar .hero-vid{
+  padding:1.2rem 0 1.2rem 1.2rem;
+}
+
+body.en .hero-vid{
+  padding:1.2rem 1.2rem 1.2rem 0;
+}
+
+/* =========================
+   HERO BADGE
+========================= */
+
+.h-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+
+  padding:5px 14px;
+
+  border-radius:20px;
+
+  background:rgba(255,255,255,.15);
+
+  border:1px solid rgba(255,255,255,.22);
+
+  font-size:11.5px;
+  color:rgba(255,255,255,.95);
+  font-weight:600;
+
+  margin-bottom:1rem;
+}
+
+.bdot{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:#4CAF50;
+
+  box-shadow:0 0 7px #4CAF50;
+
+  animation:pu 2s infinite;
+}
+
+@keyframes pu{
+  0%,
+  100%{
+    box-shadow:0 0 5px #4CAF50;
+  }
+
+  50%{
+    box-shadow:0 0 13px #4CAF50;
+  }
+}
+
+/* =========================
+   HERO TITLE
+========================= */
+
+.hero-text h1{
+    font-size:58px;
+    font-weight:900;
+    color:#fff;
+    margin-bottom:5px;
+    line-height:1.2;
+    text-shadow:0 5px 20px rgba(0,0,0,.35);
+}
+.hero h1 span{
+  background:linear-gradient(
+    90deg,
+    #FFF176,
+    #FFEB3B
+  );
+
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  background-clip:text;
+}
+
+/* =========================
+   HERO DESCRIPTION
+========================= */
+.h-desc{
+    max-width:1400px;     /* زود العرض */
+    width:95%;
+    margin:15px auto 19px;
+
+    color:#fff;
+    font-size:20px;       /* صغره قليلًا إذا لزم */
+    line-height:1.5;
+    text-align:center;
+
+    white-space:nowrap;   /* يمنع النزول لسطر جديد */
+}
+
+/* شاشات اللابتوب */
+@media (min-width:1200px){
+    .h-desc{
+        max-width:1050px;
+        font-size:22px;
+    }
+}
+
+/* التابلت */
+@media (max-width:992px){
+    .h-desc{
+        max-width:850px;
+        font-size:20px;
+    }
+}
+
+/* الموبايل */
+@media (max-width:768px){
+    .h-desc{
+        font-size:17px;
+        line-height:1.7;
+        width:95%;
+    }
+}
+.h-note{
+  font-size:12.5px;
+
+  color:rgba(255,255,255,.65);
+
+  margin-bottom:1.4rem;
+
+  font-style:italic;
+}
+
+/* =========================
+   VIDEO BUTTON
+========================= */
+
+.vid-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+
+  padding:10px 20px;
+
+  border-radius:11px;
+
+  background:rgba(255,255,255,.15);
+
+  border:1.5px solid rgba(255,255,255,.28);
+
+  color:#fff;
+
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:all .25s;
+}
+
+.vid-btn:hover{
+  background:rgba(255,255,255,.25);
+
+  transform:translateY(-2px);
+}
+
+.vid-play{
+  width:32px;
+  height:32px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.9);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+}
+
+.vid-play i{
+  font-size:13px;
+
+  color:var(--pri);
+
+  margin-right:-2px;
+}
+
+body.en .vid-play i{
+  margin-right:0;
+  margin-left:-2px;
+}
+
+/* =========================
+   HERO VIDEO PANEL
+========================= */
+
+.hvid-wrap{
+  position:relative;
+
+  width:100%;
+  height:100%;
+
+  border-radius:0;
+
+  background:rgba(0,0,0,.35);
+
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1rem;
+
+  transition:background .25s;
+}
+
+.hvid-wrap:hover{
+  background:rgba(0,0,0,.5);
+}
+
+body.ar .hvid-wrap{
+  border-radius:16px;
+}
+
+body.en .hvid-wrap{
+  border-radius:16px;
+}
+
+.hvid-thumb{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:.6;
+}
+
+.hvid-play-btn{
+  width:72px;
+  height:72px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.22);
+
+  border:2.5px solid rgba(255,255,255,.55);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:all .25s;
+
+  backdrop-filter:blur(6px);
+}
+
+.hvid-wrap:hover .hvid-play-btn{
+  background:rgba(255,255,255,.35);
+
+  transform:scale(1.08);
+}
+
+.hvid-play-btn i{
+  font-size:26px;
+
+  color:#fff;
+
+  margin-right:-3px;
+}
+
+.hvid-label{
+  font-size:13px;
+  font-weight:700;
+
+  color:rgba(255,255,255,.8);
+
+  letter-spacing:.3px;
+}
+
+/* =========================
+   VIDEO MODAL
+========================= */
+
+.vm{
+  display:none;
+
+  position:fixed;
+  inset:0;
+
+  z-index:999;
+
+  background:rgba(0,0,0,.8);
+
+  backdrop-filter:blur(8px);
+
+  align-items:center;
+  justify-content:center;
+
+  padding:1.5rem;
+}
+
+.vm.open{
+  display:flex;
+
+  animation:fi .25s ease;
+}
+
+@keyframes fi{
+  from{
+    opacity:0;
+  }
+
+  to{
+    opacity:1;
+  }
+}
+
+.vm-in{
+  width:100%;
+  max-width:860px;
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  position:relative;
+
+  background:#000;
+}
+
+.vm-x{
+  position:absolute;
+
+  top:10px;
+  right:10px;
+
+  z-index:10;
+
+  width:34px;
+  height:34px;
+
+  border-radius:50%;
+
+  background:rgba(0,0,0,.6);
+
+  border:1px solid rgba(255,255,255,.2);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#fff;
+
+  font-size:16px;
+
+  cursor:pointer;
+}
+
+body.en .vm-x{
+  right:auto;
+  left:10px;
+}
+
+#vmf{
+  width:100%;
+
+  aspect-ratio:16/9;
+
+  border:none;
+
+  display:block;
+}
+
+/* =========================
+   CARDS SECTION
+========================= */
+
+.cards-grid{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+.s-eye{
+    text-align: center;
+    color: #1565C0;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.s-ttl{
+    text-align: center;
+    font-size: 25px;
+    font-weight: 800;
+    color: #1A237E;
+    margin-bottom: 25px;
+}
+
+.s-bar{
+  width:32px;
+  height:3px;
+
+  background:linear-gradient(
+    90deg,
+    var(--pri),
+    var(--pri3)
+  );
+
+  border-radius:3px;
+
+  margin-top:7px;
+  margin-bottom:1.8rem;
+
+  opacity:.7;
+}
+
+.cards-grid{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 20px;
+}
+/* =========================
+   CARD
+========================= */
+.card{
+   width:100%;
+   max-width:250px;
+  margin:auto;
+   height:260px;
+    flex-direction:column;
+  display:flex;
+  background: rgba(255, 255, 255, 0.69);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+  border:1px solid rgba(26,35,126,.08);
+    border-radius:24px;
+
+    overflow:hidden;
+     box-shadow: 0 15px 35px rgba(26,35,126,.15),
+                      0 5px 15px rgba(0,0,0,.08);
+
+    transition:.35s;
+}
+.card.embassies .card-nm{
+    font-size:19px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.card:hover{
+    transform:translateY(-8px);
+    background:#fff;
+    border-color:#1565C0;
+}
+.card:hover .card-nm{
+    color:#1A237E;
+    text-shadow:none;
+}
+
+.card:hover .card-desc{
+    color:#3F51B5;
+}
+
+.card:hover .card-tag{
+    color:#1A237E;
+}
+
+.card:hover .card-arr{
+    color:#1A237E;
+}
+
+.card:hover .card-ico{
+    background:#1A237E;
+    border-color:#1A237E;
+}
+
+.card:hover .card-ico i{
+    color:#fff;
+}
+/* =========================
+   CARD BODY
+========================= */
+.card-body{
+    flex:1;
+    padding:15px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+}
+.card-ico{
+
+    width:72px;
+    height:72px;
+
+    border-radius:20px;
+
+    background:#F5F8FF;
+
+    border:1px solid #DCE6FF;
+
+    backdrop-filter:blur(12px);
+
+    margin-bottom:18px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card-nm{
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:21px;
+    font-weight:900;
+    color:#0D1B6B;
+
+    margin-bottom:8px;
+}
+.card-desc{
+    height:42px;      /* نفس الارتفاع لكل الكروت */
+    overflow:hidden;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    color:#555;
+    font-size:14px;
+    line-height:1.6;
+}
+/* =========================
+   CARD FOOTER
+========================= */
+
+.card-foot{
+    margin-top:auto;   /* أهم سطر */
+    height:48px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 18px;
+
+    background:#F8FAFD;
+    border-top:1px solid #E7ECF7;
+}
+.card-tag{
+    color:#1A237E;
+    font-weight:700;
+}
+
+.card-arr{
+   color:#1A237E;
+}
+.card-arr{
+  font-size:18px;
+
+  transition:transform .2s;
+}
+
+.card:hover .card-arr{
+  transform:translateX(-4px);
+}
+
+body.en .card:hover .card-arr{
+  transform:translateX(4px);
+}
+
+
+/* =========================
+   SKELETON
+========================= */
+
+.skel{
+  background:linear-gradient(
+    90deg,
+    var(--bg2) 25%,
+    var(--bc) 50%,
+    var(--bg2) 75%
+  );
+
+  background-size:200%;
+
+  animation:sk 1.2s infinite;
+
+  border-radius:8px;
+}
+
+@keyframes sk{
+  0%{
+    background-position:200% 0;
+  }
+
+  100%{
+    background-position:-200% 0;
+  }
+}
+
+/* =========================
+   ENTITY MODAL
+========================= */
+
+.em{
+  display:none;
+
+  position:fixed;
+  inset:0;
+
+  z-index:500;
+
+  background:rgba(10,18,40,.5);
+
+  backdrop-filter:blur(6px);
+
+  align-items:center;
+  justify-content:center;
+
+  padding:1.2rem;
+}
+
+.em.open{
+  display:flex;
+
+  animation:fi .25s ease;
+}
+
+.em-box{
+  background:var(--sur);
+
+  border-radius:20px;
+
+  width:100%;
+  max-width:740px;
+  max-height:90vh;
+
+  overflow:hidden;
+
+  display:flex;
+  flex-direction:column;
+
+  box-shadow:0 24px 80px rgba(0,0,0,.25);
+}
+
+/* =========================
+   ENTITY MODAL HEADER
+========================= */
+
+.em-hd{
+  background:linear-gradient(
+    135deg,
+    var(--hf),
+    var(--ht)
+  );
+
+  padding:1.3rem 1.7rem;
+
+  display:flex;
+  align-items:center;
+  gap:1rem;
+
+  flex-shrink:0;
+}
+
+.em-hd-ico{
+  width:48px;
+  height:48px;
+
+  border-radius:13px;
+
+  background:rgba(255,255,255,.18);
+
+  border:1.5px solid rgba(255,255,255,.28);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:23px;
+  color:#fff;
+
+  flex-shrink:0;
+}
+
+.em-hd-nm{
+  font-size:16px;
+  font-weight:800;
+
+  color:#fff;
+}
+
+.em-hd-sb{
+  font-size:12px;
+
+  color:rgba(255,255,255,.7);
+
+  margin-top:3px;
+}
+
+.em-x{
+  margin-right:auto;
+
+  width:34px;
+  height:34px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.18);
+
+  border:none;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#fff;
+
+  font-size:17px;
+
+  cursor:pointer;
+
+  flex-shrink:0;
+}
+
+body.en .em-x{
+  margin-right:0;
+  margin-left:auto;
+}
+
+.em-x:hover{
+  background:rgba(255,0,0,.5);
+}
+
+/* =========================
+   ENTITY SEARCH
+========================= */
+
+.em-srch{
+  padding:.85rem 1.4rem;
+
+  border-bottom:1px solid var(--bc);
+
+  flex-shrink:0;
+
+  position:relative;
+}
+
+.em-srch input{
+  width:100%;
+  height:42px;
+
+  padding:0 42px 0 13px;
+
+  border-radius:10px;
+
+  border:1.5px solid var(--b1);
+
+  background:var(--sur);
+
+  color:var(--t1);
+
+  font-family:inherit;
+  font-size:13px;
+
+  outline:none;
+
+  transition:border-color .2s;
+}
+
+body.en .em-srch input{
+  padding:0 13px 0 42px;
+}
+
+.em-srch input:focus{
+  border-color:var(--pri);
+}
+
+.em-srch-ico{
+  position:absolute;
+
+  right:26px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  color:var(--pri);
+
+  font-size:16px;
+
+  pointer-events:none;
+}
+
+body.en .em-srch-ico{
+  right:auto;
+  left:26px;
+}
+
+/* =========================
+   ENTITY LIST
+========================= */
+
+.em-list{
+  overflow-y:auto;
+
+  padding:1rem 1.4rem;
+
+  flex:1;
+}
+
+.em-item{
+  display:flex;
+  align-items:center;
+  gap:11px;
+
+  padding:.9rem 1rem;
+
+  border-radius:12px;
+
+  border:1.5px solid var(--bc);
+
+  background:var(--sur);
+
+  cursor:pointer;
+
+  transition:all .2s;
+
+  margin-bottom:.7rem;
+
+  box-shadow:0 1px 5px var(--sh);
+}
+
+.em-item:last-child{
+  margin-bottom:0;
+}
+
+.em-item:hover{
+  background:var(--sur2);
+
+  border-color:var(--pri);
+
+  transform:translateX(-3px);
+}
+
+body.en .em-item:hover{
+  transform:translateX(3px);
+}
+
+.em-ico{
+  width:44px;
+  height:44px;
+
+  border-radius:11px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+}
+
+.em-ico i{
+  font-size:21px;
+}
+
+.em-info{
+  flex:1;
+  min-width:0;
+}
+
+.em-nm{
+  font-size:13px;
+  font-weight:700;
+
+  color:var(--t1);
+}
+
+.em-tag{
+  font-size:10.5px;
+
+  color:var(--t3);
+
+  margin-top:2px;
+}
+
+.em-price-tag{
+  font-size:11px;
+  font-weight:700;
+
+  color:var(--pri3);
+}
+
+.em-chv{
+  font-size:15px;
+
+  color:var(--t4);
+
+  transition:.2s;
+
+  flex-shrink:0;
+}
+
+.em-item:hover .em-chv{
+  color:var(--pri);
+}
+/* =========================
+   FORM MODAL
+========================= */
+
+.fm{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:600;
+  background:rgba(10,18,40,.7);
+  backdrop-filter:blur(12px);
+  align-items:flex-start;
+  justify-content:center;
+  padding:1rem;
+  overflow-y:auto;
+}
+.fm.open{
+  display:flex;
+  animation:fi .28s ease;
+}
+.fm-box{
+  background:#fff;
+  border-radius:24px;
+  width:100%;
+  max-width:700px;
+  overflow:hidden;
+  box-shadow:0 32px 90px rgba(10,18,40,.4);
+  margin:auto;
+}
+
+/* =========================
+   FORM HEADER
+========================= */
+
+.fm-hd{
+  background:linear-gradient(140deg,#0d1b4b 0%,#1A237E 55%,#283593 100%);
+  padding:1.5rem 1.8rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  position:relative;
+  overflow:hidden;
+}
+.fm-hd::before{
+  content:'';
+  position:absolute;
+  top:-50px;right:-50px;
+  width:180px;height:180px;
+  border-radius:50%;
+  background:rgba(255,255,255,.05);
+  pointer-events:none;
+}
+.fm-hd::after{
+  content:'';
+  position:absolute;
+  bottom:-30px;left:50px;
+  width:120px;height:120px;
+  border-radius:50%;
+  background:rgba(255,255,255,.04);
+  pointer-events:none;
+}
+.fm-hd-ico{
+  width:52px;
+  height:52px;
+  border-radius:15px;
+  background:rgba(255,255,255,.16);
+  border:1.5px solid rgba(255,255,255,.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  color:#fff;
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+}
+.fm-hd-nm{
+  font-size:17px;
+  font-weight:800;
+  color:#fff;
+  position:relative;
+  z-index:1;
+}
+.fm-hd-sb{
+  font-size:12px;
+  color:rgba(255,255,255,.68);
+  margin-top:3px;
+  position:relative;
+  z-index:1;
+}
+.fm-x{
+  margin-right:auto;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:17px;
+  cursor:pointer;
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  transition:all .2s;
+}
+body.en .fm-x{
+  margin-right:0;
+  margin-left:auto;
+}
+.fm-x:hover{
+  background:rgba(198,40,40,.65);
+  border-color:rgba(198,40,40,.4);
+}
+
+/* =========================
+   SERVICE SELECT
+========================= */
+
+.fm-sel-wrap{
+  padding:.85rem 1.6rem;
+  background:#F7F8FC;
+  border-bottom:1px solid rgba(26,35,126,.08);
+}
+.fm-sel-wrap select{
+  width:100%;
+  height:48px;
+  padding:0 14px;
+  border-radius:12px;
+  border:1.5px solid #C5CAE9;
+  background:#fff;
+  color:#1A237E;
+  font-family:inherit;
+  font-size:13.5px;
+  font-weight:600;
+  outline:none;
+  cursor:pointer;
+  transition:all .2s;
+  box-shadow:0 1px 4px rgba(26,35,126,.08);
+}
+.fm-sel-wrap select:focus{
+  border-color:#1A237E;
+  box-shadow:0 0 0 3px rgba(26,35,126,.12);
+}
+
+/* =========================
+   SERVICE BAR
+========================= */
+
+.fm-sbar{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:.85rem 1.6rem;
+  background:linear-gradient(135deg,rgba(26,35,126,.05),rgba(26,35,126,.09));
+  border-bottom:1px solid rgba(26,35,126,.1);
+}
+.fm-sico{
+  width:46px;
+  height:46px;
+  border-radius:13px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+.fm-sico i{
+  font-size:22px;
+}
+.fm-snm{
+  font-size:14.5px;
+  font-weight:800;
+  color:#1A237E;
+  flex:1;
+}
+.fm-scat{
+  font-size:11.5px;
+  color:#5C6BC0;
+  margin-top:2px;
+}
+.fm-sprice{
+  font-size:15px;
+  font-weight:900;
+  flex-shrink:0;
+  color:#1A237E;
+  background:rgba(26,35,126,.1);
+  padding:5px 14px;
+  border-radius:20px;
+  border:1.5px solid rgba(26,35,126,.15);
+}
+
+/* =========================
+   BALANCE BAR
+========================= */
+
+.fm-bal{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:.55rem 1.6rem;
+  background:rgba(27,94,32,.05);
+  border-bottom:1px solid rgba(27,94,32,.12);
+  font-size:13px;
+  flex-wrap:wrap;
+  gap:.4rem;
+}
+.fm-bal-lbl{
+  color:#2E7D32;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.fm-bal-val{
+  font-weight:900;
+  color:#1B5E20;
+  font-size:14px;
+}
+
+/* =========================
+   FORM BODY
+========================= */
+
+.fm-body{
+  padding:1.3rem 1.6rem 1.6rem;
+}
+.fm-sec-lbl{
+  font-size:11px;
+  font-weight:800;
+  color:#1A237E;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin:.2rem 0 .85rem;
+}
+.fm-sec-lbl i{font-size:13px;opacity:.8}
+.fm-sec-lbl::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg,rgba(26,35,126,.2),transparent);
+}
+body.en .fm-sec-lbl::after{
+  background:linear-gradient(270deg,rgba(26,35,126,.2),transparent);
+}
+.fm-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+}
+
+/* =========================
+   FORM FIELD
+========================= */
+
+.fld{
+  margin-bottom:.9rem;
+}
+.fld label{
+  display:block;
+  font-size:12.5px;
+  font-weight:700;
+  color:#3D4466;
+  margin-bottom:5px;
+}
+.req{
+  color:#C62828;
+  margin-right:3px;
+}
+body.en .req{
+  margin-right:0;
+  margin-left:3px;
+}
+.fld input,
+.fld textarea,
+.fld select{
+  width:100%;
+  height:46px;
+  padding:0 14px;
+  border-radius:11px;
+  border:1.5px solid #DCE0F0;
+  background:#FAFBFF;
+  color:#1a1a1a;
+  font-family:inherit;
+  font-size:13.5px;
+  outline:none;
+  transition:all .2s;
+  box-shadow:inset 0 1px 3px rgba(26,35,126,.04);
+}
+.fld textarea{
+  height:82px;
+  padding:11px 14px;
+  resize:vertical;
+}
+.fld input:focus,
+.fld textarea:focus,
+.fld select:focus{
+  border-color:#1A237E;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(26,35,126,.1);
+}
+.fld input.err{
+  border-color:#C62828;
+  background:rgba(198,40,40,.03);
+}
+
+/* =========================
+   FORM ERROR
+========================= */
+
+.ferr{
+  font-size:11px;
+
+  color:#C62828;
+
+  margin-top:4px;
+
+  display:none;
+  align-items:center;
+  gap:3px;
+}
+
+.ferr.show{
+  display:flex;
+}
+
+/* =========================
+   FILE AREA
+========================= */
+
+.f-area{
+  border:2px dashed #C5CAE9;
+  border-radius:14px;
+  padding:1.4rem;
+  text-align:center;
+  background:linear-gradient(160deg,rgba(26,35,126,.03),rgba(26,35,126,.07));
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+}
+.f-area:hover{
+  border-color:#1A237E;
+  background:rgba(26,35,126,.09);
+}
+.f-area input{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+  width:100%;
+  height:100%;
+}
+.f-area-ico{
+  font-size:30px;
+  color:#3949AB;
+}
+.f-area-t{
+  font-size:13px;
+  font-weight:800;
+  color:#1A237E;
+  margin-top:.5rem;
+}
+.f-area-s{
+  font-size:11px;
+  color:#7986CB;
+  margin-top:3px;
+}
+
+/* =========================
+   FILE CHIPS
+========================= */
+
+.f-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:.7rem;
+  justify-content:center;
+}
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 10px;
+  border-radius:8px;
+  background:rgba(26,35,126,.1);
+  color:#1A237E;
+  font-size:11px;
+  font-weight:700;
+  border:1px solid rgba(26,35,126,.15);
+}
+.chip-x{
+  cursor:pointer;
+  color:#7986CB;
+  font-size:12px;
+}
+.chip-x:hover{
+  color:#C62828;
+}
+
+/* =========================
+   PRIVACY BOX
+========================= */
+
+.prv{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  padding:.85rem 1.1rem;
+  border-radius:12px;
+  background:rgba(26,35,126,.05);
+  border:1px solid rgba(26,35,126,.1);
+  margin-bottom:1rem;
+  font-size:12px;
+  color:#3F51B5;
+  line-height:1.75;
+}
+.prv i{
+  font-size:16px;
+  color:#1A237E;
+  flex-shrink:0;
+  margin-top:1px;
+}
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+
+.fm-sub{
+  width:100%;
+  height:52px;
+  background:linear-gradient(135deg,#0d1b4b 0%,#1A237E 55%,#3949AB 100%);
+  color:#fff;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:800;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  box-shadow:0 6px 24px rgba(26,35,126,.32);
+  transition:all .25s;
+  letter-spacing:.3px;
+}
+.fm-sub:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 32px rgba(26,35,126,.45);
+}
+.fm-sub.ld{
+  opacity:.75;
+  pointer-events:none;
+}
+
+/* =========================
+   LOADING SPINNER
+========================= */
+
+.spin{
+  width:18px;
+  height:18px;
+
+  border:2.5px solid rgba(255,255,255,.35);
+
+  border-top-color:#fff;
+
+  border-radius:50%;
+
+  animation:sp .7s linear infinite;
+
+  display:none;
+}
+
+.fm-sub.ld .spin{
+  display:block;
+}
+
+.fm-sub.ld .stxt{
+  display:none;
+}
+
+@keyframes sp{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* =========================
+   SUCCESS STATE
+========================= */
+
+.succ{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  padding:2.8rem 2rem;
+  text-align:center;
+}
+.succ.on{
+  display:flex;
+}
+.succ-ico{
+  width:76px;
+  height:76px;
+  border-radius:50%;
+  background:rgba(27,94,32,.1);
+  border:2px solid rgba(27,94,32,.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  color:#1B5E20;
+  margin-bottom:1.2rem;
+}
+.succ-ttl{
+  font-size:20px;
+  font-weight:800;
+  color:#1A237E;
+  margin-bottom:.5rem;
+}
+.succ-sub{
+  font-size:13.5px;
+  color:#5C6BC0;
+  line-height:1.85;
+  max-width:380px;
+}
+.succ-ref{
+  margin-top:1rem;
+  padding:.7rem 1.6rem;
+  border-radius:12px;
+  background:rgba(26,35,126,.07);
+  border:1.5px solid rgba(26,35,126,.15);
+  font-size:13.5px;
+  color:#1A237E;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+
+/* =========================
+   SUCCESS BUTTONS
+========================= */
+
+.succ-btns{
+  display:flex;
+  gap:10px;
+
+  margin-top:1.4rem;
+
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.s-b1{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:9px 20px;
+
+  border-radius:10px;
+
+  background:var(--pri);
+
+  color:#fff;
+
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  border:none;
+
+  text-decoration:none;
+}
+
+.s-b2{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:9px 20px;
+
+  border-radius:10px;
+
+  background:transparent;
+
+  color:var(--pri);
+
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  border:1.5px solid var(--b2);
+}
+
+/* =========================
+   OFFICES SECTION
+========================= */
+
+.offices-sec{
+    position:relative;
+    margin-top:35px;
+    padding:0;
+    overflow:visible;
+    text-align:center;
+
+    background:transparent;
+       
+
+    background-size:cover;
+    background-position:center;
+}
+
+.offices-sec::before{
+  content:'';
+  position:absolute;
+  top:-80px;right:-80px;
+  width:320px;height:320px;
+  border-radius:50%;
+  background:rgba(255,255,255,.04);
+  pointer-events:none;
+}
+.offices-sec::after{
+  content:'';
+  position:absolute;
+  bottom:-60px;left:-60px;
+  width:220px;height:220px;
+  border-radius:50%;
+  background:rgba(255,255,255,.03);
+  pointer-events:none;
+}
+
+.offices-inner{
+    max-width:1600px;   /* أو 1550px */
+    width:100%;
+    margin:15px auto 0;
+    padding:0 30px;
+}
+
+.offices-hd{
+    margin-bottom:12px;
+    transform:translateY(-18px);
+}
+.offices-hd .s-eye{color:rgba(255,255,255,.65)}
+.offices-hd .s-ttl{color:#fff}
+.offices-hd .s-bar{background:linear-gradient(90deg,rgba(255,255,255,.7),rgba(255, 255, 255, 0.53))}
+.off-sub{
+  font-size:14px;
+  color:rgba(255,255,255,.72);
+  line-height:1.75;
+  margin-top:.75rem;
+  max-width:640px;
+  margin-right: 300px;
+      -webkit-line-clamp:2; /* يعرض سطرين فقط */
+
+}
+
+.off-cards-grid{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.off-card{
+    width:100%;
+    max-width:230px;
+    height:110px;
+
+    margin:auto;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    background:rgba(255, 255, 255, 0.69);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid rgba(26,35,126,.08);
+    border-radius:20px;
+
+    text-decoration:none;
+    overflow:hidden;
+
+    box-shadow:
+        0 12px 25px rgba(26,35,126,.12),
+        0 4px 12px rgba(0,0,0,.08);
+
+    transition:.35s;
+}
+
+.off-card:hover{
+    transform:translateY(-6px);
+    background:#fff;
+    border-color:#1565C0;
+}
+
+.off-card:hover .off-card-name{
+    color:#1A237E;
+    text-shadow:none;
+}
+
+.off-card:hover .off-card-desc{
+    color:#3F51B5;
+}
+
+.off-card:hover .off-card-count,
+.off-card:hover .off-cnt{
+    color:#1A237E;
+}
+
+.off-card:hover .off-card-arrow{
+    color:#1A237E;
+}
+
+.off-card:hover .off-card-icon{
+    background:#1A237E !important;
+}
+
+.off-card:hover .off-card-icon i{
+    color:#fff;
+}
+
+.off-card-icon{
+    width:53px;
+    height:31px;
+
+    margin:40px auto 12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:16px;
+}
+
+.off-card-icon i{
+    color:#fff;
+    font-size:30px;
+}
+.off-card-body{
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+.off-card-name{
+    min-height:42px;
+    font-size:16px;
+    font-weight:800;
+    color:#1A237E;
+    line-height:1.4;
+    margin-bottom:8px;
+}
+
+.off-card-desc{
+    min-height:60px;
+    font-size:14px;
+    line-height:1.6;
+    color:rgba(255,255,255,.85);
+    margin-bottom:8px;
+}
+
+.off-card-count{
+    margin:0;
+    height:auto;
+}
+
+.off-cnt{
+    font-size:18px;
+    font-weight:800;
+    color:#fff;
+}
+
+.off-card-arrow{
+    margin:0;
+    padding:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:17px;
+    color:#fff;
+}
+
+.off-card:hover .off-card-arrow{color:rgba(232, 232, 240, 0.9)}
+.off-cta{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
+}
+
+.off-card-foot{
+    height:42px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 16px;
+
+    background:rgba(255,255,255,.15);
+    border-top:1px solid rgba(255,255,255,.25);
+
+    flex-shrink:0;
+}
+
+.off-cta-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:11px 24px;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:700;
+  text-decoration:none;
+  transition:all .2s;
+}
+.off-cta-primary{
+  background:#fff;
+  color:#1A237E;
+}
+.off-cta-primary:hover{background:#e8eaf6;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.off-cta-sec{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.2);
+}
+.off-cta-sec:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+@media(max-width:768px){
+
+    .hero{
+        min-height: 400px;
+        padding: 70px 0;
+        background-attachment: scroll;
+    }
+
+    .hero-text h1{
+        font-size: 42px;
+    }
+
+    .h-desc{
+        font-size: 18px;
+    }
+
+    .cards-grid{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    background:#f4f6fb;
+    border-top:1px solid rgba(13,18,87,.08);
+    margin-top:0;
+    padding:0;
+}
+.f-main{
+    max-width:1400px;
+    width:100%;
+    margin:auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+
+    gap:22px;
+
+    padding:8px 45px;
+}
+
+/* يمين */
+.f-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    margin-right:40px;
+}
+
+.f-lr{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.f-lic{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    border:1px solid rgba(13,18,87,.15);
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-right: -150px;
+}
+
+.f-lic img{
+    width:30px;
+    height:30px;
+    object-fit:contain;
+}
+
+.f-lnm{
+    font-size:16px;
+    font-weight:800;
+    color:#0d1257;
+}
+
+.f-lsb{
+    font-size:11px;
+    color:#666;
+}
+
+/* الوصف */
+
+.f-ab{
+    font-size:13px;
+    color:#666;
+    white-space:nowrap;
+    margin:0;
+}
+
+/* السوشيال */
+
+.f-soc{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.fsoc{
+    width:34px;
+    height:34px;
+    border-radius:8px;
+    background:#fff;
+    border:1px solid rgba(13,18,87,.15);
+    color:#0d1257;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.fsoc:hover{
+    background:#0d1257;
+    color:#fff;
+}
+
+/* الحقوق */
+
+.f-copy{
+    font-size:13px;
+    color:#666;
+    margin:0;
+    white-space:nowrap;
+}
+
+/* الروابط */
+
+.f-left{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    margin-left: 35px;
+}
+
+.fbl{
+    color:#555;
+    text-decoration:none;
+    font-size:13px;
+    transition:.25s;
+}
+
+.fbl:hover{
+    color:#0d1257;
+}
+
+/* نخفي القديم */
+
+.f-div,
+.f-bot{
+    display:none;
+}
+/* =========================
+   VIDEO FAB (mobile only)
+========================= */
+
+.vid-fab{
+  display:none;
+}
+
+.vid-fab-ico{
+  width:38px;
+  height:38px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.22);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:17px;
+
+  flex-shrink:0;
+}
+
+.vid-fab-lbl{
+  font-size:13px;
+  font-weight:700;
+}
+
+@keyframes vid-pulse{
+  0%,100%{ box-shadow:0 8px 24px rgba(26,35,126,.45); }
+  50%{ box-shadow:0 8px 32px rgba(26,35,126,.7),0 0 0 10px rgba(26,35,126,.1); }
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media(max-width:992px){
+
+.f-main{
+    flex-direction:column;
+    justify-content:center;
+    text-align:center;
+    gap:15px;
+    padding:18px;
+}
+
+.f-right,
+.f-left,
+.f-soc{
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.f-ab,
+.f-copy{
+    white-space:normal;
+}
+
+}
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+  width:5px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:rgba(26,35,126,.2);
+
+  border-radius:4px;
+}
+
+/* Desktop */
+@media (min-width:1400px){
+
+.cards-grid{
+    grid-template-columns:repeat(5,1fr);
+}
+
+.off-cards-grid{
+    grid-template-columns:repeat(6,1fr);
+}
+
+}
+
+/* Laptop */
+@media (max-width:1399px){
+
+.cards-grid{
+    grid-template-columns:repeat(5,1fr);
+}
+
+.off-cards-grid{
+    grid-template-columns:repeat(5,1fr);
+}
+
+}
+
+/* Tablet */
+@media (max-width:992px){
+
+.cards-grid{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.off-cards-grid{
+    grid-template-columns:repeat(3,1fr);
+}
+
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+.cards-grid,
+.off-cards-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media (max-width:480px){
+
+.cards-grid,
+.off-cards-grid{
+    grid-template-columns:1fr;
+}
+
+}
+/* =========================================
+   HERO TEXT RESPONSIVE
+========================================= */
+
+@media (max-width:768px){
+
+    .hero-text{
+        width:95%;
+        margin:0 auto;
+        text-align:center;
+        padding:0 10px;
+                margin-bottom:45px; /* أهم سطر */
+
+    }
+
+    .hero-text h1{
+        font-size:30px;
+        line-height:1.45;
+        margin-bottom:12px;
+        white-space:normal;
+    }
+
+    .h-desc{
+        width:100%;
+        max-width:100%;
+        font-size:15px;
+        line-height:1.8;
+        white-space:normal;
+        margin:0 auto;
+    }
+
+}
+
+@media (max-width:576px){
+
+    .hero-text h1{
+        font-size:24px;
+        line-height:1.5;
+    }
+
+    .h-desc{
+        font-size:14px;
+        line-height:1.9;
+        padding:0 5px;
+    }
+
+}
+/* ===========================
+   MOBILE HERO FIX
+=========================== */
+@media (max-width:768px){
+
+    /* ارتفاع الهيدر */
+    .nb{
+        min-height:70px;
+    }
+
+    /* إبعاد أول سكشن عن الهيدر */
+    .hero,
+    .ent-hero,
+    .hero-section{
+        margin-top:80px !important;
+    }
+
+    /* عنوان منصة أمر تم */
+    .hero-title,
+    .hero h1{
+        font-size:28px !important;
+        line-height:1.4;
+        margin-bottom:12px;
+    }
+
+    /* الوصف */
+    .hero-subtitle,
+    .hero p{
+        font-size:15px !important;
+        line-height:1.8;
+        padding:0 12px;
+    }
+
+}
+</style>
+</head>
+<body class="ar">
+
+
+<!-- NAVBAR -->
+<nav class="nb">
+  <a class="nb-logo" href="{{ route('amrtm.index') }}">
+    <div class="nb-logo-img">
+      <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAK2ArkDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAYHBQgDBAkBAv/EAEgQAAEDBAECAwQFCQYEBQUBAAABAgMEBQYRBxIhEzFBCCJRYRQVMnGBFhcjQlZXlaHSCYKRlLHBM1JiciRDorLRJURTdbPC/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIEAQMFBgf/xAA9EQEAAgECAwQHBgYABQUAAAAAAQIDBBEhMUEFElFhBhMicYGRoRRSscHR8BUjMkJT4QckM4LxJWJykrL/2gAMAwEAAhEDEQA/ANywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/2Q==" alt="آمر تم" onerror="this.style.display='none';this.parentElement.innerHTML+='<svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'rgba(255,255,255,0.9)\' stroke-width=\'2.2\' width=\'20\' height=\'20\'><path d=\'M12 2L2 7l10 5 10-5-10-5z\'/><path d=\'M2 17l10 5 10-5\'/><path d=\'M2 12l10 5 10-5\'/></svg>'"/>
+    </div>
+    <!-- <div><div class="nb-logo-nm" id="nnm">آمر تم</div><div class="nb-logo-sb" id="nsb">لقطاع الأعمال</div></div> -->
+  </a>
+  <div class="nb-mid">
+    <div class="nb-lnk on" id="nl-home">الرئيسية</div>
+    <div class="nb-lnk" onclick="scrollCards()" id="nl-svcs">الخدمات</div>
+<div class="nb-lnk" id="nl-about"
+     onclick="window.location='{{ route('about') }}'">
+    عن المنصة
+</div>  
+    
+
+<div class="nb-lnk" id="nl-con">تواصل معنا</div>
+  </div>
+  <div class="nb-right">
+    <div class="lng"><div class="lt on" id="la" onclick="setLang('ar')">AR</div><div class="lt" id="le" onclick="setLang('en')">EN</div></div>
+    <div id="nb-guest" style="{{ auth('business')->check() ? 'display:none' : 'display:flex' }};gap:6px;align-items:center;">
+      <a class="nb-btn out" href="{{ route('amrtm.login') }}" id="nb-li"><i class="ti ti-login"></i><span id="nl-li">دخول</span></a>
+      <a class="nb-btn sol" href="{{ route('amrtm.register') }}" id="nb-re"><i class="ti ti-user-plus"></i><span id="nl-re">تسجيل</span></a>
+      <a href="{{ route('amrtm.office.login') }}" style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:20px;background:rgba(255,255,255,.12);color:#fff;font-size:12.5px;font-weight:700;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.2s;white-space:nowrap" title="دخول المكاتب المهنية">
+        <i class="ti ti-building-skyscraper" style="font-size:15px"></i>
+        <span style="display:none" class="nb-office-lbl">المكاتب</span>
+      </a>
+    </div>
+    <div id="nb-auth" style="{{ auth('business')->check() ? 'display:flex' : 'display:none' }};gap:6px;align-items:center;">
+      @auth('business')
+        @php $authUser = auth('business')->user(); @endphp
+        <a class="nb-btn out" id="nb-dash-lnk"
+           href="{{ $authUser->isAdmin() ? route('amrtm.admin.dashboard') : route('amrtm.user.dashboard') }}">
+          <i class="ti ti-layout-dashboard"></i>
+          <span id="nl-da">{{ $authUser->isAdmin() ? 'لوحة التحكم' : 'حسابي' }}</span>
+        </a>
+        <div class="nb-user" id="nb-user-chip"
+             onclick="location.href='{{ $authUser->isAdmin() ? route('amrtm.admin.dashboard') : route('amrtm.user.dashboard') }}'">
+          <img class="nb-user-av" id="nb-av"
+               src="https://ui-avatars.com/api/?name={{ urlencode($authUser->name) }}&background=1A237E&color=fff&size=64"
+               alt="{{ $authUser->name }}"/>
+          <span class="nb-user-nm" id="nb-un">{{ explode(' ', $authUser->name)[0] }}</span>
+        </div>
+        <form id="nb-logout-form" method="POST" action="{{ route('amrtm.logout') }}" style="display:none;">@csrf</form>
+        <button onclick="document.getElementById('nb-logout-form').submit()"
+                style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.55);font-size:18px;padding:4px 6px;transition:color .2s;"
+                title="تسجيل الخروج">
+          <i class="ti ti-logout"></i>
+        </button>
+      @endauth
+    </div>
+    <div class="nb-ham" id="nb-ham" onclick="togMob()"><i class="ti ti-menu-2"></i></div>
+  </div>
+</nav>
+<div class="mob-dd" id="mob-dd">
+  <div class="mob-lnk"><i class="ti ti-home-2"></i><span id="mn-h">الرئيسية</span></div>
+  <div class="mob-lnk" onclick="scrollCards();clsMob()"><i class="ti ti-grid-3x3"></i><span id="mn-s">الخدمات</span></div>
+  @auth('business')
+    @if(auth('business')->user()->isAdmin())
+      <div class="mob-lnk" onclick="location.href='{{ route('amrtm.admin.dashboard') }}'"><i class="ti ti-layout-dashboard"></i><span>لوحة التحكم</span></div>
+    @else
+      <div class="mob-lnk" onclick="location.href='{{ route('amrtm.user.dashboard') }}'"><i class="ti ti-layout-dashboard"></i><span>حسابي</span></div>
+    @endif
+    <div class="mob-lnk" onclick="document.getElementById('mob-logout-form').submit()"><i class="ti ti-logout"></i><span>تسجيل الخروج</span></div>
+    <form id="mob-logout-form" method="POST" action="{{ route('amrtm.logout') }}" style="display:none;">@csrf</form>
+  @else
+    <div class="mob-lnk" onclick="location.href='{{ route('amrtm.login') }}'"><i class="ti ti-login"></i><span id="mn-l">تسجيل الدخول</span></div>
+    <div class="mob-lnk" onclick="location.href='{{ route('amrtm.register') }}'"><i class="ti ti-user-plus"></i><span id="mn-r">إنشاء حساب</span></div>
+  @endauth
+</div>
+
+<!-- HERO -->
+<section class="hero">
+
+    <!-- Hero Text -->
+    <div class="-heroin">
+
+        <div class="hero-text" style="text-align:center">
+
+          <h1 id="hero-title"id="h-hl">
+    منصة <span id="h-hl">آمر تم</span> لخدمات قطاع الأعمال
+</h1>
+            <p class="h-desc" id="off-sub">
+                منصة تعمل وفق مفهوم النافذة الواحدة لاستقبال طلبات العملاء وإنجاز معاملاتهم عبر شبكة من الشركاء والمتخصصين.
+</p>
+        </div>
+
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-wrap-home">
+
+       
+        <div class="cards-grid" id="cards-grid">
+
+          <!-- Skeleton 1 -->
+            <div class="card" style="pointer-events:none;">
+                <div class="card-body">
+                    <div class="skel" style="width:76px;height:76px;border-radius:20px;margin:0 auto 1.2rem;"></div>
+                    <div class="skel" style="width:55%;height:18px;margin:0 auto .5rem;"></div>
+                    <div class="skel" style="width:75%;height:13px;margin:0 auto;"></div>
+                </div>
+
+                <div class="card-foot">
+                    <div class="skel" style="width:70px;height:14px;"></div>
+                </div>
+            </div>
+
+            <!-- Skeleton 2 -->
+            <div class="card" style="pointer-events:none;">
+                <div class="card-body">
+                    <div class="skel" style="width:76px;height:76px;border-radius:20px;margin:0 auto 1.2rem;"></div>
+                    <div class="skel" style="width:55%;height:18px;margin:0 auto .5rem;"></div>
+                    <div class="skel" style="width:75%;height:13px;margin:0 auto;"></div>
+                </div>
+
+                <div class="card-foot">
+                    <div class="skel" style="width:70px;height:14px;"></div>
+                </div>
+            </div>
+
+            <!-- Skeleton 3 -->
+            <div class="card" style="pointer-events:none;">
+                <div class="card-body">
+                    <div class="skel" style="width:76px;height:76px;border-radius:20px;margin:0 auto 1.2rem;"></div>
+                    <div class="skel" style="width:55%;height:18px;margin:0 auto .5rem;"></div>
+                    <div class="skel" style="width:75%;height:13px;margin:0 auto;"></div>
+                </div>
+
+                <div class="card-foot">
+                    <div class="skel" style="width:70px;height:14px;"></div>
+                </div>
+            </div>
+
+            <!-- Skeleton 4 -->
+            <div class="card embassies" style="pointer-events:none;">
+                <div class="card-body">
+                    <div class="skel" style="width:76px;height:76px;border-radius:20px;margin:0 auto 1.2rem;"></div>
+                    <div class="skel" style="width:55%;height:18px;margin:0 auto .5rem;"></div>
+                    <div class="skel" style="width:75%;height:13px;margin:0 auto;"></div>
+                </div>
+
+                <div class="card-foot">
+                    <div class="skel" style="width:70px;height:14px;"></div>
+                </div>
+            </div>
+
+            <!-- Skeleton 5 -->
+            <div class="card" style="pointer-events:none;">
+                <div class="card-body">
+                    <div class="skel" style="width:76px;height:76px;border-radius:20px;margin:0 auto 1.2rem;"></div>
+                    <div class="skel" style="width:55%;height:18px;margin:0 auto .5rem;"></div>
+                    <div class="skel" style="width:75%;height:13px;margin:0 auto;"></div>
+                </div>
+
+                <div class="card-foot">
+                    <div class="skel" style="width:70px;height:14px;"></div>
+                </div>
+            </div>
+
+        </div>
+
+
+        </div>
+
+    </div>
+
+<!-- =============== END HERO =============== -->
+
+
+<!-- VIDEO MODAL -->
+<div class="vm" id="vm" onclick="if(event.target===this)closeVid()">
+    <div class="vm-in">
+
+        <div class="vm-x" onclick="closeVid()">
+            <i class="ti ti-x"></i>
+        </div>
+
+        <iframe id="vmf"
+                src=""
+                allowfullscreen
+                allow="autoplay; encrypted-media">
+        </iframe>
+
+    </div>
+</div>
+
+
+<!-- ================= OFFICES ================= -->
+<div class="offices-sec" id="offices-sec">
+
+    <div class="offices-inner">
+
+        <div class="offices-hd">
+
+
+            <div class="s-ttl" id="off-ttl">
+مكاتب المستشارين والشركات المهنية المتخصصة المساندة لتقديم الخدمات لعملاء منصة أمر تم لخدمات الأعمال            </div>
+
+        <div class="off-cards-grid">
+
+    <!-- Law -->
+    <a href="{{ route('amrtm.offices.directory', 'law') }}" class="off-card" id="off-card-law">
+
+        <div class="off-card-icon" style="background:linear-gradient(135deg,#1A237E,#283593)">
+            <i class="ti ti-scale"></i>
+        </div>
+
+        <div class="off-card-body">
+            <div class="off-card-name" id="off-name-law">
+                مكاتب المحاماة
+            </div>
+
+        </div>
+
+
+    </a>
+
+    <!-- Services -->
+    <a href="{{ route('amrtm.offices.directory', 'services') }}" class="off-card" id="off-card-svc">
+
+        <div class="off-card-icon" style="background:linear-gradient(135deg,#bd15c0,#c71ee5)">
+            <i class="ti ti-briefcase"></i>
+        </div>
+
+        <div class="off-card-body">
+            <div class="off-card-name" id="off-name-svc">
+                مكاتب الخدمات والتعقيب
+            </div>
+
+        </div>
+
+       
+
+    </a>
+
+    <!-- Customs -->
+    <a href="{{ route('amrtm.offices.directory', 'customs') }}" class="off-card" id="off-card-cus">
+
+        <div class="off-card-icon" style="background:linear-gradient(135deg,#2182f0,#0688eb)">
+            <i class="ti ti-address-book"></i>
+        </div>
+
+        <div class="off-card-body">
+            <div class="off-card-name" id="off-name-cus">
+                شركات التخليص الجمركي
+            </div>
+
+        </div>
+
+       
+
+    </a>
+
+    <!-- Accounting -->
+    <a href="{{ route('amrtm.offices.directory', 'accounting') }}" class="off-card" id="off-card-acc">
+
+        <div class="off-card-icon" style="background:linear-gradient(135deg,#2207a7,#0b05d1)">
+            <i class="ti ti-calculator"></i>
+        </div>
+
+        <div class="off-card-body">
+            <div class="off-card-name" id="off-name-acc" >
+               الاستشارات المالية والضربية
+            </div>
+
+        </div>
+
+    </a>
+
+    <!-- Engineering -->
+    <a href="{{ route('amrtm.offices.directory', 'engineering') }}" class="off-card" id="off-card-eng">
+
+        <div class="off-card-icon" style="background:linear-gradient(135deg,#f69d03,#e9a403)">
+            <i class="ti ti-building"></i>
+        </div>
+
+        <div class="off-card-body">
+            <div class="off-card-name" id="off-name-eng">
+                الاستشارات الهندسية 
+            </div>
+
+          
+        </div>
+
+        
+
+    </a>
+
+    <!-- Freelance -->
+    <a href="{{ route('amrtm.offices.directory', 'freelance') }}" class="off-card" id="off-card-free">
+
+        <div class="off-card-icon" style="background:linear-gradient(135deg,#00695C,#00897B)">
+            <i class="ti ti-user"></i>
+        </div>
+
+        <div class="off-card-body">
+            <div class="off-card-name" id="off-name-free">
+                أصحاب المهن الحرة
+            </div>
+
+           
+        </div>
+
+        
+    </a>
+
+</div>
+<br>
+        <div class="off-cta">
+
+            <a href="{{ route('amrtm.office.register') }}"
+               class="off-cta-btn off-cta-primary">
+
+                <i class="ti ti-building-plus"></i>
+             تسجيل الخدمات المساندة
+            </a>
+
+
+
+        </div>
+    </section>
+
+    </div>
+
+</section>
+<!-- ============== END OFFICES ============== -->
+<!-- LOGIN GATE MODAL -->
+<div class="em" id="lgm" onclick="if(event.target===this)closeLgm()" style="z-index:700;">
+  <div class="em-box" style="max-width:440px;">
+    <div class="em-hd" style="background:linear-gradient(135deg,#1A237E,#1565C0);">
+      <div class="em-hd-ico"><i class="ti ti-lock"></i></div>
+      <div><div class="em-hd-nm" id="lgm-ttl">تسجيل الدخول مطلوب</div><div class="em-hd-sb" id="lgm-sub">يجب تسجيل الدخول لتقديم طلب خدمة</div></div>
+      <button class="em-x" onclick="closeLgm()"><i class="ti ti-x"></i></button>
+    </div>
+    <div style="padding:2rem 1.6rem;text-align:center;">
+      <div style="width:72px;height:72px;border-radius:50%;background:rgba(26,35,126,.1);border:2px solid rgba(26,35,126,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:30px;color:#1A237E;"><i class="ti ti-user-circle"></i></div>
+      <p style="font-size:14px;color:#3A4490;line-height:1.8;margin-bottom:1.6rem;" id="lgm-body">لتقديم طلب خدمة يجب أن يكون لديك حساب مسجل في المنصة. سجّل دخولك أو أنشئ حساباً جديداً مجاناً.</p>
+      <div style="display:flex;flex-direction:column;gap:.75rem;">
+        <a id="lgm-login-btn" href="#" style="display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1A237E,#1565C0);color:#fff;font-family:inherit;font-size:14.5px;font-weight:800;text-decoration:none;transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'"><i class="ti ti-login"></i> <span id="lgm-login-lbl">تسجيل الدخول</span></a>
+        <a id="lgm-reg-btn" href="#" style="display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:12px;background:transparent;color:#1A237E;font-family:inherit;font-size:14px;font-weight:700;text-decoration:none;border:1.5px solid rgba(26,35,126,.2);transition:background .2s;" onmouseover="this.style.background='rgba(26,35,126,.06)'" onmouseout="this.style.background='transparent'"><i class="ti ti-user-plus"></i> <span id="lgm-reg-lbl">إنشاء حساب جديد</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ENTITY MODAL -->
+<div class="em" id="em" onclick="if(event.target===this)closeEm()">
+  <div class="em-box">
+    <div class="em-hd">
+      <div class="em-hd-ico" id="em-ico"><i class="ti ti-building" id="em-ico-i"></i></div>
+      <div><div class="em-hd-nm" id="em-nm">—</div><div class="em-hd-sb" id="em-sb">اختر الجهة</div></div>
+      <button class="em-x" onclick="closeEm()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="em-srch" style="position:relative;">
+      <i class="ti ti-search em-srch-ico"></i>
+      <input type="text" id="em-q" placeholder="ابحث..." oninput="filtEm(this.value)"/>
+    </div>
+    <div class="em-list" id="em-list"></div>
+  </div>
+</div>
+
+<!-- FORM MODAL -->
+<div class="fm" id="fm" onclick="if(event.target===this)closeFm()">
+  <div class="fm-box">
+    <div class="fm-hd">
+      <div class="fm-hd-ico" id="fm-ico"><i class="ti ti-file-text" id="fm-ico-i"></i></div>
+      <div style="flex:1;"><div class="fm-hd-nm" id="fm-hnm">استمارة التقديم</div><div class="fm-hd-sb" id="fm-hsb">يرجى تعبئة البيانات بدقة</div></div>
+      <button class="fm-x" onclick="closeFm()"><i class="ti ti-x"></i></button>
+    </div>
+    <!-- Service select -->
+    <div class="fm-sel-wrap"><select id="fm-sel" onchange="onSelChange(this)"></select></div>
+    <!-- Service bar -->
+    <div class="fm-sbar" id="fm-sb">
+      <div class="fm-sico" id="fm-si"><i class="ti ti-file-text" id="fm-si-i"></i></div>
+      <div style="flex:1;"><div class="fm-snm" id="fm-snm">—</div><div class="fm-scat" id="fm-scat">—</div></div>
+      <div class="fm-sprice" id="fm-sp">—</div>
+    </div>
+    <!-- Balance -->
+    <div class="fm-bal"><span class="fm-bal-lbl" id="fm-bl">رصيدك:</span><span class="fm-bal-val" id="fm-bv">—</span></div>
+    <!-- Success -->
+    <div class="succ" id="fm-succ">
+      <div class="succ-ico"><i class="ti ti-circle-check"></i></div>
+      <div class="succ-ttl" id="sc-t">تم تقديم طلبك بنجاح!</div>
+      <div class="succ-sub" id="sc-s">سيتم مراجعة طلبك والتواصل معك خلال المدة المحددة.</div>
+      <div class="succ-ref" id="sc-r">رقم الطلب: —</div>
+      <div class="succ-btns">
+        <a class="s-b1" href="{{ route('amrtm.user.dashboard') }}" id="sc-d"><i class="ti ti-layout-dashboard"></i><span id="sc-dl">تابع طلبك</span></a>
+        <button class="s-b2" onclick="rstFm()" id="sc-n"><span id="sc-nl">طلب جديد</span></button>
+      </div>
+    </div>
+    <!-- Form inner -->
+    <div class="fm-body" id="fm-in">
+      <div class="fm-sec-lbl"><i class="ti ti-user"></i><span id="fm-lbl-pers">البيانات الشخصية</span></div>
+      <div class="fm-row">
+        <div class="fld"><label><span class="req">*</span><span id="ln">الاسم الكامل</span></label><input type="text" id="fn"/><div class="ferr" id="en"><i class="ti ti-alert-circle"></i><span id="ent">مطلوب</span></div></div>
+        <div class="fld"><label><span class="req">*</span><span id="lid">رقم الهوية</span></label><input type="text" id="fid" maxlength="10"/><div class="ferr" id="eid"><i class="ti ti-alert-circle"></i><span id="eidt">غير صحيح</span></div></div>
+      </div>
+      <div class="fm-row">
+        <div class="fld"><label><span class="req">*</span><span id="lph">رقم الجوال</span></label><input type="tel" id="fph"/><div class="ferr" id="eph"><i class="ti ti-alert-circle"></i><span id="epht">غير صحيح</span></div></div>
+        <div class="fld"><label><span class="req">*</span><span id="lem">البريد الإلكتروني</span></label><input type="email" id="fem"/><div class="ferr" id="eem"><i class="ti ti-alert-circle"></i><span id="eemt">غير صحيح</span></div></div>
+      </div>
+      <div class="fm-sec-lbl" style="margin-top:.4rem"><i class="ti ti-building"></i><span id="fm-lbl-biz">بيانات الجهة (اختياري)</span></div>
+      <div class="fm-row">
+        <div class="fld"><label><span id="lco">اسم الشركة</span></label><input type="text" id="fco"/></div>
+        <div class="fld"><label><span id="lcr">السجل التجاري</span></label><input type="text" id="fcr"/></div>
+      </div>
+      <div class="fm-sec-lbl" style="margin-top:.4rem"><i class="ti ti-paperclip"></i><span id="fm-lbl-attach">المرفقات والملاحظات</span></div>
+      <div class="fld"><label><span id="lno">ملاحظات</span></label><textarea id="fno"></textarea></div>
+      <div class="fld">
+        <label id="lfi">إرفاق ملفات</label>
+        <div class="f-area" id="f-area">
+          <input type="file" id="ffi" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="hndFiles(this)"/>
+          <div class="f-area-ico"><i class="ti ti-cloud-upload"></i></div>
+          <div class="f-area-t" id="fat">اضغط أو اسحب الملفات هنا</div>
+          <div class="f-area-s" id="fas">PDF, JPG, PNG, DOC — حد أقصى 10MB</div>
+          <div class="f-chips" id="f-chips"></div>
+        </div>
+      </div>
+      <div class="prv"><i class="ti ti-shield-check"></i><span id="prv-t">بياناتك محمية ومشفرة ولن تُشارَك مع أي جهة خارجية دون موافقتك الصريحة.</span></div>
+      <button class="fm-sub" id="fm-sub" onclick="sbmFm()">
+        <span class="stxt" id="fm-st"><i class="ti ti-send"></i> تقديم الطلب</span>
+        <div class="spin"></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer">
+
+<div class="f-main">
+
+    <!-- اليمين -->
+    <div class="f-right">
+
+        <div class="f-lr">
+
+            <div class="f-lic">
+                <img 
+                     <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAK2ArkDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAYHBQgDBAkBAv/EAEgQAAEDBAECAwQFCQYEBQUBAAABAgMEBQYRBxIhEzFBCCJRYRQVMnGBFhcjQlZXlaHSCYKRlLHBM1JiciRDorLRJURTdbPC/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAIEAQMFBgf/xAA9EQEAAgECAwQHBgYABQUAAAAAAQIDBBEhMUEFElFhBhMicYGRoRRSscHR8BUjMkJT4QckM4LxJWJykrL/2gAMAwEAAhEDEQA/ANywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/2Q=="
+>
+            </div>
+
+            <div>
+                <div class="f-lnm">آمر تم</div>
+                <div class="f-lsb">لقطاع الأعمال</div>
+            </div>
+
+        </div>
+
+        <p class="f-ab">
+            منصة إلكترونية متكاملة لخدمة الأفراد وقطاع الأعمال
+        </p>
+
+    </div>
+
+    <!-- السوشيال -->
+    <div class="f-soc">
+            <a class="fsoc"
+            href="https://x.com/amrtmcomsa"
+           target="_blank"
+              rel="noopener noreferrer"
+            aria-label="X">
+           <i class="ti ti-brand-x"></i>
+           </a>
+
+            <a class="fsoc"
+             href="https://www.linkedin.com/in/amrtm-com-sa/"
+             target="_blank"
+             rel="noopener noreferrer"
+                aria-label="LinkedIn">
+             <i class="ti ti-brand-linkedin"></i>
+              </a>
+
+            <a class="fsoc" 
+                  href="https://www.instagram.com/amrtm.com.sa/"
+              target="_blank"
+               rel="noopener noreferrer"
+                 aria-label="Instagram">
+                <i class="ti ti-brand-instagram"></i>
+             </a>
+
+         <a class="fsoc" href="https://wa.me/966504915222">
+            <i class="ti ti-brand-whatsapp"></i>
+        </a>
+
+    </div>
+     
+    <!-- الحقوق -->
+    <p class="f-copy">
+        © 2025 جميع الحقوق محفوظة لـ <b>آمر تم</b>
+    </p>
+
+    <!-- الروابط -->
+    <div class="f-left">
+
+        <a class="fbl" href="#">
+            سياسة الخصوصية
+        </a>
+
+        <a class="fbl" href="#">
+            شروط الاستخدام
+        </a>
+
+        <a class="fbl" href="#">
+            تواصل معنا
+        </a>
+
+    </div>
+
+</div>
+
+</footer>
+
+<script>
+window.AMRTM_USER = {!! auth('business')->check() ? json_encode([
+    'id'    => auth('business')->id(),
+    'name'  => auth('business')->user()->name,
+    'email' => auth('business')->user()->email,
+    'phone' => auth('business')->user()->phone ?? '',
+    'role'  => auth('business')->user()->role,
+    'balance' => 0,
+]) : 'null' !!};
+window.AMRTM_CSRF = '{{ csrf_token() }}';
+window.AMRTM_API_BASE = '{{ url("/amrtm/api") }}';
+window.AMRTM_ROUTES = {
+    login:         '{{ route("amrtm.login") }}',
+    register:      '{{ route("amrtm.register") }}',
+    logout:        '{{ route("amrtm.logout") }}',
+    home:          '{{ route("amrtm.index") }}',
+    userDashboard: '{{ route("amrtm.user.dashboard") }}',
+    adminDashboard:'{{ route("amrtm.admin.dashboard") }}',
+    mainSite:      '{{ url("/") }}',
+    catalogBase:   '{{ url("/amrtm/catalog") }}',
+};
+</script>
+
+<!-- VIDEO FAB — mobile only -->
+<button class="vid-fab" id="vid-fab" onclick="openVid()">
+<div class="vid-fab-ico"><i class="ti ti-player-play-filled"></i></div>
+<span class="vid-fab-lbl" id="vfl">شاهد كيف تعمل المنصة</span>
+</button>
+<script>
+/* ══ amrtm-web.js — inlined ══ */
+const API_BASE = window.AMRTM_API_BASE || '/amrtm/api';
+
+async function apiRequest(method, endpoint, data = null, isFormData = false) {
+    const csrf = window.AMRTM_CSRF || document.querySelector('meta[name="csrf-token"]')?.content || '';
+    const headers = { 'Accept': 'application/json' };
+    if (!isFormData) headers['Content-Type'] = 'application/json';
+    if (csrf) headers['X-CSRF-TOKEN'] = csrf;
+    const options = { method, headers, credentials: 'same-origin' };
+    if (data) options.body = isFormData ? data : JSON.stringify(data);
+    try {
+        const res = await fetch(API_BASE + endpoint, options);
+        if (res.status === 401 || res.status === 403) {
+            const routes = window.AMRTM_ROUTES || {};
+            if (!window.location.pathname.includes('/login'))
+                window.location.href = (routes.login || '/login') + '?redirect=' + encodeURIComponent(window.location.href);
+            return null;
+        }
+        const json = await res.json();
+        if (!res.ok) throw { status: res.status, data: json };
+        return json;
+    } catch (err) { console.error('API Error:', err); throw err; }
+}
+
+const API = {
+    get:    (url)        => apiRequest('GET',    url),
+    post:   (url, data)  => apiRequest('POST',   url, data),
+    put:    (url, data)  => apiRequest('PUT',    url, data),
+    delete: (url)        => apiRequest('DELETE', url),
+    upload: (url, form)  => apiRequest('POST',   url, form, true),
+};
+
+const Auth = {
+    getUser()    { return window.AMRTM_USER || null; },
+    isLoggedIn() { return window.AMRTM_USER !== null && window.AMRTM_USER !== undefined; },
+    isAdmin()    { const u = this.getUser(); return u && (u.role === 'admin' || u.role === 'supervisor'); },
+    async logout() {
+        const routes = window.AMRTM_ROUTES || {};
+        const csrf   = window.AMRTM_CSRF || '';
+        const logoutUrl = routes.logout || '/amrtm/logout';
+        try { await fetch(logoutUrl, { method: 'POST', headers: { 'X-CSRF-TOKEN': csrf, 'Content-Type': 'application/json' }, credentials: 'same-origin' }); } catch {}
+        window.location.href = routes.home || '/';
+    },
+    requireLogin() {
+        if (!this.isLoggedIn()) {
+            const routes = window.AMRTM_ROUTES || {};
+            window.location.href = (routes.login || '/amrtm/login') + '?redirect=' + encodeURIComponent(window.location.href);
+            return false;
+        }
+        return true;
+    },
+    requireAdmin() {
+        if (!this.isLoggedIn() || !this.isAdmin()) {
+            window.location.href = (window.AMRTM_ROUTES || {}).login || '/amrtm/login';
+            return false;
+        }
+        return true;
+    },
+    async refreshUser() { return this.getUser(); },
+};
+
+const Services  = { async getAll() { return API.get('/services'); } };
+const Requests  = {
+    async submit(formData)   { return API.upload('/requests', formData); },
+    async myRequests(page=1) { return API.get('/requests?page=' + page); },
+    async getOne(id)         { return API.get('/requests/' + id); },
+};
+const Payments  = {
+    async charge(amount)  { return API.post('/payments/charge', { amount }); },
+    async history(page=1) { return API.get('/payments/history?page=' + page); },
+};
+const Profile   = {
+    async update(data)         { return API.put('/profile', data); },
+    async changePassword(data) { return API.put('/profile/password', data); },
+};
+const Dashboard = {
+    async userStats()  { return API.get('/dashboard/user'); },
+    async adminStats() { return API.get('/dashboard/admin'); },
+};
+const Admin = {
+    async getRequests(status='all', search='', page=1) { return API.get(`/admin/requests?status=${status}&search=${encodeURIComponent(search)}&page=${page}`); },
+    async updateStatus(id, status, rejectReason='', estimatedTime='') { return API.put(`/admin/requests/${id}/status`, { status, reject_reason: rejectReason, estimated_completion: estimatedTime || undefined }); },
+    async sendNote(id, note) { return API.post(`/admin/requests/${id}/note`, { note }); },
+    async updatePrice(serviceId, price) { return API.put(`/admin/services/${serviceId}/price`, { price }); },
+    async updateService(id, data) { return API.put(`/admin/services/${id}`, data); },
+    async getTransactions(page=1) { return API.get('/admin/payments?page=' + page); },
+    catalog: {
+        getCategories()          { return API.get('/admin/catalog/categories'); },
+        createCategory(data)     { return API.post('/admin/catalog/categories', data); },
+        updateCategory(id, data) { return API.put(`/admin/catalog/categories/${id}`, data); },
+        deleteCategory(id)       { return API.delete(`/admin/catalog/categories/${id}`); },
+        getEntities(catId)       { return API.get('/admin/catalog/entities' + (catId ? `?category_id=${catId}` : '')); },
+        createEntity(data)       { return API.post('/admin/catalog/entities', data); },
+        updateEntity(id, data)   { return API.put(`/admin/catalog/entities/${id}`, data); },
+        deleteEntity(id)         { return API.delete(`/admin/catalog/entities/${id}`); },
+        getServices(entityId)    { return API.get('/admin/catalog/services' + (entityId ? `?entity_id=${entityId}` : '')); },
+        createService(data)      { return API.post('/admin/catalog/services', data); },
+        updateService(id, data)  { return API.put(`/admin/services/${id}`, data); },
+        deleteService(id)        { return API.delete(`/admin/catalog/services/${id}`); },
+    },
+};
+const Notifications = {
+    async getAll(page=1)  { return API.get('/notifications?page=' + page); },
+    async unreadCount()   { return API.get('/notifications/unread-count'); },
+    async markRead(id)    { return API.post(`/notifications/${id}/read`); },
+    async markAllRead()   { return API.post('/notifications/read-all'); },
+};
+
+(function startNotifPolling() {
+    if (!window.AMRTM_USER) return;
+    let _timer = null;
+    async function poll() {
+        try {
+            const res = await Notifications.unreadCount();
+            if (res && typeof res.count !== 'undefined') {
+                document.querySelectorAll('[data-notif-badge]').forEach(el => { el.textContent = res.count; el.style.display = res.count > 0 ? '' : 'none'; });
+                const b1 = document.getElementById('notif-badge'), b2 = document.getElementById('notif-count');
+                if (b1) b1.textContent = res.count;
+                if (b2) b2.textContent = res.count;
+                window.dispatchEvent(new CustomEvent('amrtm:notif-count', { detail: res.count }));
+            }
+        } catch (_) {}
+        _timer = setTimeout(poll, 30000);
+    }
+    document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(_timer); else poll(); });
+    poll();
+})();
+
+function showToast(message, type='success', duration=3500) {
+    const existing = document.getElementById('amrtm-toast');
+    if (existing) existing.remove();
+    const colors = { success: { bg: 'rgba(27,94,32,.95)', icon: 'ti-circle-check' }, error: { bg: 'rgba(198,40,40,.95)', icon: 'ti-alert-circle' }, info: { bg: 'rgba(26,35,126,.95)', icon: 'ti-info-circle' }, warning: { bg: 'rgba(230,81,0,.95)', icon: 'ti-alert-triangle' } };
+    const c = colors[type] || colors.info;
+    const lang = localStorage.getItem('amrtm_lang') || 'ar';
+    const toast = document.createElement('div');
+    toast.id = 'amrtm-toast';
+    toast.style.cssText = `position:fixed;bottom:24px;${lang==='ar'?'right':'left'}:24px;z-index:9999;background:${c.bg};color:#fff;padding:12px 18px;border-radius:12px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:9px;box-shadow:0 8px 24px rgba(0,0,0,.25);animation:toastIn .3s ease;font-family:'Cairo',sans-serif;max-width:340px;`;
+    toast.innerHTML = `<i class="ti ${c.icon}" style="font-size:18px;flex-shrink:0;"></i><span>${message}</span>`;
+    const style = document.createElement('style');
+    style.textContent = `@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}`;
+    document.head.appendChild(style);
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.opacity='0'; toast.style.transition='opacity .3s'; setTimeout(()=>toast.remove(), 300); }, duration);
+}
+function showLoader() {
+    if (document.getElementById('amrtm-loader')) return;
+    const el = document.createElement('div');
+    el.id = 'amrtm-loader';
+    el.style.cssText = 'position:fixed;inset:0;z-index:9998;background:rgba(255,255,255,.7);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;';
+    el.innerHTML = `<div style="width:44px;height:44px;border:4px solid rgba(26,35,126,.2);border-top-color:#1A237E;border-radius:50%;animation:spin .7s linear infinite;"></div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>`;
+    document.body.appendChild(el);
+}
+function hideLoader() { document.getElementById('amrtm-loader')?.remove(); }
+function formatSAR(amount, lang='ar') { const n = parseFloat(amount||0).toFixed(2); return lang==='ar' ? `${n} ر.س` : `${n} SAR`; }
+function formatDate(dateStr, lang='ar') { if (!dateStr) return '—'; const d = new Date(dateStr); return d.toLocaleDateString(lang==='ar'?'ar-SA':'en-US', { year:'numeric', month:'long', day:'numeric' }); }
+function statusInfo(status, lang='ar') {
+    const map = { pending: { ar:'قيد الانتظار', en:'Pending', color:'#E65100', bg:'rgba(230,81,0,.1)' }, processing: { ar:'جاري المعالجة', en:'Processing', color:'#0277BD', bg:'rgba(2,119,189,.1)' }, in_progress: { ar:'قيد التنفيذ', en:'In Progress', color:'#F9A825', bg:'rgba(249,168,37,.1)' }, done: { ar:'تمت العملية', en:'Completed', color:'#1B5E20', bg:'rgba(27,94,32,.1)' }, rejected: { ar:'مرفوض', en:'Rejected', color:'#C62828', bg:'rgba(198,40,40,.1)' } };
+    const s = map[status] || { ar:'—', en:'—', color:'#999', bg:'rgba(0,0,0,.05)' };
+    return { label: s[lang]||s.ar, color: s.color, bg: s.bg };
+}
+/* ══ END amrtm-web.js ══ */
+
+    /* ══ TRANSLATIONS ══ */
+const T = {
+    ar: {
+        nm: "آمر تم",
+        sb: "لقطاع الأعمال",
+        home: "الرئيسية",
+        svcs: "الخدمات",
+        about: "عن المنصة",
+        con: "تواصل معنا",
+        li: "دخول",
+        re: "تسجيل",
+        da: "حسابي",
+        bdg: "منصة معتمدة رسمياً",
+   
+    h1: "منصة",
+    hl: "آمر تم",
+ h2: "لخدمات قطاع الأعمال",
+
+        h2:"لخدمات قطاع الاعمال",
+       /* desc: "منصة إلكترونية متكاملة لخدمة الأفراد وقطاع الأعمال، تُمكّنكم من إنجاز الخدمات الحكومية والخاصة بسهولة وسرعة وأمان، عبر ربط رقمي بالجهات والمنصات الرسمية.", */
+       desc:"تعمل منصة آمر تم لخدمات قطاع الأعمال وفق مفهوم النافذة الواحدة، حيث تستقبل طلبات العملاء من الأفراد وقطاع الأعمال، وتتولى إنجازها ومتابعتها لدى الجهات الحكومية وشبه الحكومية والقطاع الخاص، من خلال شبكة من الشركاء والمتخصصين، بما يضمن سرعة الإنجاز وجودة التنفيذ.",
+        note: "لطلب الخدمة، تفضلوا بتعبئة الاستمارة أدناه.",
+        vl: "شاهد كيف تعمل المنصة",
+        eye: "اختر القطاع",
+        ttl: "ابدأ بطلب خدمتك",
+        ents: "جهة",
+        svcs2: "خدمة",
+        sar: "ر.س",
+        chooseEnt: "اختر الجهة للتقديم",
+        selSvc: "اختر الخدمة المطلوبة...",
+        fttl: "استمارة التقديم",
+        fsb: "يرجى تعبئة البيانات بدقة",
+        ln: "الاسم الكامل",
+        lid: "رقم الهوية / الإقامة",
+        lph: "رقم الجوال",
+        lem: "البريد الإلكتروني",
+        lco: "اسم الشركة",
+        lcr: "السجل التجاري",
+        lno: "ملاحظات",
+        lfi: "إرفاق ملفات",
+        fat: "اضغط لرفع الملفات أو اسحبها هنا",
+        fas: "PDF, JPG, PNG — حد أقصى 10MB",
+        prv: "بياناتك محمية ومشفرة. لن يتم مشاركتها مع أي جهة خارجية دون موافقتك.",
+        sub: "تقديم الطلب",
+        bl: "رصيدك الحالي:",
+        erq: "هذا الحقل مطلوب",
+        eid: "رقم هوية غير صحيح",
+        eph: "رقم جوال غير صحيح",
+        eem: "بريد غير صحيح",
+        sct: "تم تقديم طلبك بنجاح!",
+        scs: "سيتم مراجعة طلبك والتواصل معك خلال المدة المحددة.",
+        scr: "رقم الطلب: ",
+        scd: "تابع طلبك",
+        scn: "طلب جديد",
+        noLogin: "يجب تسجيل الدخول أولاً لتقديم طلب",
+        noBal: "رصيدك غير كافٍ. اشحن رصيدك من حسابك.",
+        desc_min: "جميع الوزارات الحكومية السعودية",
+        desc_aut: "الهيئات والمؤسسات الحكومية",
+        desc_com: "المؤسسات والشركات الحكومية",
+        desc_emb: "سفارات المملكه والقنصليات والمنظمات",
+        desc_law: "مكاتب وشركات المحاماة والاستشارات القانونية المرخصة",
+        desc_consultants: "اختر مستشارك",
+        desc_svc: "مكاتب الخدمات والتعقيب للمعاملات الحكومية",
+        desc_cus: "شركات ومكاتب التخليص الجمركي المعتمدة",
+        fm_lbl_pers: "البيانات الشخصية",
+        fm_lbl_biz:  "بيانات الجهة (اختياري)",
+        fm_lbl_att:  "المرفقات والملاحظات",
+        off_eye: "قطاع الأعمال الخاص",
+        off_ttl: "مكاتب المستشارين والشركات المهنية المتخصصة المساندة لتقديم الخدمات لعملاء منصة أمر تم لخدمات الأعمال",
+        off_sub: "منصة تعمل وفق مفهوم النافذة الواحدة لاستقبال طلبات العملاء وإنجاز معاملاتهم عبر شبكة من الشركاء والمتخصصين.",
+
+        off_law: "مكاتب المحاماة",
+        off_svc: "مكاتب الخدمات والتعقيب",
+        off_cus: "شركات التخليص الجمركي",
+        off_acc: "الاستشارات المالية والضربية",
+        off_eng: "الأستشارات الهندسية",
+        off_free: "أصحاب المهن الحرة",
+        off_law_desc: "استشارات قانونية وتمثيل أمام الجهات القضائية",
+        off_svc_desc: "إنهاء المعاملات الحكومية والرسمية بكل سهولة",
+        off_cus_desc: "تخليص البضائع وإجراءات الاستيراد والتصدير",
+        off_acc_desc: "خدمات المحاسبة والضرائب والاستشارات المالية",
+        off_eng_desc: "خدمات التصميم الهندسي والإشراف وإعداد المخططات",
+        off_free_desc: "خدمات أصحاب المهن الحرة المعتمدين",
+        
+        off_cnt_lbl: "مكتب معتمد",
+        off_reg: "سجّل مكتبك الآن",
+        off_login: "دخول المكاتب",
+        flt: "روابط سريعة",
+        fct: "اتصل بنا",
+        fab: "منصة إلكترونية متكاملة لخدمة الأفراد وقطاع الأعمال.",
+        fl_h: "الرئيسية",
+        fl_l: "تسجيل الدخول",
+        fl_r: "إنشاء حساب",
+        fl_d: "حسابي",
+        fl_p: "سياسة الخصوصية",
+        fcal: "العنوان",
+        fca: "المملكة العربية السعودية، جده - حي الحمراء-مركز الجمجوم",
+        fcpl: "الهاتف",
+        fcel: "البريد الإلكتروني",
+        fcp: "© 2025 آمر تم — جميع الحقوق محفوظة",
+        fb1: "سياسة الخصوصية",
+        fb2: "شروط الاستخدام",
+        fb3: "تواصل معنا",
+    },
+    en: {
+        nm: "Amrtm",
+        sb: "For the Business Sector",
+        home: "Home",
+        svcs: "Services",
+        about: "About",
+        con: "Contact",
+        li: "Sign In",
+        re: "Register",
+        da: "My Account",
+        bdg: "Officially Accredited Platform",
+        h1: "Amer TAMM Platform",
+        hl: "for Business Services",
+       /* desc: "An integrated digital platform serving individuals and the business sector, enabling you to complete government services easily, quickly and securely.", */
+       desc:"A unified platform empowering individuals and businesses with secure, seamless digital services.",
+        note: "To request a service, please fill out the form below.",
+        vl: "Watch how the platform works",
+        eye: "Choose Sector",
+        ttl: "Start Your Service Request",
+        ents: "Entities",
+        svcs2: "Services",
+        sar: "SAR",
+        chooseEnt: "Select entity to apply",
+        selSvc: "Select required service...",
+        fttl: "Service Application",
+        fsb: "Please fill in accurately",
+        ln: "Full Name",
+        lid: "ID / Residency Number",
+        lph: "Mobile Number",
+        lem: "Email Address",
+        lco: "Company Name",
+        lcr: "Commercial Registration",
+        lno: "Notes",
+        lfi: "Attach Files",
+        fat: "Click to upload or drag & drop",
+        fas: "PDF, JPG, PNG — Max 10MB",
+        prv: "Your data is protected and encrypted. It will not be shared with any third party.",
+        sub: "Submit Application",
+        bl: "Your balance:",
+        erq: "This field is required",
+        eid: "Invalid ID number",
+        eph: "Invalid mobile number",
+        eem: "Invalid email",
+        sct: "Application Submitted Successfully!",
+        scs: "Your application will be reviewed and we will contact you within the specified time.",
+        scr: "Reference Number: ",
+        scd: "Track Request",
+        scn: "New Request",
+        noLogin: "Please sign in first to submit a request",
+        noBal: "Insufficient balance. Top up from your account.",
+        desc_min: "All Saudi government ministries",
+        desc_aut: "Government authorities and agencies",
+        desc_com: "Government companies and institutions",
+        desc_emb: "Saudi embassies and foreign consulates and Organazation",
+        desc_law: "Licensed law firms and legal consultancy offices",
+        desc_consultants: "Select your consultant",
+        desc_svc: "Service and expediting offices for government procedures",
+        desc_cus: "Customs clearance companies and brokers",
+        fm_lbl_pers: "Personal Information",
+        fm_lbl_biz:  "Company Details (Optional)",
+        fm_lbl_att:  "Attachments & Notes",
+        off_eye: "Private Business Sector",
+        off_ttl: "Consultant offices and specialized professional companies supporting the provision of services to the customers of the Amr Tam platform for business services",
+        off_sub: "A platform that operates on a one-stop service model to receive customer requests and complete their transactions through a network of trusted partners and specialized professionals.",
+
+        off_law: "Law Firms",
+        off_svc: "Service & Expediting Offices",
+        off_cus: "Customs Clearance Companies",
+        off_acc: "Accounting Offices",
+        off_eng: "Engineering Offices",
+        off_free: "Freelancers",
+        off_law_desc: "Legal consultations and representation before judicial authorities",
+        off_svc_desc: "Complete government transactions easily and efficiently",
+        off_cus_desc: "Cargo clearance and import/export procedures",
+        off_cnt_lbl: "Accredited Office",
+        off_acc_desc: "Accounting, tax and financial consulting services",
+        off_eng_desc: "Engineering design and supervision services",
+        off_free_desc: "Certified freelance professional services",
+        
+        off_reg: "Register Your Office",
+        off_login: "Office Login",
+        flt: "Quick Links",
+        fct: "Contact Us",
+        fab: "An integrated digital platform serving individuals and the business sector.",
+        fl_h: "Home",
+        fl_l: "Sign In",
+        fl_r: "Create Account",
+        fl_d: "My Account",
+        fl_p: "Privacy Policy",
+        fcal: "Address",
+        fca: "Kingdom of Saudi Arabia, Jeddah - Al-Hamra District",
+        fcpl: "Phone",
+        fcel: "Email",
+        fcp: "© 2025 Amrtm — All Rights Reserved",
+        fb1: "Privacy Policy",
+        fb2: "Terms of Use",
+        fb3: "Contact Us",
+    },
+};
+
+/* ══ CARD CONFIG — keys match DB category keys from seeder ══ */
+const CC = {
+    ministries: {
+        color: "#1A237E",
+        bg: "rgba(26,35,126,.1)",
+        icon: "ti-building-bank",
+        dk: "desc_min",
+    },
+    authorities: {
+        color: "#6A1B9A",
+        bg: "rgba(106,27,154,.1)",
+        icon: "ti-award",
+        dk: "desc_aut",
+    },
+    companies: {
+        color: "#1B5E20",
+        bg: "rgba(27,94,32,.1)",
+        icon: "ti-building-factory",
+        dk: "desc_com",
+    },
+    embassies: {
+        color: "#00838F",
+        bg: "rgba(0,131,143,.1)",
+        icon: "ti-world",
+        dk: "desc_emb",
+    },
+     consultants: {
+        color: "#E65100",
+        bg: "rgba(173,20,87,.1)",
+        icon: "ti-users",
+        dk: "desc_consultants", 
+         url: "/consultants"
+    },
+    law: {
+        color: "#AD1457",
+        bg: "rgba(173,20,87,.1)",
+        icon: "ti-scale",
+        dk: "desc_law",
+    },
+    services: {
+        color: "#E65100",
+        bg: "rgba(230,81,0,.1)",
+        icon: "ti-briefcase",
+        dk: "desc_svc",
+    },
+    customs: {
+        color: "#37474F",
+        bg: "rgba(55,71,79,.1)",
+        icon: "ti-truck",
+        dk: "desc_cus",
+    },
+    accounting: {
+    color: "#0D47A1",
+    bg: "rgba(13,71,161,.1)",
+    icon: "ti-calculator",
+    dk: "desc_acc",
+},
+
+engineering: {
+    color: "#F9A825",
+    bg: "rgba(249,168,37,.1)",
+    icon: "ti-building",
+    dk: "desc_eng",
+},
+
+freelance: {
+    color: "#00695C",
+    bg: "rgba(0,105,92,.1)",
+    icon: "ti-user-star",
+    dk: "desc_free",
+},
+    
+};
+
+/* ══ STATE ══ */
+let lang = localStorage.getItem("amrtm_lang") || "ar";
+let cats = [],
+    curCatKey = null,
+    curEnts = [],
+    curEnt = null,
+    files = [];
+let filteredCats = [];
+/* ══ OFFICES SECTION ══ */
+async function loadOfficeCounts() {
+    try {
+        const base = (window.AMRTM_API_BASE || '/amrtm/api').replace(/\/$/, '');
+        const res  = await fetch(base + '/office-types', {
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (!res.ok) return;
+
+        const data = await res.json();
+
+        const fmt = n => n > 0 ? String(n) : '٠';
+        const el = id => document.getElementById(id);
+
+        if (el('off-cnt-law'))
+            el('off-cnt-law').textContent = fmt(data.law || 0);
+
+        if (el('off-cnt-svc'))
+            el('off-cnt-svc').textContent = fmt(data.services || 0);
+
+        if (el('off-cnt-cus'))
+            el('off-cnt-cus').textContent = fmt(data.customs || 0);
+
+        if (el('off-cnt-acc'))
+            el('off-cnt-acc').textContent = fmt(data.accounting || 0);
+
+        if (el('off-cnt-eng'))
+            el('off-cnt-eng').textContent = fmt(data.engineering || 0);
+
+        if (el('off-cnt-free'))
+            el('off-cnt-free').textContent = fmt(data.freelance || 0);
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+/* ══ INIT ══ */
+/* ══ INIT ══ */
+async function init() {
+    applyLang(lang);
+    updateNavAuth();
+    // استخدام البيانات التجريبية مباشرة
+    cats = getDemoData();
+    filteredCats = [...cats];
+    renderCards();
+    loadOfficeCounts();
+}
+
+function updateNavAuth() {
+    const u = typeof Auth !== "undefined" ? Auth.getUser() : null;
+    if (u) {
+        document.getElementById("nb-guest").style.display = "none";
+        const a = document.getElementById("nb-auth");
+        a.style.display = "flex";
+        document.getElementById("nb-un").textContent = u.name.split(" ")[0];
+        const av = document.getElementById("nb-av");
+        av.src =
+            u.avatar_url ||
+            `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=1A237E&color=fff&size=64`;
+        av.onerror = () =>
+            (av.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=1A237E&color=fff&size=64`);
+        // Route to correct dashboard
+        const dashUrl =
+            u.role === "admin"
+                ? (AMRTM_ROUTES && AMRTM_ROUTES.adminDashboard) ||
+                  "/amrtm/admin"
+                : (AMRTM_ROUTES && AMRTM_ROUTES.userDashboard) ||
+                  "/amrtm/dashboard";
+        document.getElementById("nb-dash-lnk").href = dashUrl;
+        document.getElementById("nb-user-chip").onclick = () =>
+            (location.href = dashUrl);
+        document.getElementById("nl-da").textContent =
+            u.role === "admin"
+                ? lang === "ar"
+                    ? "لوحة التحكم"
+                    : "Dashboard"
+                : lang === "ar"
+                  ? "حسابي"
+                  : "My Account";
+    } else {
+        document.getElementById("nb-guest").style.display = "flex";
+        document.getElementById("nb-auth").style.display = "none";
+    }
+}
+function searchCards() {
+    const q = document
+        .getElementById("searchInput")
+        .value
+        .trim()
+        .toLowerCase();
+
+    if (!q) {
+        filteredCats = [...cats];
+    } else {
+        filteredCats = cats.filter(c => {
+            const ar = (c.name_ar || "").toLowerCase();
+            const en = (c.name_en || "").toLowerCase();
+
+            return ar.includes(q) || en.includes(q);
+        });
+    }
+
+    renderCards(filteredCats);
+}
+/* ══ RENDER CARDS ══ */
+function renderCards(list = cats) {    const t = T[lang],
+        g = document.getElementById("cards-grid");
+    if (!cats.length) {
+        g.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--t3);">${t.erq}</div>`;
+        return;
+    }
+    g.innerHTML = list
+        .slice(0, 7)
+        .map((c) => {
+            const cc = CC[c.key] || {
+                color: c.color || "#1A237E",
+                bg: c.bg || "rgba(26,35,126,.1)",
+                icon: c.icon || "ti-building",
+                dk: "desc_min",
+            };
+            const nm = lang === "ar" ? c.name_ar : c.name_en;
+            const cnt = c.entities?.length || 0;
+            const desc = t[cc.dk] || "";
+          //  const catUrl =
+            //    (window.AMRTM_ROUTES?.catalogBase || "/amrtm/catalog") +
+             //   "/" +
+              //  c.key;  #MARAM
+              const catUrl = c.url || ((window.AMRTM_ROUTES?.catalogBase || "/amrtm/catalog") + "/" + c.key);
+            return `<div class="card" style="--cc:${cc.color}" onclick="location.href='${catUrl}'">
+      <div class="card-body">
+        <div class="card-ico" style="background:${cc.bg};border:2px solid ${cc.color}22;">
+          <i class="ti ${cc.icon}" style="color:${cc.color};"></i>
+        </div>
+        <div class="card-nm">${nm}</div>
+        <div class="card-desc">${desc}</div>
+      </div>
+     
+      <div class="card-foot">
+        <span class="card-tag">${cnt} ${t.ents}</span>
+        <i class="ti ti-arrow-left card-arr" style="color:${cc.color};"></i>
+      </div>
+    </div>`;
+        })
+        .join("");
+}
+
+/* ══ ENTITY MODAL ══ */
+function openEm(key) {
+    curCatKey = key;
+    const cat = cats.find((c) => c.key === key);
+    if (!cat) return;
+    curEnts = cat.entities || [];
+    const t = T[lang],
+        cc = CC[key] || { color: "#1A237E", icon: "ti-building" };
+    S("em-ico-i", "className", "ti " + cc.icon);
+    document.getElementById("em-ico").style.background =
+        cc.bg || "rgba(26,35,126,.1)";
+    S("em-nm", "textContent", lang === "ar" ? cat.name_ar : cat.name_en);
+    S("em-sb", "textContent", t.chooseEnt);
+    document.getElementById("em-q").value = "";
+    renderEnts(curEnts);
+    document.getElementById("em").classList.add("open");
+    document.body.style.overflow = "hidden";
+}
+
+function renderEnts(ents) {
+    const t = T[lang];
+    document.getElementById("em-list").innerHTML = ents.length
+        ? ents
+              .map((e, i) => {
+                  const nm = lang === "ar" ? e.name_ar : e.name_en;
+                  const tag = lang === "ar" ? e.tag_ar || "" : e.tag_en || "";
+                  const minPrice = e.services?.length
+                      ? Math.min(...e.services.map((s) => s.price || 0))
+                      : 0;
+                  return `<div class="em-item" onclick="openFm(${curEnts.indexOf(e)})">
+      <div class="em-ico" style="background:${e.bg || "rgba(26,35,126,.09)"};border:1px solid ${e.color || "#1A237E"}22;"><i class="ti ${e.icon || "ti-building"}" style="color:${e.color || "#1A237E"};"></i></div>
+      <div class="em-info"><div class="em-nm">${nm}</div><div class="em-tag">${tag}${e.services?.length ? ` · ${e.services.length} ${t.svcs2}` : ""}</div></div>
+      ${minPrice > 0 ? `<div class="em-price-tag">${t.svcs2}: من ${minPrice} ${t.sar}</div>` : ""}
+      <i class="ti ${lang === "ar" ? "ti-chevron-left" : "ti-chevron-right"} em-chv"></i>
+    </div>`;
+              })
+              .join("")
+        : `<div style="padding:2rem;text-align:center;color:var(--t3);">—</div>`;
+}
+function filtEm(q) {
+    renderEnts(
+        q
+            ? curEnts.filter((e) =>
+                  (lang === "ar" ? e.name_ar : e.name_en)
+                      .toLowerCase()
+                      .includes(q.toLowerCase()),
+              )
+            : curEnts,
+    );
+}
+function closeEm() {
+    document.getElementById("em").classList.remove("open");
+    document.body.style.overflow = "";
+}
+
+/* ══ FORM MODAL ══ */
+function openFm(idx) {
+    curEnt = curEnts[idx];
+    if (!curEnt) return;
+    if (typeof Auth !== "undefined" && !Auth.isLoggedIn()) {
+        closeEm();
+        openLgm();
+        return;
+    }
+    closeEm();
+    const t = T[lang],
+        cat = cats.find((c) => c.key === curCatKey);
+    const catNm = cat ? (lang === "ar" ? cat.name_ar : cat.name_en) : "";
+    const nm = lang === "ar" ? curEnt.name_ar : curEnt.name_en;
+    S("fm-ico-i", "className", "ti " + (curEnt.icon || "ti-building"));
+    document.getElementById("fm-ico").style.background =
+        curEnt.bg || "rgba(26,35,126,.09)";
+    S("fm-hnm", "textContent", t.fttl);
+    S("fm-hsb", "textContent", nm + (catNm ? " — " + catNm : ""));
+    // Build service dropdown
+    const svcs = curEnt.services || [];
+    const sel = document.getElementById("fm-sel");
+    sel.innerHTML =
+        `<option value="">${t.selSvc}</option>` +
+        svcs
+            .map(
+                (s) =>
+                    `<option value="${s.id}" data-price="${s.price}" data-icon="${s.icon || "ti-file-text"}">${lang === "ar" ? s.name_ar : s.name_en} — ${s.price} ${t.sar}</option>`,
+            )
+            .join("");
+    sel.value = "";
+    updSvcBar(null);
+    updBal();
+    // Labels
+    ["ln", "lid", "lph", "lem", "lco", "lcr", "lno", "lfi"].forEach((k) =>
+        S(k, "textContent", t[k]),
+    );
+    S("fat", "textContent", t.fat);
+    S("fas", "textContent", t.fas);
+    S("prv-t", "textContent", t.prv);
+    document.getElementById("fm-st").innerHTML =
+        `<i class="ti ti-send"></i> ${t.sub}`;
+    S("sc-t", "textContent", t.sct);
+    S("sc-s", "textContent", t.scs);
+    S("sc-dl", "textContent", t.scd);
+    S("sc-nl", "textContent", t.scn);
+    ["ent", "eidt", "epht", "eemt"].forEach((k, i) =>
+        S(k, "textContent", [t.erq, t.eid, t.eph, t.eem][i]),
+    );
+    // Prefill
+    const u = Auth.getUser();
+    if (u) {
+        setV("fn", u.name || "");
+        setV("fem", u.email || "");
+        setV("fph", u.phone || "");
+    }
+    // Reset
+    document.getElementById("fm-succ").classList.remove("on");
+    document.getElementById("fm-in").style.display = "block";
+    clearErrs();
+    files = [];
+    renderChips();
+    document.getElementById("fm").classList.add("open");
+    document.body.style.overflow = "hidden";
+}
+function onSelChange(sel) {
+    if (!sel.value) {
+        updSvcBar(null);
+        return;
+    }
+    const svc = curEnt?.services?.find((s) => s.id == sel.value);
+    updSvcBar(svc);
+    updBal();
+}
+function updSvcBar(svc) {
+    const t = T[lang],
+        bar = document.getElementById("fm-sb");
+    if (!svc) {
+        bar.style.opacity = ".4";
+        return;
+    }
+    bar.style.opacity = "1";
+    const c = curEnt?.color || "#1A237E",
+        b = curEnt?.bg || "rgba(26,35,126,.09)";
+    const si = document.getElementById("fm-si");
+    si.style.background = b;
+    si.style.borderColor = c + "22";
+    S("fm-si-i", "className", "ti " + (svc.icon || "ti-file-text"));
+    document.getElementById("fm-si-i").style.color = c;
+    S("fm-snm", "textContent", lang === "ar" ? svc.name_ar : svc.name_en);
+    S(
+        "fm-scat",
+        "textContent",
+        lang === "ar" ? curEnt?.name_ar || "" : curEnt?.name_en || "",
+    );
+    const prEl = document.getElementById("fm-sp");
+    prEl.textContent = `${svc.price} ${t.sar}`;
+    prEl.style.color = c;
+}
+function updBal() {
+    const u = typeof Auth !== "undefined" ? Auth.getUser() : null,
+        t = T[lang];
+    S("fm-bl", "textContent", t.bl);
+    if (!u) {
+        S("fm-bv", "textContent", "—");
+        return;
+    }
+    const sel = document.getElementById("fm-sel");
+    const price = sel.value
+        ? parseFloat(sel.options[sel.selectedIndex].dataset.price || 0)
+        : 0;
+    const bal = parseFloat(u.balance || 0);
+    const bv = document.getElementById("fm-bv");
+    bv.textContent = `${bal.toFixed(2)} ${t.sar}`;
+    bv.style.color = price > 0 && bal < price ? "#C62828" : "var(--pri)";
+}
+function closeFm() {
+    document.getElementById("fm").classList.remove("open");
+    document.body.style.overflow = "";
+}
+
+/* ══ LOGIN GATE MODAL ══ */
+function openLgm() {
+    const t = T[lang];
+    const routes = window.AMRTM_ROUTES || {};
+    const redirectUrl = encodeURIComponent(location.href);
+    document.getElementById("lgm-ttl").textContent =
+        lang === "ar" ? "تسجيل الدخول مطلوب" : "Sign In Required";
+    document.getElementById("lgm-sub").textContent =
+        lang === "ar"
+            ? "يجب تسجيل الدخول لتقديم طلب خدمة"
+            : "You must be signed in to submit a service request";
+    document.getElementById("lgm-body").textContent =
+        lang === "ar"
+            ? "لتقديم طلب خدمة يجب أن يكون لديك حساب مسجل في المنصة. سجّل دخولك أو أنشئ حساباً جديداً مجاناً."
+            : "To submit a service request you need a registered account. Sign in or create a free account.";
+    document.getElementById("lgm-login-lbl").textContent =
+        lang === "ar" ? "تسجيل الدخول" : "Sign In";
+    document.getElementById("lgm-reg-lbl").textContent =
+        lang === "ar" ? "إنشاء حساب جديد" : "Create Account";
+    document.getElementById("lgm-login-btn").href =
+        (routes.login || "/amrtm/login") + "?redirect=" + redirectUrl;
+    document.getElementById("lgm-reg-btn").href =
+        (routes.register || "/amrtm/register") + "?redirect=" + redirectUrl;
+    document.getElementById("lgm").classList.add("open");
+    document.body.style.overflow = "hidden";
+}
+function closeLgm() {
+    document.getElementById("lgm").classList.remove("open");
+    document.body.style.overflow = "";
+}
+
+/* ══ FILES ══ */
+function hndFiles(inp) {
+    files = [...files, ...Array.from(inp.files)];
+    renderChips();
+}
+function renderChips() {
+    document.getElementById("f-chips").innerHTML = files
+        .map(
+            (f, i) =>
+                `<div class="chip"><i class="ti ti-file"></i><span>${f.name.length > 16 ? f.name.slice(0, 14) + "…" : f.name}</span><span class="chip-x" onclick="rmFile(${i})"><i class="ti ti-x"></i></span></div>`,
+        )
+        .join("");
+}
+function rmFile(i) {
+    files.splice(i, 1);
+    renderChips();
+}
+
+/* ══ SUBMIT ══ */
+function clearErrs() {
+    document
+        .querySelectorAll(".ferr")
+        .forEach((e) => e.classList.remove("show"));
+    document
+        .querySelectorAll(".fld input,.fld textarea")
+        .forEach((i) => i.classList.remove("err"));
+}
+function shErr(fi, ei) {
+    document.getElementById(fi).classList.add("err");
+    document.getElementById(ei).classList.add("show");
+}
+
+async function sbmFm() {
+    clearErrs();
+    const t = T[lang];
+    let ok = true;
+    const name = gV("fn"),
+        id = gV("fid"),
+        ph = gV("fph"),
+        em = gV("fem"),
+        svcId = document.getElementById("fm-sel").value;
+
+
+    if (!name) {
+        shErr("fn", "en");
+        ok = false;
+    }
+    if (!id || id.length < 5) {
+        shErr("fid", "eid");
+        ok = false;
+    }
+    if (!ph || ph.length < 9) {
+        shErr("fph", "eph");
+        ok = false;
+    }
+    if (!em || !em.includes("@")) {
+        shErr("fem", "eem");
+        ok = false;
+    }
+    if (!svcId) {
+        if (typeof showToast !== "undefined")
+            showToast(
+                lang === "ar"
+                    ? "يرجى اختيار الخدمة المطلوبة"
+                    : "Please select a service",
+                "warning",
+            );
+        ok = false;
+    }
+    if (!ok) return;
+    const btn = document.getElementById("fm-sub");
+    btn.classList.add("ld");
+    try {
+        let ref;
+        if (
+            typeof Requests !== "undefined" &&
+            typeof Auth !== "undefined" &&
+            Auth.isLoggedIn() &&
+            svcId
+        ) {
+            const fd = new FormData();
+            fd.append("service_id", svcId);
+            fd.append("client_name", name);
+            fd.append("client_email", em);
+            fd.append("client_phone", ph);
+            fd.append("client_id_number", id);
+            fd.append("company_name", gV("fco"));
+            fd.append("company_cr", gV("fcr"));
+            fd.append("notes", gV("fno"));
+
+
+
+
+            files.forEach((f) => fd.append("attachments[]", f));
+            const res = await Requests.submit(fd);
+            ref = res.ref_number;
+            await Auth.refreshUser();
+            updateNavAuth();
+        } else {
+            await new Promise((r) => setTimeout(r, 1600));
+            ref = "AMR-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+        }
+        btn.classList.remove("ld");
+        S("sc-r", "textContent", t.scr + ref);
+        document.getElementById("fm-in").style.display = "none";
+        document.getElementById("fm-succ").classList.add("on");
+        if (typeof showToast !== "undefined") showToast(t.sct, "success");
+    } catch (e) {
+        btn.classList.remove("ld");
+        if (typeof showToast !== "undefined")
+            showToast(e?.data?.message || "حدث خطأ", "error");
+    }
+}
+function rstFm() {
+    document.getElementById("fm-succ").classList.remove("on");
+    document.getElementById("fm-in").style.display = "block";
+    document
+        .querySelectorAll("#fm-in input,#fm-in textarea")
+        .forEach((i) => (i.value = ""));
+    document.getElementById("fm-sel").value = "";
+    updSvcBar(null);
+    files = [];
+    renderChips();
+    clearErrs();
+    const u = typeof Auth !== "undefined" ? Auth.getUser() : null;
+    if (u) {
+        setV("fn", u.name || "");
+        setV("fem", u.email || "");
+        setV("fph", u.phone || "");
+    }
+}
+
+/* ══ VIDEO ══ */
+function openVid() {
+    document.getElementById("vm").classList.add("open");
+    document.getElementById("vmf").src = "/";
+    document.body.style.overflow = "hidden";
+}
+function closeVid() {
+    document.getElementById("vm").classList.remove("open");
+    document.getElementById("vmf").src = "";
+    document.body.style.overflow = "";
+}
+
+/* ══ LANGUAGE ══ */
+function setLang(l) {
+    lang = l;
+    localStorage.setItem("amrtm_lang", l);
+    document.documentElement.setAttribute("lang", l);
+    document.documentElement.setAttribute("dir", l === "ar" ? "rtl" : "ltr");
+    document.body.className = l;
+    document.getElementById("la").classList.toggle("on", l === "ar");
+    document.getElementById("le").classList.toggle("on", l === "en");
+    applyLang(l);
+    renderCards();
+}
+function applyLang(l) {
+    const t = T[l];
+    [
+        ["nnm", "nm"],
+        ["nsb", "sb"],
+        ["nl-home", "home"],
+        ["nl-svcs", "svcs"],
+        ["nl-about", "about"],
+        ["nl-con", "con"],
+        ["nl-li", "li"],
+        ["nl-re", "re"],
+        ["nl-da", "da"],
+        ["mn-h", "home"],
+        ["mn-s", "svcs"],
+        ["mn-l", "li"],
+        ["mn-r", "re"],
+        ["h-bdg", "bdg"],
+        ["h-d", "desc"],
+        ["h-n", "note"],
+        ["h-vl", "vl"],
+        ["hvid-lbl", "vl"],
+        ["s-eye", "eye"],
+        ["s-ttl", "ttl"],
+        ["fm-lbl-pers",     "fm_lbl_pers"],
+        ["fm-lbl-biz",      "fm_lbl_biz"],
+        ["fm-lbl-attach",   "fm_lbl_att"],
+        ["off-eye",         "off_eye"],
+        ["off-ttl",         "off_ttl"],
+        ["off-sub",         "off_sub"],
+
+        ["off-name-law",    "off_law"],
+        ["off-desc-law",    "off_law_desc"],
+        ["off-cnt-lbl-law", "off_cnt_lbl"],
+
+        ["off-name-svc",    "off_svc"],
+        ["off-desc-svc",    "off_svc_desc"],
+        ["off-cnt-lbl-svc", "off_cnt_lbl"],
+
+        ["off-name-cus",    "off_cus"],
+        ["off-desc-cus",    "off_cus_desc"],
+        ["off-cnt-lbl-cus", "off_cnt_lbl"],
+
+        ["off-name-acc", "off_acc"],
+        ["off-desc-acc", "off_acc_desc"],
+        ["off-cnt-lbl-acc", "off_cnt_lbl"],
+
+        ["off-name-eng", "off_eng"],
+        ["off-desc-eng", "off_eng_desc"],
+        ["off-cnt-lbl-eng", "off_cnt_lbl"],
+
+        ["off-name-free", "off_free"],
+        ["off-desc-free", "off_free_desc"],
+        ["off-cnt-lbl-free", "off_cnt_lbl"],
+
+        ["off-reg-lbl",     "off_reg"],
+        ["off-login-lbl",   "off_login"],
+        ["fnm", "nm"],
+        ["fsb", "sb"],
+        ["fab", "fab"],
+        ["flt", "flt"],
+        ["fct", "fct"],
+        ["fl-h", "fl_h"],
+        ["fl-l", "fl_l"],
+        ["fl-r", "fl_r"],
+        ["fl-d", "fl_d"],
+        ["fl-p", "fl_p"],
+        ["fcal", "fcal"],
+        ["fca", "fca"],
+        ["fcpl", "fcpl"],
+        ["fcel", "fcel"],
+        ["fcp", "fcp"],
+        ["fb1", "fb1"],
+        ["fb2", "fb2"],
+        ["fb3", "fb3"],
+    ].forEach(([id, k]) => S(id, "textContent", t[k]));
+    const ht = document.getElementById("h-t");
+    if (ht) ht.innerHTML = t.h1 + ' <span id="h-hl">' + t.hl + "</span>";
+    document
+        .querySelectorAll(".f-lk i")
+        .forEach(
+            (i) =>
+                (i.className =
+                    "ti " +
+                    (l === "ar" ? "ti-chevron-left" : "ti-chevron-right")),
+        );
+}
+
+/* ══ HELPERS ══ */
+function S(id, p, v) {
+    const el = document.getElementById(id);
+    if (el && v !== undefined) el[p] = v;
+}
+function gV(id) {
+    return document.getElementById(id)?.value?.trim() || "";
+}
+function setV(id, v) {
+    const el = document.getElementById(id);
+    if (el) el.value = v;
+}
+function togMob() {
+    document.getElementById("mob-dd").classList.toggle("open");
+}
+function clsMob() {
+    document.getElementById("mob-dd").classList.remove("open");
+}
+function scrollCards() {
+    document.getElementById("cards-sec").scrollIntoView({ behavior: "smooth" });
+}
+
+/* ══ DRAG DROP ══ */
+const fa = document.getElementById("f-area");
+if (fa) {
+    fa.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        fa.style.borderColor = "var(--pri)";
+    });
+    fa.addEventListener("dragleave", () => (fa.style.borderColor = ""));
+    fa.addEventListener("drop", (e) => {
+        e.preventDefault();
+        fa.style.borderColor = "";
+        files = [...files, ...Array.from(e.dataTransfer.files)];
+        renderChips();
+    });
+}
+function searchCards() {
+
+    const q = document
+        .getElementById("searchInput")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const filtered = cats.filter(c => {
+
+        const name = (lang === "ar" ? c.name_ar : c.name_en).toLowerCase();
+
+        return name.includes(q);
+
+    });
+
+    renderCards(filtered);
+
+}
+/* ══ FULL DEMO DATA — 4 categories, 24 ministries, all entities ══ */
+function getDemoData() {
+    const M = (id, ar, en, icon, color, bg, tag_ar, tag_en, svcs) => ({
+        id,
+        name_ar: ar,
+        name_en: en,
+        icon,
+        color,
+        bg,
+        tag_ar,
+        tag_en,
+        services: svcs,
+    });
+    const S = (id, ar, en, icon, price) => ({
+        id,
+        name_ar: ar,
+        name_en: en,
+        icon,
+        price,
+    });
+    return [
+        {
+            key: "ministries",
+            name_ar: "الوزارات",
+            name_en: "Ministries",
+            entities: [
+                M(
+                    1,
+                    "وزارة الداخلية",
+                    "Ministry of Interior",
+                    "ti-shield",
+                    "#C62828",
+                    "rgba(198,40,40,.11)",
+                    "الأمن والمواطنة",
+                    "Security & Citizenship",
+                    [
+                        S(
+                            1,
+                            "استخراج جواز السفر",
+                            "Passport Issuance",
+                            "ti-passport",
+                            350,
+                        ),
+                        S(2, "تجديد بطاقة الهوية", "ID Renewal", "ti-id", 150),
+                        S(
+                            3,
+                            "تصاريح الإقامة",
+                            "Residency Permits",
+                            "ti-home-check",
+                            500,
+                        ),
+                        S(4, "خدمات المرور", "Traffic Services", "ti-car", 200),
+                        S(
+                            5,
+                            "الأحوال المدنية",
+                            "Civil Status",
+                            "ti-users",
+                            100,
+                        ),
+                        S(
+                            6,
+                            "تصاريح الفعاليات",
+                            "Event Permits",
+                            "ti-calendar-event",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    2,
+                    "وزارة الاتصالات وتقنية المعلومات",
+                    "Ministry of Communications & IT",
+                    "ti-wifi",
+                    "#1565C0",
+                    "rgba(21,101,192,.11)",
+                    "التقنية والرقمنة",
+                    "Technology & Digital",
+                    [
+                        S(
+                            7,
+                            "البنية التحتية الرقمية",
+                            "Digital Infrastructure",
+                            "ti-server",
+                            800,
+                        ),
+                        S(
+                            8,
+                            "التراخيص التقنية",
+                            "Tech Licenses",
+                            "ti-certificate",
+                            600,
+                        ),
+                        S(
+                            9,
+                            "دعم التحول الرقمي",
+                            "Digital Transformation",
+                            "ti-refresh",
+                            400,
+                        ),
+                    ],
+                ),
+                M(
+                    3,
+                    "وزارة الاقتصاد والتخطيط",
+                    "Ministry of Economy & Planning",
+                    "ti-chart-line",
+                    "#2E7D32",
+                    "rgba(46,125,50,.11)",
+                    "الاقتصاد والتنمية",
+                    "Economy & Development",
+                    [
+                        S(
+                            10,
+                            "الإحصاءات الاقتصادية",
+                            "Economic Statistics",
+                            "ti-chart-bar",
+                            200,
+                        ),
+                        S(
+                            11,
+                            "خطط التنمية",
+                            "Development Plans",
+                            "ti-map",
+                            500,
+                        ),
+                        S(
+                            12,
+                            "الشراكات الاقتصادية",
+                            "Economic Partnerships",
+                            "ti-handshake",
+                            700,
+                        ),
+                    ],
+                ),
+                M(
+                    4,
+                    "وزارة الخارجية",
+                    "Ministry of Foreign Affairs",
+                    "ti-world",
+                    "#F57C00",
+                    "rgba(245,124,0,.11)",
+                    "الشؤون الدولية",
+                    "International Affairs",
+                    [
+                        S(
+                            13,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                        S(
+                            14,
+                            "خدمات التأشيرة",
+                            "Visa Services",
+                            "ti-ticket",
+                            400,
+                        ),
+                        S(
+                            15,
+                            "الشؤون القنصلية",
+                            "Consular Affairs",
+                            "ti-building",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    5,
+                    "وزارة الشؤون البلدية والقروية والإسكان",
+                    "Ministry of Municipal & Housing Affairs",
+                    "ti-building-skyscraper",
+                    "#6A1B9A",
+                    "rgba(106,27,154,.11)",
+                    "التطوير العمراني",
+                    "Urban Development",
+                    [
+                        S(
+                            16,
+                            "رخص البناء",
+                            "Building Permits",
+                            "ti-building-arch",
+                            500,
+                        ),
+                        S(
+                            17,
+                            "التخطيط العمراني",
+                            "Urban Planning",
+                            "ti-map-pins",
+                            800,
+                        ),
+                        S(
+                            18,
+                            "خدمات الإسكان",
+                            "Housing Services",
+                            "ti-home",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    6,
+                    "وزارة الصحة",
+                    "Ministry of Health",
+                    "ti-heart-rate-monitor",
+                    "#C62828",
+                    "rgba(198,40,40,.09)",
+                    "الرعاية الصحية",
+                    "Healthcare",
+                    [
+                        S(
+                            19,
+                            "تسجيل منشأة صحية",
+                            "Health Facility Registration",
+                            "ti-building-hospital",
+                            600,
+                        ),
+                        S(
+                            20,
+                            "تراخيص الأدوية",
+                            "Drug Licenses",
+                            "ti-pill",
+                            400,
+                        ),
+                        S(
+                            21,
+                            "التأمين الصحي",
+                            "Health Insurance",
+                            "ti-shield-heart",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    7,
+                    "وزارة البيئة والمياه والزراعة",
+                    "Ministry of Environment, Water & Agriculture",
+                    "ti-plant",
+                    "#1B5E20",
+                    "rgba(27,94,32,.11)",
+                    "البيئة والزراعة",
+                    "Environment & Agriculture",
+                    [
+                        S(
+                            22,
+                            "تراخيص الزراعة",
+                            "Agricultural Licenses",
+                            "ti-seeding",
+                            350,
+                        ),
+                        S(
+                            23,
+                            "خدمات المياه",
+                            "Water Services",
+                            "ti-droplet",
+                            200,
+                        ),
+                        S(
+                            24,
+                            "التصاريح البيئية",
+                            "Environmental Permits",
+                            "ti-leaf",
+                            400,
+                        ),
+                    ],
+                ),
+                M(
+                    8,
+                    "وزارة الشؤون الإسلامية والدعوة والإرشاد",
+                    "Ministry of Islamic Affairs",
+                    "ti-moon",
+                    "#1A237E",
+                    "rgba(26,35,126,.11)",
+                    "الشؤون الدينية",
+                    "Religious Affairs",
+                    [
+                        S(
+                            25,
+                            "تراخيص المساجد",
+                            "Mosque Licenses",
+                            "ti-building-mosque",
+                            200,
+                        ),
+                        S(26, "خدمات الدعوة", "Dawah Services", "ti-book", 100),
+                        S(27, "الإفتاء", "Fatwa Services", "ti-scale", 50),
+                    ],
+                ),
+                M(
+                    9,
+                    "وزارة النقل والخدمات اللوجستية",
+                    "Ministry of Transport & Logistics",
+                    "ti-truck",
+                    "#37474F",
+                    "rgba(55,71,79,.11)",
+                    "النقل والمواصلات",
+                    "Transport & Logistics",
+                    [
+                        S(
+                            28,
+                            "تراخيص النقل",
+                            "Transport Licenses",
+                            "ti-license",
+                            400,
+                        ),
+                        S(
+                            29,
+                            "خدمات الموانئ",
+                            "Port Services",
+                            "ti-anchor",
+                            600,
+                        ),
+                        S(
+                            30,
+                            "خدمات الطيران",
+                            "Aviation Services",
+                            "ti-plane",
+                            800,
+                        ),
+                    ],
+                ),
+                M(
+                    10,
+                    "وزارة الموارد البشرية والتنمية الاجتماعية",
+                    "Ministry of Human Resources",
+                    "ti-users",
+                    "#0277BD",
+                    "rgba(2,119,189,.11)",
+                    "العمل والتوظيف",
+                    "Labor & Employment",
+                    [
+                        S(
+                            31,
+                            "تصاريح العمل",
+                            "Work Permits",
+                            "ti-id-badge",
+                            350,
+                        ),
+                        S(
+                            32,
+                            "خدمات التوظيف",
+                            "Employment Services",
+                            "ti-briefcase",
+                            200,
+                        ),
+                        S(
+                            33,
+                            "الضمان الاجتماعي",
+                            "Social Security",
+                            "ti-shield-check",
+                            100,
+                        ),
+                    ],
+                ),
+                M(
+                    11,
+                    "وزارة الصناعة والثروة المعدنية",
+                    "Ministry of Industry & Mineral Resources",
+                    "ti-hammer",
+                    "#BF360C",
+                    "rgba(191,54,12,.11)",
+                    "الصناعة والتعدين",
+                    "Industry & Mining",
+                    [
+                        S(
+                            34,
+                            "تراخيص التعدين",
+                            "Mining Licenses",
+                            "ti-pickaxe",
+                            1000,
+                        ),
+                        S(
+                            35,
+                            "رخص المصانع",
+                            "Factory Licenses",
+                            "ti-building-factory",
+                            800,
+                        ),
+                        S(
+                            36,
+                            "دعم الصناعة",
+                            "Industry Support",
+                            "ti-rocket",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    12,
+                    "وزارة التعليم",
+                    "Ministry of Education",
+                    "ti-school",
+                    "#00695C",
+                    "rgba(0,105,92,.11)",
+                    "التعليم والتدريب",
+                    "Education & Training",
+                    [
+                        S(
+                            37,
+                            "قبول الطلاب",
+                            "Student Admission",
+                            "ti-user-plus",
+                            200,
+                        ),
+                        S(
+                            38,
+                            "اعتماد المدارس",
+                            "School Accreditation",
+                            "ti-certificate",
+                            800,
+                        ),
+                        S(
+                            39,
+                            "خدمات المنح",
+                            "Scholarship Services",
+                            "ti-award",
+                            100,
+                        ),
+                    ],
+                ),
+                M(
+                    13,
+                    "وزارة الإعلام",
+                    "Ministry of Media",
+                    "ti-broadcast",
+                    "#6A1B9A",
+                    "rgba(106,27,154,.11)",
+                    "الإعلام والنشر",
+                    "Media & Publishing",
+                    [
+                        S(
+                            40,
+                            "تراخيص الإعلام",
+                            "Media Licenses",
+                            "ti-device-tv",
+                            600,
+                        ),
+                        S(
+                            41,
+                            "اعتماد الصحفيين",
+                            "Journalist Accreditation",
+                            "ti-news",
+                            300,
+                        ),
+                        S(
+                            42,
+                            "رخص النشر",
+                            "Publishing Licenses",
+                            "ti-book-2",
+                            400,
+                        ),
+                    ],
+                ),
+                M(
+                    14,
+                    "وزارة الثقافة",
+                    "Ministry of Culture",
+                    "ti-palette",
+                    "#E65100",
+                    "rgba(230,81,0,.11)",
+                    "الفنون والثقافة",
+                    "Arts & Culture",
+                    [
+                        S(
+                            43,
+                            "تراخيص الفعاليات الثقافية",
+                            "Cultural Event Licenses",
+                            "ti-calendar-event",
+                            350,
+                        ),
+                        S(
+                            44,
+                            "دعم الفنانين",
+                            "Artist Support",
+                            "ti-brush",
+                            200,
+                        ),
+                    ],
+                ),
+                M(
+                    15,
+                    "وزارة التجارة",
+                    "Ministry of Commerce",
+                    "ti-shopping-cart",
+                    "#AD1457",
+                    "rgba(173,20,87,.11)",
+                    "التجارة والأعمال",
+                    "Trade & Business",
+                    [
+                        S(
+                            45,
+                            "تسجيل شركة جديدة",
+                            "Company Registration",
+                            "ti-building",
+                            1200,
+                        ),
+                        S(
+                            46,
+                            "استخراج سجل تجاري",
+                            "Commercial Register",
+                            "ti-file-text",
+                            300,
+                        ),
+                        S(
+                            47,
+                            "تجديد السجل التجاري",
+                            "CR Renewal",
+                            "ti-refresh",
+                            250,
+                        ),
+                        S(
+                            48,
+                            "حماية المستهلك",
+                            "Consumer Protection",
+                            "ti-shield",
+                            150,
+                        ),
+                    ],
+                ),
+                M(
+                    16,
+                    "وزارة المالية",
+                    "Ministry of Finance",
+                    "ti-coin",
+                    "#1A237E",
+                    "rgba(26,35,126,.11)",
+                    "المالية والميزانية",
+                    "Finance & Budget",
+                    [
+                        S(
+                            49,
+                            "الخدمات الضريبية",
+                            "Tax Services",
+                            "ti-receipt",
+                            350,
+                        ),
+                        S(
+                            50,
+                            "المدفوعات الحكومية",
+                            "Government Payments",
+                            "ti-credit-card",
+                            150,
+                        ),
+                        S(
+                            51,
+                            "إدارة الميزانية",
+                            "Budget Management",
+                            "ti-chart-pie",
+                            500,
+                        ),
+                    ],
+                ),
+                M(
+                    17,
+                    "وزارة الدفاع",
+                    "Ministry of Defense",
+                    "ti-shield-half",
+                    "#37474F",
+                    "rgba(55,71,79,.14)",
+                    "الدفاع الوطني",
+                    "National Defense",
+                    [
+                        S(
+                            52,
+                            "التجنيد العسكري",
+                            "Military Recruitment",
+                            "ti-military-rank",
+                            100,
+                        ),
+                        S(
+                            53,
+                            "خدمات المتقاعدين",
+                            "Veteran Services",
+                            "ti-medal",
+                            200,
+                        ),
+                    ],
+                ),
+                M(
+                    18,
+                    "وزارة السياحة",
+                    "Ministry of Tourism",
+                    "ti-plane",
+                    "#00838F",
+                    "rgba(0,131,143,.11)",
+                    "السياحة والضيافة",
+                    "Tourism & Hospitality",
+                    [
+                        S(
+                            54,
+                            "تراخيص الفنادق",
+                            "Hotel Licenses",
+                            "ti-building",
+                            600,
+                        ),
+                        S(
+                            55,
+                            "التصاريح السياحية",
+                            "Tourism Permits",
+                            "ti-ticket",
+                            300,
+                        ),
+                        S(56, "دعم السياحة", "Tourism Support", "ti-star", 200),
+                    ],
+                ),
+                M(
+                    19,
+                    "وزارة الاستثمار",
+                    "Ministry of Investment",
+                    "ti-trending-up",
+                    "#2E7D32",
+                    "rgba(46,125,50,.11)",
+                    "الاستثمار والأعمال",
+                    "Investment & Business",
+                    [
+                        S(
+                            57,
+                            "تراخيص الاستثمار الأجنبي",
+                            "Foreign Investment Licenses",
+                            "ti-world",
+                            800,
+                        ),
+                        S(
+                            58,
+                            "إنشاء الشركات",
+                            "Company Formation",
+                            "ti-building",
+                            1000,
+                        ),
+                        S(
+                            59,
+                            "حوافز الاستثمار",
+                            "Investment Incentives",
+                            "ti-gift",
+                            200,
+                        ),
+                    ],
+                ),
+                M(
+                    20,
+                    "وزارة الطاقة",
+                    "Ministry of Energy",
+                    "ti-bolt",
+                    "#F9A825",
+                    "rgba(249,168,37,.11)",
+                    "الطاقة والكهرباء",
+                    "Energy & Electricity",
+                    [
+                        S(
+                            60,
+                            "تراخيص الطاقة",
+                            "Energy Licenses",
+                            "ti-plug",
+                            700,
+                        ),
+                        S(
+                            61,
+                            "الطاقة المتجددة",
+                            "Renewable Energy",
+                            "ti-solar-panel",
+                            500,
+                        ),
+                    ],
+                ),
+                M(
+                    21,
+                    "وزارة الرياضة",
+                    "Ministry of Sport",
+                    "ti-ball-football",
+                    "#1B5E20",
+                    "rgba(27,94,32,.11)",
+                    "الرياضة والأندية",
+                    "Sports & Clubs",
+                    [
+                        S(
+                            62,
+                            "تراخيص الأندية",
+                            "Club Licenses",
+                            "ti-award",
+                            400,
+                        ),
+                        S(
+                            63,
+                            "تصاريح الفعاليات",
+                            "Event Permits",
+                            "ti-calendar",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    22,
+                    "وزارة العدل",
+                    "Ministry of Justice",
+                    "ti-scale",
+                    "#4A148C",
+                    "rgba(74,20,140,.11)",
+                    "القضاء والتوثيق",
+                    "Justice & Notarization",
+                    [
+                        S(
+                            64,
+                            "التوثيق القانوني",
+                            "Legal Documentation",
+                            "ti-file-certificate",
+                            300,
+                        ),
+                        S(
+                            65,
+                            "الكتابة العدلية",
+                            "Notary Services",
+                            "ti-writing",
+                            200,
+                        ),
+                        S(
+                            66,
+                            "التحكيم التجاري",
+                            "Commercial Arbitration",
+                            "ti-gavel",
+                            600,
+                        ),
+                    ],
+                ),
+                M(
+                    23,
+                    "وزارة الحج والعمرة",
+                    "Ministry of Hajj & Umrah",
+                    "ti-building-mosque",
+                    "#1A237E",
+                    "rgba(26,35,126,.11)",
+                    "الحج والعمرة",
+                    "Hajj & Umrah",
+                    [
+                        S(67, "تصاريح الحج", "Hajj Permits", "ti-ticket", 500),
+                        S(68, "تصاريح العمرة", "Umrah Permits", "ti-moon", 300),
+                        S(
+                            69,
+                            "خدمات الزوار",
+                            "Visitor Services",
+                            "ti-users",
+                            200,
+                        ),
+                    ],
+                ),
+                M(
+                    24,
+                    "وزارة حرس الوطني",
+                    "Ministry of National Guard",
+                    "ti-shield-star",
+                    "#1A237E",
+                    "rgba(26,35,126,.14)",
+                    "الأمن الوطني",
+                    "National Security",
+                    [
+                        S(
+                            70,
+                            "خدمات المنتسبين",
+                            "Personnel Services",
+                            "ti-id-badge",
+                            200,
+                        ),
+                        S(
+                            71,
+                            "التجنيد",
+                            "Recruitment",
+                            "ti-military-rank",
+                            100,
+                        ),
+                    ],
+                ),
+            ],
+        },
+        {
+            key: "authorities",
+            name_ar: "الهيئات",
+            name_en: "Authorities",
+            entities: [
+                M(
+                    25,
+                    "هيئة الزكاة والضرائب والجمارك",
+                    "ZATCA",
+                    "ti-receipt-tax",
+                    "#6A1B9A",
+                    "rgba(106,27,154,.1)",
+                    "الضرائب والجمارك",
+                    "Tax & Customs",
+                    [
+                        S(
+                            72,
+                            "التسجيل الضريبي",
+                            "Tax Registration",
+                            "ti-file-text",
+                            500,
+                        ),
+                        S(
+                            73,
+                            "إقرارات ضريبة القيمة المضافة",
+                            "VAT Returns",
+                            "ti-calculator",
+                            350,
+                        ),
+                        S(
+                            74,
+                            "الاعتراض على القرارات",
+                            "Dispute Resolution",
+                            "ti-scale",
+                            200,
+                        ),
+                    ],
+                ),
+                M(
+                    26,
+                    "الهيئة العامة للطيران المدني",
+                    "GACA",
+                    "ti-plane",
+                    "#0277BD",
+                    "rgba(2,119,189,.1)",
+                    "الطيران المدني",
+                    "Civil Aviation",
+                    [
+                        S(
+                            75,
+                            "تراخيص الطيران",
+                            "Aviation Licenses",
+                            "ti-license",
+                            800,
+                        ),
+                        S(
+                            76,
+                            "تصاريح المطارات",
+                            "Airport Permits",
+                            "ti-building",
+                            600,
+                        ),
+                    ],
+                ),
+                M(
+                    27,
+                    "هيئة السوق المالية",
+                    "CMA",
+                    "ti-chart-candlestick",
+                    "#1B5E20",
+                    "rgba(27,94,32,.1)",
+                    "السوق المالية",
+                    "Financial Market",
+                    [
+                        S(
+                            77,
+                            "تراخيص الأوراق المالية",
+                            "Securities Licenses",
+                            "ti-certificate",
+                            1000,
+                        ),
+                        S(
+                            78,
+                            "تسجيل الصناديق",
+                            "Fund Registration",
+                            "ti-coin",
+                            800,
+                        ),
+                    ],
+                ),
+                M(
+                    28,
+                    "الهيئة العامة للغذاء والدواء",
+                    "SFDA",
+                    "ti-pill",
+                    "#C62828",
+                    "rgba(198,40,40,.1)",
+                    "الغذاء والدواء",
+                    "Food & Drug",
+                    [
+                        S(
+                            79,
+                            "تسجيل الأدوية",
+                            "Drug Registration",
+                            "ti-pill",
+                            800,
+                        ),
+                        S(
+                            80,
+                            "تراخيص المنشآت الغذائية",
+                            "Food Facility Licenses",
+                            "ti-license",
+                            450,
+                        ),
+                    ],
+                ),
+                M(
+                    29,
+                    "الهيئة الوطنية للأمن السيبراني",
+                    "NCA",
+                    "ti-shield-lock",
+                    "#263238",
+                    "rgba(38,50,56,.1)",
+                    "الأمن السيبراني",
+                    "Cybersecurity",
+                    [
+                        S(
+                            81,
+                            "اعتماد الأنظمة",
+                            "System Accreditation",
+                            "ti-certificate",
+                            1200,
+                        ),
+                        S(
+                            82,
+                            "تقييم المخاطر",
+                            "Risk Assessment",
+                            "ti-alert-triangle",
+                            600,
+                        ),
+                    ],
+                ),
+                M(
+                    30,
+                    "الهيئة العامة للعقار",
+                    "General Real Estate Authority",
+                    "ti-home-star",
+                    "#AD1457",
+                    "rgba(173,20,87,.1)",
+                    "قطاع العقار",
+                    "Real Estate",
+                    [
+                        S(
+                            83,
+                            "تسجيل العقارات",
+                            "Property Registration",
+                            "ti-home",
+                            400,
+                        ),
+                        S(
+                            84,
+                            "تراخيص الوساطة العقارية",
+                            "Real Estate Brokerage",
+                            "ti-license",
+                            600,
+                        ),
+                    ],
+                ),
+                M(
+                    31,
+                    "هيئة الاتصالات والفضاء والتقنية",
+                    "CST",
+                    "ti-satellite",
+                    "#1565C0",
+                    "rgba(21,101,192,.1)",
+                    "الاتصالات والتقنية",
+                    "Telecom & Technology",
+                    [
+                        S(
+                            85,
+                            "تراخيص الاتصالات",
+                            "Telecom Licenses",
+                            "ti-wifi",
+                            700,
+                        ),
+                        S(
+                            86,
+                            "تراخيص خدمات الإنترنت",
+                            "ISP Licenses",
+                            "ti-world",
+                            500,
+                        ),
+                    ],
+                ),
+                M(
+                    32,
+                    "هيئة الرقابة ومكافحة الفساد",
+                    "Nazaha",
+                    "ti-shield-check",
+                    "#1B5E20",
+                    "rgba(27,94,32,.1)",
+                    "مكافحة الفساد",
+                    "Anti-Corruption",
+                    [
+                        S(
+                            87,
+                            "تقديم البلاغات",
+                            "Submit Reports",
+                            "ti-file-alert",
+                            0,
+                        ),
+                        S(88, "الاستفسارات", "Inquiries", "ti-help-circle", 0),
+                    ],
+                ),
+                M(
+                    33,
+                    "الهيئة العامة للترفيه",
+                    "GEA",
+                    "ti-confetti",
+                    "#E65100",
+                    "rgba(230,81,0,.1)",
+                    "قطاع الترفيه",
+                    "Entertainment",
+                    [
+                        S(
+                            89,
+                            "تراخيص الفعاليات الترفيهية",
+                            "Entertainment Event Licenses",
+                            "ti-license",
+                            500,
+                        ),
+                        S(
+                            90,
+                            "اعتماد المنصات",
+                            "Platform Accreditation",
+                            "ti-certificate",
+                            800,
+                        ),
+                    ],
+                ),
+                M(
+                    34,
+                    "الهيئة العامة للإحصاء",
+                    "General Authority for Statistics",
+                    "ti-chart-bar",
+                    "#37474F",
+                    "rgba(55,71,79,.1)",
+                    "الإحصاء",
+                    "Statistics",
+                    [
+                        S(
+                            91,
+                            "طلب البيانات الإحصائية",
+                            "Statistical Data Request",
+                            "ti-database",
+                            100,
+                        ),
+                    ],
+                ),
+                M(
+                    35,
+                    "الهيئة السعودية للبيانات والذكاء الاصطناعي",
+                    "SDAIA",
+                    "ti-brain",
+                    "#1565C0",
+                    "rgba(21,101,192,.1)",
+                    "الذكاء الاصطناعي",
+                    "AI & Data",
+                    [
+                        S(
+                            92,
+                            "تراخيص البيانات",
+                            "Data Licenses",
+                            "ti-database",
+                            600,
+                        ),
+                        S(
+                            93,
+                            "مشاريع الذكاء الاصطناعي",
+                            "AI Projects",
+                            "ti-brain",
+                            1000,
+                        ),
+                    ],
+                ),
+                M(
+                    36,
+                    "الهيئة العامة للنقل",
+                    "General Transport Authority",
+                    "ti-truck",
+                    "#37474F",
+                    "rgba(55,71,79,.1)",
+                    "النقل",
+                    "Transport",
+                    [
+                        S(
+                            94,
+                            "تراخيص النقل البري",
+                            "Land Transport Licenses",
+                            "ti-truck",
+                            400,
+                        ),
+                        S(
+                            95,
+                            "رخص شركات النقل",
+                            "Transport Company Licenses",
+                            "ti-license",
+                            600,
+                        ),
+                    ],
+                ),
+            ],
+        },
+        {
+            key: "companies",
+            name_ar: "الشركات الحكومية",
+            name_en: "Government Companies",
+            entities: [
+                M(
+                    37,
+                    "المؤسسة العامة للتأمينات الاجتماعية",
+                    "GOSI",
+                    "ti-shield-check",
+                    "#1B5E20",
+                    "rgba(27,94,32,.1)",
+                    "التأمينات الاجتماعية",
+                    "Social Insurance",
+                    [
+                        S(
+                            96,
+                            "التسجيل في التأمينات",
+                            "Social Insurance Registration",
+                            "ti-file-text",
+                            200,
+                        ),
+                        S(
+                            97,
+                            "طلب معاش التقاعد",
+                            "Pension Application",
+                            "ti-coin",
+                            100,
+                        ),
+                        S(
+                            98,
+                            "إصابات العمل",
+                            "Work Injury Claims",
+                            "ti-first-aid-kit",
+                            0,
+                        ),
+                    ],
+                ),
+                M(
+                    38,
+                    "البريد السعودي",
+                    "Saudi Post (SPL)",
+                    "ti-mail",
+                    "#C62828",
+                    "rgba(198,40,40,.1)",
+                    "الخدمات البريدية",
+                    "Postal Services",
+                    [
+                        S(
+                            99,
+                            "خدمات الشحن",
+                            "Shipping Services",
+                            "ti-truck",
+                            150,
+                        ),
+                        S(
+                            100,
+                            "صناديق البريد",
+                            "PO Box Services",
+                            "ti-mailbox",
+                            100,
+                        ),
+                    ],
+                ),
+                M(
+                    39,
+                    "الخطوط الجوية العربية السعودية",
+                    "Saudi Arabian Airlines (Saudia)",
+                    "ti-plane",
+                    "#1A237E",
+                    "rgba(26,35,126,.1)",
+                    "الطيران",
+                    "Aviation",
+                    [
+                        S(
+                            101,
+                            "حجز التذاكر التجارية",
+                            "Commercial Ticket Booking",
+                            "ti-ticket",
+                            300,
+                        ),
+                        S(
+                            102,
+                            "شحن البضائع الجوي",
+                            "Air Cargo",
+                            "ti-package",
+                            500,
+                        ),
+                    ],
+                ),
+                M(
+                    40,
+                    "السكك الحديدية السعودية",
+                    "Saudi Railways (SAR)",
+                    "ti-train",
+                    "#37474F",
+                    "rgba(55,71,79,.1)",
+                    "النقل بالسكك الحديدية",
+                    "Railway Transport",
+                    [
+                        S(
+                            103,
+                            "خدمات نقل البضائع",
+                            "Cargo Transport Services",
+                            "ti-package",
+                            400,
+                        ),
+                    ],
+                ),
+                M(
+                    41,
+                    "مدينة الملك عبدالعزيز للعلوم والتقنية",
+                    "KACST",
+                    "ti-microscope",
+                    "#6A1B9A",
+                    "rgba(106,27,154,.1)",
+                    "العلوم والتقنية",
+                    "Science & Technology",
+                    [
+                        S(
+                            104,
+                            "تقديم البحوث",
+                            "Research Submission",
+                            "ti-file-text",
+                            200,
+                        ),
+                        S(
+                            105,
+                            "التعاون البحثي",
+                            "Research Collaboration",
+                            "ti-users",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    42,
+                    "صندوق التنمية الصناعية السعودي",
+                    "SIDF",
+                    "ti-building-factory",
+                    "#1B5E20",
+                    "rgba(27,94,32,.1)",
+                    "التنمية الصناعية",
+                    "Industrial Development",
+                    [
+                        S(
+                            106,
+                            "طلبات القروض الصناعية",
+                            "Industrial Loan Applications",
+                            "ti-coin",
+                            500,
+                        ),
+                        S(
+                            107,
+                            "دعم المشاريع",
+                            "Project Support",
+                            "ti-trending-up",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    43,
+                    "صندوق التنمية العقارية",
+                    "REDF",
+                    "ti-home-dollar",
+                    "#AD1457",
+                    "rgba(173,20,87,.1)",
+                    "التطوير العقاري",
+                    "Real Estate Development",
+                    [
+                        S(
+                            108,
+                            "طلب قرض عقاري",
+                            "Real Estate Loan Application",
+                            "ti-home",
+                            100,
+                        ),
+                        S(
+                            109,
+                            "الاستفسار عن الأهلية",
+                            "Eligibility Inquiry",
+                            "ti-help-circle",
+                            0,
+                        ),
+                    ],
+                ),
+                M(
+                    44,
+                    "مدينة الملك عبدالله للطاقة الذرية والمتجددة",
+                    "KACARE",
+                    "ti-atom",
+                    "#E65100",
+                    "rgba(230,81,0,.1)",
+                    "الطاقة المتجددة",
+                    "Renewable Energy",
+                    [
+                        S(
+                            110,
+                            "تراخيص الطاقة المتجددة",
+                            "Renewable Energy Licenses",
+                            "ti-solar-panel",
+                            600,
+                        ),
+                    ],
+                ),
+                M(
+                    45,
+                    "معهد الإدارة العامة",
+                    "Institute of Public Administration",
+                    "ti-school",
+                    "#00695C",
+                    "rgba(0,105,92,.1)",
+                    "التدريب والتعليم",
+                    "Training & Education",
+                    [
+                        S(
+                            111,
+                            "التسجيل في البرامج",
+                            "Program Registration",
+                            "ti-certificate",
+                            300,
+                        ),
+                        S(
+                            112,
+                            "طلب التدريب",
+                            "Training Request",
+                            "ti-users",
+                            200,
+                        ),
+                    ],
+                ),
+                M(
+                    46,
+                    "المؤسسة العامة لتحلية المياه المالحة",
+                    "SWCC",
+                    "ti-droplet",
+                    "#0277BD",
+                    "rgba(2,119,189,.1)",
+                    "تحلية المياه",
+                    "Water Desalination",
+                    [
+                        S(
+                            113,
+                            "طلبات التوصيل",
+                            "Connection Requests",
+                            "ti-pipe",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    47,
+                    "البنك الأهلي السعودي",
+                    "SNB",
+                    "ti-building-bank",
+                    "#1A237E",
+                    "rgba(26,35,126,.1)",
+                    "الخدمات المصرفية",
+                    "Banking Services",
+                    [
+                        S(
+                            114,
+                            "فتح حساب تجاري",
+                            "Open Business Account",
+                            "ti-coin",
+                            100,
+                        ),
+                        S(
+                            115,
+                            "قروض المشاريع الصغيرة",
+                            "SME Loans",
+                            "ti-trending-up",
+                            0,
+                        ),
+                    ],
+                ),
+            ],
+        },
+        {
+            key: "embassies",
+            name_ar: "السفارات والمنظمات",
+            name_en: "Embassies & Consulates & Organaztions ",
+            entities: [
+                M(
+                    48,
+                    "السفارة السعودية في الولايات المتحدة",
+                    "Saudi Embassy - United States",
+                    "ti-world",
+                    "#00838F",
+                    "rgba(0,131,143,.1)",
+                    "سفارة",
+                    "Embassy",
+                    [
+                        S(
+                            116,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                        S(
+                            117,
+                            "خدمات التأشيرة",
+                            "Visa Services",
+                            "ti-ticket",
+                            400,
+                        ),
+                        S(
+                            118,
+                            "خدمات المغتربين",
+                            "Expatriate Services",
+                            "ti-users",
+                            150,
+                        ),
+                    ],
+                ),
+                M(
+                    49,
+                    "السفارة السعودية في المملكة المتحدة",
+                    "Saudi Embassy - United Kingdom",
+                    "ti-world",
+                    "#00838F",
+                    "rgba(0,131,143,.1)",
+                    "سفارة",
+                    "Embassy",
+                    [
+                        S(
+                            119,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                        S(
+                            120,
+                            "خدمات التأشيرة",
+                            "Visa Services",
+                            "ti-ticket",
+                            400,
+                        ),
+                    ],
+                ),
+                M(
+                    50,
+                    "السفارة السعودية في فرنسا",
+                    "Saudi Embassy - France",
+                    "ti-world",
+                    "#00838F",
+                    "rgba(0,131,143,.1)",
+                    "سفارة",
+                    "Embassy",
+                    [
+                        S(
+                            121,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                        S(
+                            122,
+                            "خدمات القنصلية",
+                            "Consular Services",
+                            "ti-building",
+                            300,
+                        ),
+                    ],
+                ),
+                M(
+                    51,
+                    "السفارة السعودية في ألمانيا",
+                    "Saudi Embassy - Germany",
+                    "ti-world",
+                    "#00838F",
+                    "rgba(0,131,143,.1)",
+                    "سفارة",
+                    "Embassy",
+                    [
+                        S(
+                            123,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                    ],
+                ),
+                M(
+                    52,
+                    "السفارة السعودية في مصر",
+                    "Saudi Embassy - Egypt",
+                    "ti-world",
+                    "#00838F",
+                    "rgba(0,131,143,.1)",
+                    "سفارة",
+                    "Embassy",
+                    [
+                        S(
+                            124,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                        S(
+                            125,
+                            "خدمات المغتربين",
+                            "Expatriate Services",
+                            "ti-users",
+                            150,
+                        ),
+                    ],
+                ),
+                M(
+                    53,
+                    "القنصلية السعودية في نيويورك",
+                    "Saudi Consulate - New York",
+                    "ti-building",
+                    "#0277BD",
+                    "rgba(2,119,189,.1)",
+                    "قنصلية",
+                    "Consulate",
+                    [
+                        S(
+                            126,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                        S(
+                            127,
+                            "خدمات التأشيرة",
+                            "Visa Services",
+                            "ti-ticket",
+                            400,
+                        ),
+                    ],
+                ),
+                M(
+                    54,
+                    "القنصلية السعودية في لوس أنجلوس",
+                    "Saudi Consulate - Los Angeles",
+                    "ti-building",
+                    "#0277BD",
+                    "rgba(2,119,189,.1)",
+                    "قنصلية",
+                    "Consulate",
+                    [
+                        S(
+                            128,
+                            "تصديق الوثائق",
+                            "Document Attestation",
+                            "ti-file-check",
+                            250,
+                        ),
+                    ],
+                ),
+                M(
+                    55,
+                    "سفارة الولايات المتحدة في الرياض",
+                    "US Embassy - Riyadh",
+                    "ti-world",
+                    "#1A237E",
+                    "rgba(26,35,126,.1)",
+                    "سفارة أجنبية",
+                    "Foreign Embassy",
+                    [
+                        S(
+                            129,
+                            "تأشيرات السفر",
+                            "Travel Visas",
+                            "ti-ticket",
+                            350,
+                        ),
+                        S(
+                            130,
+                            "التوثيق القنصلي",
+                            "Consular Documentation",
+                            "ti-file-check",
+                            250,
+                        ),
+                    ],
+                ),
+                M(
+                    56,
+                    "سفارة المملكة المتحدة في الرياض",
+                    "UK Embassy - Riyadh",
+                    "ti-world",
+                    "#C62828",
+                    "rgba(198,40,40,.1)",
+                    "سفارة أجنبية",
+                    "Foreign Embassy",
+                    [
+                        S(
+                            131,
+                            "تأشيرات السفر",
+                            "Travel Visas",
+                            "ti-ticket",
+                            350,
+                        ),
+                        S(
+                            132,
+                            "خدمات الجوازات",
+                            "Passport Services",
+                            "ti-passport",
+                            200,
+                        ),
+                    ],
+                ),
+                M(
+                    57,
+                    "سفارة فرنسا في الرياض",
+                    "French Embassy - Riyadh",
+                    "ti-world",
+                    "#1565C0",
+                    "rgba(21,101,192,.1)",
+                    "سفارة أجنبية",
+                    "Foreign Embassy",
+                    [
+                        S(
+                            133,
+                            "تأشيرات شنغن",
+                            "Schengen Visas",
+                            "ti-ticket",
+                            400,
+                        ),
+                    ],
+                ),
+                M(
+                    58,
+                    "سفارة ألمانيا في الرياض",
+                    "German Embassy - Riyadh",
+                    "ti-world",
+                    "#37474F",
+                    "rgba(55,71,79,.1)",
+                    "سفارة أجنبية",
+                    "Foreign Embassy",
+                    [S(134, "تأشيرات السفر", "Travel Visas", "ti-ticket", 350)],
+                ),
+                M(
+                    59,
+                    "القنصلية الأمريكية في جدة",
+                    "US Consulate - Jeddah",
+                    "ti-building",
+                    "#1A237E",
+                    "rgba(26,35,126,.1)",
+                    "قنصلية أجنبية",
+                    "Foreign Consulate",
+                    [S(135, "تأشيرات السفر", "Travel Visas", "ti-ticket", 350)],
+                ),
+            ],
+        },{
+            key: "consultants",
+            name_ar: "المستشارين",
+            name_en: "Consultants",
+            url: "/consultants",
+           
+        },
+        /*
+
+        
+        {
+            key: "law",
+            name_ar: "شركات ومكاتب المحاماة",
+            name_en: "Law Firms & Offices",
+            entities: [
+                M(60,"مكتب الأمين للمحاماة والاستشارات","Al-Ameen Law Office","ti-scale","#AD1457","rgba(173,20,87,.1)","محاماة وتحكيم","Law & Arbitration",[S(136,"تأسيس شركة","Company Formation","ti-building",800),S(137,"عقود تجارية","Commercial Contracts","ti-file-certificate",500),S(138,"تمثيل قضائي","Legal Representation","ti-gavel",1200)]),
+                M(61,"شركة الحقوق للمحاماة","Al-Huqooq Law Firm","ti-scale","#AD1457","rgba(173,20,87,.1)","قانون تجاري","Commercial Law",[S(139,"استشارة قانونية","Legal Consultation","ti-message-dots",300),S(140,"تسوية نزاعات","Dispute Settlement","ti-handshake",700)]),
+                M(62,"مكتب العدل للتحكيم","Al-Adl Arbitration Office","ti-gavel","#AD1457","rgba(173,20,87,.1)","تحكيم دولي","International Arbitration",[S(141,"تحكيم تجاري","Commercial Arbitration","ti-scale",2000),S(142,"وساطة","Mediation","ti-handshake",800)]),
+            ],
+        },
+        {
+            key: "services",
+            name_ar: "مكاتب الخدمات والتعقيب",
+            name_en: "Service & Expediting Offices",
+            entities: [
+                M(63,"مكتب السرعة للخدمات","Al-Sura'a Services","ti-briefcase","#E65100","rgba(230,81,0,.1)","تعقيب وخدمات","Expediting & Services",[S(143,"تجديد سجل تجاري","CR Renewal","ti-refresh",200),S(144,"استخراج وثائق","Document Extraction","ti-file-text",150),S(145,"خدمات وزارة العمل","Ministry of Labor Services","ti-users",300)]),
+                M(64,"مكتب الأمانة للمعاملات","Al-Amana Transactions","ti-briefcase","#E65100","rgba(230,81,0,.1)","معاملات حكومية","Government Transactions",[S(146,"تأسيس منشأة","Business Setup","ti-building",600),S(147,"إيقاف الخدمات","Service Suspension","ti-ban",100),S(148,"تعديل سجل","Register Amendment","ti-edit",250)]),
+                M(65,"شركة نجد للخدمات المتكاملة","Najd Integrated Services","ti-briefcase","#E65100","rgba(230,81,0,.1)","خدمات متكاملة","Integrated Services",[S(149,"توثيق وزارة الخارجية","MFA Attestation","ti-file-check",350),S(150,"خدمات بلدية","Municipal Services","ti-building-community",200)]),
+            ],
+        },
+        {
+            key: "customs",
+            name_ar: "شركات ومكاتب التخليص الجمركي",
+            name_en: "Customs Clearance",
+            entities: [
+                M(66,"شركة الجمارك السريعة","Fast Customs Co.","ti-truck","#37474F","rgba(55,71,79,.1)","تخليص جمركي","Customs Clearance",[S(151,"تخليص بضاعة","Cargo Clearance","ti-package",500),S(152,"استيراد وتصدير","Import & Export","ti-arrow-right-left",800),S(153,"شهادة منشأ","Certificate of Origin","ti-certificate",300)]),
+                M(67,"مكتب الخليج للجمارك","Gulf Customs Office","ti-truck","#37474F","rgba(55,71,79,.1)","وكيل جمركي","Customs Agent",[S(154,"تسوية جمركية","Customs Settlement","ti-coin",600),S(155,"معاينة البضائع","Cargo Inspection","ti-search",400)]),
+                M(68,"شركة العبور للتخليص","Al-Obour Clearance Co.","ti-truck","#37474F","rgba(55,71,79,.1)","تخليص ونقل","Clearance & Transport",[S(156,"نقل بري دولي","International Land Transport","ti-truck",1200),S(157,"تخليص جوي","Air Freight Clearance","ti-plane",900)]),
+            ],
+        },*/
+    ];
+}
+
+/* ══ RUN ══ */
+init();
+
+</script>
+</body>
+</html>

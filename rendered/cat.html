@@ -1,0 +1,1303 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="csrf-token" content="izLU45vhYhan7wcXlUPgdCeMRsj2uZfvvmWShnzN">
+    <title> الوزارات | منصة آمر تم
+    </title>
+    <link rel="icon" type="image/png" href="http://localhost/images/new-logo1.png">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="preload" as="style" href="http://localhost/build/assets/app-Dy5uBiDp.css" />
+    <link rel="modulepreload" as="script" href="http://localhost/build/assets/app-DOkskYnS.js" />
+    <link rel="stylesheet" href="http://localhost/build/assets/app-Dy5uBiDp.css" />
+    <script type="module" src="http://localhost/build/assets/app-DOkskYnS.js"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* ── Entities section: margins + responsive columns (2/3/5) ── */
+        #entities-sec {
+            max-width: 1600px;
+            margin-inline: auto;
+            padding-inline: 12px;
+            padding-block: 32px;
+        }
+
+        @media (min-width: 768px) {
+            #entities-sec {
+                padding-inline: 16px;
+                padding-block: 40px;
+            }
+        }
+
+        #entities-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+        }
+
+        @media (min-width: 640px) {
+            #entities-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 12px !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            #entities-grid {
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+                gap: 12px !important;
+            }
+        }
+
+        /* ═══ Corporate-UI Design System ═══ */
+        :root {
+            --cui-primary: #006C35;
+            --cui-primary-dark: #004D28;
+            --cui-primary-light: #00843D;
+            --cui-primary-lighter: #00A651;
+            --cui-surface: #F5F7F5;
+            --cui-surface-2: #EBF0EB;
+            --cui-text: #04241A;
+            --cui-text-2: #21493B;
+            --cui-text-muted: #6A8A7C;
+            --cui-border: rgba(0, 108, 53, .12);
+            --cui-shadow: 0 30px 60px -12px rgba(0, 44, 21, .12);
+            --cui-radius: 1.5rem;
+        }
+
+        /* ── Hero ─────────────────────────── */
+        .cui-hero {
+            position: relative;
+            background:
+                radial-gradient(1200px 600px at 85% -10%, rgba(0, 165, 81, .22) 0%, transparent 60%),
+                linear-gradient(135deg, #001A0D 0%, #002A15 35%, #004D28 72%, #006C35 100%);
+        }
+
+        .cui-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px);
+            background-size: 28px 28px;
+            opacity: .45;
+            pointer-events: none;
+        }
+
+        .cui-hero::after {
+            content: "";
+            position: absolute;
+            left: -180px;
+            bottom: -220px;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, .07), transparent 62%);
+            pointer-events: none;
+        }
+
+        .cui-glass {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .16);
+        }
+
+        /* ── Stat cards ───────────────────── */
+        .cui-stat {
+            transition: transform .35s ease, box-shadow .35s ease;
+            will-change: transform;
+        }
+
+        .cui-stat:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px -16px rgba(0, 108, 53, .18);
+        }
+
+        /* ── Entity cards ─────────────────── */
+        .cui-entity {
+            position: relative;
+            border: 1px solid var(--cui-border);
+            border-radius: var(--cui-radius);
+            background: #fff;
+            overflow: hidden;
+            transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+            will-change: transform;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cui-entity::before {
+            content: "";
+            position: absolute;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ent-color, #006C35), #006C35);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform .45s ease;
+            z-index: 2;
+        }
+
+        .cui-entity:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--cui-shadow);
+            border-color: rgba(0, 108, 53, .22);
+        }
+
+        .cui-entity:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cui-entity:hover .cui-entity-icon {
+            transform: scale(1.08) rotate(-3deg);
+        }
+
+        .cui-entity:hover .cui-entity-arrow {
+            background: var(--ent-color, #006C35);
+            color: #fff;
+            transform: translateX(-4px);
+        }
+
+        .cui-entity:hover .cui-entity-cta {
+            color: var(--ent-color, #006C35);
+        }
+
+        .cui-entity-icon {
+            transition: transform .4s ease;
+        }
+
+        .cui-entity-arrow {
+            transition: all .3s ease;
+        }
+
+        .cui-entity-cta {
+            transition: color .3s ease;
+        }
+
+        .cui-fade {
+            animation: cuiFadeIn .55s ease both;
+        }
+
+        @keyframes cuiFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* ── Search suggestions ──────────── */
+        .cui-suggest {
+            display: none;
+        }
+
+        .cui-suggest-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .cui-suggest-item:hover {
+            background: #F0F7F3;
+        }
+
+        .cui-suggest-ico {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #EAF4EF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #006C35;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        /* ── Pagination ──────────────────── */
+        .cui-page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all .2s ease;
+            border: 1.5px solid transparent;
+        }
+
+        .cui-page-link:hover {
+            background: #006C35;
+            color: #fff;
+            border-color: #006C35;
+        }
+
+        .cui-page-active {
+            background: #006C35;
+            color: #fff;
+            border-color: #006C35;
+        }
+
+        .cui-page-disabled {
+            opacity: .4;
+            pointer-events: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #EFF5EF;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #79A88C;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4C8A68;
+        }
+    </style>
+</head>
+
+<body class="ar font-sans bg-surface text-gray-900 min-h-screen">
+
+    <nav class="sticky top-0 inset-x-0 z-[999] w-full border-b border-slate-200 bg-white shadow-sm">
+        <div class="mx-auto flex h-[72px] w-full max-w-[1400px] items-center justify-between gap-4 px-4 md:px-6">
+            <!-- Logo -->
+            <a class="flex shrink-0 items-center gap-2.5 no-underline" href="http://localhost">
+                <span
+                    class="relative flex h-[52px] w-[52px] items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-[#f8fafc]">
+                    <img src="http://localhost/images/official-logo.jpg" alt="آمر تم"
+                        class="relative h-[48px] w-[48px] object-contain"
+                        onerror="this.style.display='none';this.nextElementSibling&&this.nextElementSibling.classList.remove('hidden');">
+                    <svg class="hidden" viewBox="0 0 24 24" fill="none" stroke="rgba(0,108,53,0.7)" stroke-width="2"
+                        width="24" height="24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                    </svg>
+                </span>
+                <span class="hidden text-xl font-black text-[#006C35] sm:block">آمر تم</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden flex-1 items-center justify-center gap-1 lg:flex">
+                <a href="http://localhost"
+                    class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200"
+                    id="nl-home">الرئيسية</a>
+                <a href="http://localhost#services"
+                    class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200"
+                    id="nl-svcs">الخدمات</a>
+                <a href="http://localhost#about"
+                    class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200"
+                    id="nl-about">عن المنصة</a>
+                <a href="http://localhost#contact"
+                    class="text-gray-500 hover:bg-[#006C35]/10 hover:text-[#006C35] relative cursor-pointer rounded-lg px-4 py-2 text-sm font-semibold no-underline transition-all duration-200"
+                    id="nl-con">تواصل معنا</a>
+            </div>
+
+            <!-- Right Section -->
+            <div class="flex shrink-0 items-center gap-2.5">
+                <!-- Language Toggle -->
+                <div class="flex items-center overflow-hidden rounded-full border-[1.5px] border-slate-300 bg-gray-50">
+                    <button type="button" id="la" onclick="navLang('ar')"
+                        class="cursor-pointer px-3 py-2 text-xs font-bold text-gray-400 transition-all duration-200">AR</button>
+                    <button type="button" id="le" onclick="navLang('en')"
+                        class="cursor-pointer px-3 py-2 text-xs font-bold text-gray-400 transition-all duration-200">EN</button>
+                </div>
+
+                <!-- Guest Buttons -->
+                <div id="nb-guest" class="flex items-center gap-2">
+                    <a href="http://localhost/login" id="nb-li"
+                        class="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-gray-700 no-underline transition-all duration-200 hover:bg-gray-50">
+                        <i class="fa fa-right-to-bracket text-sm"></i><span id="nl-li">دخول</span>
+                    </a>
+                    <a href="http://localhost/register" id="nb-re"
+                        class="inline-flex items-center gap-2 rounded-lg bg-[#006C35] px-4 py-2 text-sm font-semibold text-white no-underline transition-all duration-200 hover:bg-[#00843D]">
+                        <i class="fa fa-user-plus text-sm"></i><span id="nl-re">تسجيل</span>
+                    </a>
+                    <a href="http://localhost/office/login"
+                        class="hidden items-center gap-2 rounded-lg border border-[#006C35]/20 px-4 py-2 text-sm font-semibold text-[#006C35] no-underline transition-all duration-200 hover:bg-[#006C35] hover:text-white lg:inline-flex">
+                        <i class="fa fa-building text-sm"></i>
+                        <span class="sm:hidden">المكاتب</span>
+                    </a>
+                </div>
+
+                <!-- Auth Buttons -->
+                <div id="nb-auth" class="hidden items-center gap-2">
+                </div>
+
+                <!-- Hamburger -->
+                <button type="button"
+                    class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl bg-gray-100 text-gray-600 transition-all duration-200 hover:bg-gray-200 lg:hidden"
+                    onclick="togMob()">
+                    <i class="fa fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mob-dd"
+        class="fixed top-[72px] left-0 right-0 bottom-0 z-[1998] hidden flex-col items-stretch gap-1 overflow-y-auto bg-white px-4 pb-6 pt-2">
+        <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10"
+            href="http://localhost">
+            <i class="fa fa-house w-5 text-center"></i><span id="mn-h">الرئيسية</span>
+        </a>
+        <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10"
+            href="http://localhost#services">
+            <i class="fa fa-table-cells-large w-5 text-center"></i><span id="mn-s">الخدمات</span>
+        </a>
+        <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10"
+            href="http://localhost/login">
+            <i class="fa fa-right-to-bracket w-5 text-center"></i><span id="mn-l">تسجيل الدخول</span>
+        </a>
+        <a class="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold no-underline text-gray-700 hover:bg-[#006C35]/10"
+            href="http://localhost/register">
+            <i class="fa fa-user-plus w-5 text-center"></i><span id="mn-r">إنشاء حساب</span>
+        </a>
+    </div>
+
+
+    <!-- ══════════ HERO ══════════ -->
+    <section class="cui-hero">
+        <div class="relative mx-auto w-full max-w-[1320px] px-4 py-14 md:py-20 md:px-6">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-6">
+                <ol class="flex flex-wrap items-center gap-2 text-[13px] text-white/60">
+                    <li>
+                        <a href="http://localhost"
+                            class="inline-flex items-center gap-1.5 font-semibold text-white/75 no-underline transition-colors duration-200 hover:text-white">
+                            <i class="ti ti-home-2 text-[14px]"></i>
+                            <span>الرئيسية</span>
+                        </a>
+                    </li>
+                    <li class="text-white/30"><i class="ti ti-chevron-left"></i></li>
+                    <li class="font-bold text-white">الوزارات</li>
+                </ol>
+            </nav>
+
+            <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-between">
+                <!-- Text -->
+                <div class="text-center lg:text-right">
+                    <span
+                        class="cui-glass mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[12px] font-bold text-white/85">
+                        <i class="ti ti-category-2 text-[14px]"></i>
+                        <span>قطاع حكومي</span>
+                    </span>
+
+                    <h1 class="text-3xl font-black leading-[1.15] text-white md:text-[46px]">
+                        الوزارات
+                    </h1>
+
+                    <p class="mx-auto mt-4 max-w-xl text-[14px] leading-relaxed text-white/65 md:text-[15px] lg:mx-0">
+                        اختر الجهة المطلوبة لتقديم طلبك والحصول على الخدمة بيسر وموثوقية
+                    </p>
+
+                    <!-- Search -->
+                    <div class="relative mx-auto mt-7 max-w-xl lg:mx-0">
+                        <div class="cui-glass flex items-center gap-2 rounded-xl p-1.5 transition-all duration-300">
+                            <div class="relative flex-1">
+                                <i
+                                    class="ti ti-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[17px] text-white/50"></i>
+                                <input id="serviceSearch" type="text" placeholder="ابحث عن جهة أو خدمة..."
+                                    autocomplete="off" dir="auto"
+                                    class="w-full border-0 !bg-transparent !px-10 !py-3 !text-[14px] text-white placeholder:!text-white/45 focus:!border-0 focus:!ring-0" />
+                            </div>
+                            <button id="clearSearch" type="button"
+                                class="hidden shrink-0 cursor-pointer rounded-lg border-0 bg-white/10 px-3 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-white/20"
+                                onclick="clearSearch()">
+                                <i class="ti ti-x text-[15px]"></i>
+                            </button>
+                        </div>
+                        <div id="searchSuggestions"
+                            class="cui-suggest absolute inset-x-0 top-[calc(100%+8px)] z-50 max-h-[400px] overflow-auto rounded-xl border border-slate-200 bg-white shadow-[0_25px_50px_-12px_rgba(0,0,0,.3)]">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Icon -->
+                <div class="hidden shrink-0 items-center justify-center lg:flex">
+                    <div
+                        class="relative flex h-44 w-44 items-center justify-center rounded-3xl cui-glass shadow-xl ring-1 ring-white/20">
+                        <div class="absolute -right-4 -top-5 h-20 w-20 rounded-full bg-white/10 blur-2xl"></div>
+                        <div class="absolute -bottom-6 -left-4 h-24 w-24 rounded-full bg-white/8 blur-2xl"></div>
+                        <i class="ti ti-building-bank relative text-7xl text-white drop-shadow-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ STATS ══════════ -->
+    <section class="relative z-10 -mt-5 px-4 md:px-6">
+        <div class="mx-auto grid w-full max-w-[1100px] grid-cols-1 gap-4 sm:grid-cols-2">
+            <div
+                class="cui-stat flex items-center gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_32px_-10px_rgba(0,44,21,.1)]">
+                <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#006C35]/10 text-[#006C35]">
+                    <i class="ti ti-building text-xl"></i>
+                </span>
+                <div>
+                    <div class="text-xl font-black text-slate-900 tabular-nums">24</div>
+                    <div class="text-[12px] font-semibold text-slate-500">جهة متاحة</div>
+                </div>
+            </div>
+            <div
+                class="cui-stat flex items-center gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_12px_32px_-10px_rgba(0,44,21,.1)]">
+                <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#1565C0]/10 text-[#1565C0]">
+                    <i class="ti ti-file-text text-xl"></i>
+                </span>
+                <div>
+                    <div class="text-xl font-black text-slate-900 tabular-nums">137</div>
+                    <div class="text-[12px] font-semibold text-slate-500">خدمة إلكترونية</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ ENTITIES GRID ══════════ -->
+    <section id="entities-sec" class="mx-auto max-w-[1600px] px-3 py-8 md:px-4 md:py-10">
+        <div class="mx-auto w-full max-w-[1600px]">
+            <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-900 md:text-[28px]">الجهات الحكومية</h2>
+                    <p class="mt-1 text-[13px] text-slate-500">تابع الخدمات الإلكترونية المتاحة لدى كل جهة</p>
+                </div>
+                <span id="filter-count"
+                    class="inline-flex items-center gap-1.5 rounded-full bg-[#006C35]/10 px-3 py-1 text-[12px] font-bold text-[#006C35]">
+                    <i class="ti ti-filter text-[13px]"></i>
+                    <span id="filter-count-val">12</span>
+                    <span id="filter-count-lbl">نتيجة</span>
+                </span>
+            </div>
+
+            <!-- Empty -->
+            <div id="category-empty"
+                class="hidden mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+                <div
+                    class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-slate-50 ring-1 ring-slate-200/70">
+                    <i class="ti ti-inbox text-5xl text-slate-300"></i>
+                </div>
+                <p class="text-base font-bold text-slate-600">لا توجد جهات متاحة في هذا القطاع حالياً</p>
+            </div>
+
+            <!-- Grid -->
+            <div id="entities-grid" class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                <a href="http://localhost/catalog/ministries/1" class="cui-entity cui-fade group"
+                    style="--ent-color: #C62828;" data-name-ar="وزارة الداخلية" data-name-en="ministry of interior"
+                    data-tag-ar="الأمن والمواطنة"
+                    data-services-ar='["\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u062c\u0648\u0627\u0632 \u0627\u0644\u0633\u0641\u0631","\u062a\u062c\u062f\u064a\u062f \u0628\u0637\u0627\u0642\u0629 \u0627\u0644\u0647\u0648\u064a\u0629","\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u0648\u062b\u064a\u0642\u0629 \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u0639\u0627\u0626\u0644\u064a"]'
+                    data-services-en='["Passport Issuance","ID Card Renewal","Family Registration Document"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/952da002-1964-46be-b6fa-30729747ba24.webp"
+                            alt="وزارة الداخلية"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-shield hidden text-5xl" style="color:#C62828;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#C6282812; color:#C62828;">الأمن والمواطنة</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة الداخلية"
+                            data-en="Ministry of Interior">وزارة الداخلية</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-1">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">3</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/2" class="cui-entity cui-fade group"
+                    style="--ent-color: #1565C0;" data-name-ar="وزارة الاتصالات وتقنية المعلومات"
+                    data-name-en="ministry of communications &amp; it" data-tag-ar="التقنية والرقمنة"
+                    data-services-ar='["\u062a\u0631\u0627\u062e\u064a\u0635 \u0627\u0644\u0627\u062a\u0635\u0627\u0644\u0627\u062a","\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a \u0627\u0644\u062d\u0643\u0648\u0645\u064a"]'
+                    data-services-en='["Telecom Licenses","Government Email Services"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة الاتصالات.jpeg"
+                            alt="وزارة الاتصالات وتقنية المعلومات"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-wifi hidden text-5xl" style="color:#1565C0;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#1565C012; color:#1565C0;">التقنية والرقمنة</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900"
+                            data-ar="وزارة الاتصالات وتقنية المعلومات" data-en="Ministry of Communications &amp; IT">
+                            وزارة الاتصالات وتقنية المعلومات</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-2">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">2</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/3" class="cui-entity cui-fade group"
+                    style="--ent-color: #AD1457;" data-name-ar="وزارة التجارة" data-name-en="ministry of commerce"
+                    data-tag-ar="التجارة والأعمال"
+                    data-services-ar='["\u062d\u062c\u0632 \u0627\u0633\u0645 \u062a\u062c\u0627\u0631\u064a \u0628\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629","\u062a\u062c\u062f\u064a\u062f \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a","\u062d\u062c\u0632 \u0627\u0633\u0645 \u062a\u062c\u0627\u0631\u064a \u0628\u0627\u0644\u0644\u063a\u0629 \u0627\u0644\u0625\u0646\u062c\u0644\u064a\u0632\u064a\u0629","\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u0634\u0647\u0627\u062f\u0629 \u0639\u062f\u0645 \u062a\u0639\u0627\u0631\u0636","\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0631\u0626\u064a\u0633\u064a \u2013 \u0634\u0631\u0643\u0629 \u0645\u0633\u0627\u0647\u0645\u0629 \u0623\u0648 \u0645\u0633\u0627\u0647\u0645\u0629 \u0645\u0628\u0633\u0637\u0629","\u0627\u0635\u062f\u0627\u0631 \u0633\u062c\u0644 \u062a\u062c\u0627\u0631\u064a \u062c\u062f\u064a\u062f \u0644\u0645\u0648\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629","\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0631\u0626\u064a\u0633\u064a \u2013 \u0634\u0631\u0643\u0629 \u0630\u0627\u062a \u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0645\u062d\u062f\u0648\u062f\u0629","\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0631\u0626\u064a\u0633\u064a \u2013 \u0634\u0631\u0643\u0629 \u062a\u0636\u0627\u0645\u0646 \u0623\u0648 \u062a\u0648\u0635\u064a\u0629 \u0628\u0633\u064a\u0637\u0629","\u0625\u0639\u0627\u062f\u0629 \u062a\u0639\u064a\u064a\u0646 \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0631\u0626\u064a\u0633\u064a","\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0641\u0631\u0639\u064a \u2013 \u0634\u0631\u0643\u0629 \u0645\u0633\u0627\u0647\u0645\u0629 \u0623\u0648 \u0645\u0633\u0627\u0647\u0645\u0629 \u0645\u0628\u0633\u0637\u0629","\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0641\u0631\u0639\u064a \u2013 \u0634\u0631\u0643\u0629 \u0630\u0627\u062a \u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0645\u062d\u062f\u0648\u062f\u0629","\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0641\u0631\u0639\u064a \u2013 \u0634\u0631\u0643\u0629 \u062a\u0636\u0627\u0645\u0646 \u0623\u0648 \u062a\u0648\u0635\u064a\u0629 \u0628\u0633\u064a\u0637\u0629","\u0627\u0644\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0644\u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0628\u0645\u0648\u062c\u0628 \u062a\u0631\u062e\u064a\u0635 \u0627\u0633\u062a\u062b\u0645\u0627\u0631\u064a \u2013 \u0634\u0631\u0643\u0629 \u0645\u0633\u0627\u0647\u0645\u0629 \u0623\u0648 \u0645\u0633\u0627\u0647\u0645\u0629 \u0645\u0628\u0633\u0637\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0628\u0645\u0648\u062c\u0628 \u062a\u0631\u062e\u064a\u0635 \u0627\u0633\u062a\u062b\u0645\u0627\u0631\u064a \u2013 \u0634\u0631\u0643\u0629 \u0630\u0627\u062a \u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0645\u062d\u062f\u0648\u062f\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0628\u0645\u0648\u062c\u0628 \u062a\u0631\u062e\u064a\u0635 \u0627\u0633\u062a\u062b\u0645\u0627\u0631\u064a \u2013 \u0634\u0631\u0643\u0629 \u062a\u0636\u0627\u0645\u0646 \u0623\u0648 \u062a\u0648\u0635\u064a\u0629 \u0628\u0633\u064a\u0637\u0629","\u0627\u0644\u062a\u0646\u0627\u0632\u0644 \u0639\u0646 \u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0644\u0641\u0631\u0639 \u0634\u0631\u0643\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0628\u0645\u0648\u062c\u0628 \u062a\u0631\u062e\u064a\u0635 \u0647\u064a\u0626\u0629 \u0627\u0644\u0645\u062f\u0646 \u0648\u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0627\u0644\u062e\u0627\u0635\u0629 \u2013 \u0634\u0631\u0643\u0629 \u0645\u0633\u0627\u0647\u0645\u0629 \u0623\u0648 \u0645\u0633\u0627\u0647\u0645\u0629 \u0645\u0628\u0633\u0637\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0628\u0645\u0648\u062c\u0628 \u062a\u0631\u062e\u064a\u0635 \u0647\u064a\u0626\u0629 \u0627\u0644\u0645\u062f\u0646 \u0648\u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0627\u0644\u062e\u0627\u0635\u0629 \u2013 \u0634\u0631\u0643\u0629 \u0630\u0627\u062a \u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0645\u062d\u062f\u0648\u062f\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0628\u0645\u0648\u062c\u0628 \u062a\u0631\u062e\u064a\u0635 \u0647\u064a\u0626\u0629 \u0627\u0644\u0645\u062f\u0646 \u0648\u0627\u0644\u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0627\u0644\u062e\u0627\u0635\u0629 \u2013 \u0634\u0631\u0643\u0629 \u062a\u0636\u0627\u0645\u0646 \u0623\u0648 \u062a\u0648\u0635\u064a\u0629 \u0628\u0633\u064a\u0637\u0629","\u062a\u0633\u062c\u064a\u0644 \u0642\u064a\u062f \u0627\u0645\u062a\u064a\u0627\u0632 \u062a\u062c\u0627\u0631\u064a","\u062a\u0639\u062f\u064a\u0644 \u0642\u064a\u062f \u0627\u0645\u062a\u064a\u0627\u0632 \u062a\u062c\u0627\u0631\u064a","\u0627\u0644\u062a\u0646\u0627\u0632\u0644 \u0639\u0646 \u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0644\u0634\u0631\u0643\u0629","\u0646\u0634\u0631 \u0642\u0631\u0627\u0631\u0627\u062a \u0627\u0644\u062c\u0645\u0639\u064a\u0629 \u063a\u064a\u0631 \u0627\u0644\u0639\u0627\u062f\u064a\u0629","\u0645\u0633\u062a\u062e\u0631\u062c \u0633\u062c\u0644 \u062a\u062c\u0627\u0631\u064a","\u062a\u0645\u062f\u064a\u062f \u062d\u062c\u0632 \u0627\u0633\u0645 \u062a\u062c\u0627\u0631\u064a","\u0646\u0642\u0644 \u0645\u0644\u0643\u064a\u0629 \u0633\u062c\u0644 \u062a\u062c\u0627\u0631\u064a \u0644\u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629","\u062a\u0639\u062f\u064a\u0644 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0631\u0626\u064a\u0633\u064a \u0644\u0634\u0631\u0643\u0629","\u0642\u064a\u062f \u0633\u062c\u0644 \u062a\u062c\u0627\u0631\u064a \u0644\u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629","\u062a\u0639\u062f\u064a\u0644 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0641\u0631\u0639\u064a \u0644\u0634\u0631\u0643\u0629","\u0637\u0644\u0628 \u062a\u0633\u062c\u064a\u0644 \u0642\u064a\u062f \u0648\u0643\u0627\u0644\u0629 \u062a\u062c\u0627\u0631\u064a\u0629","\u062a\u0631\u0627\u062e\u064a\u0635 \u0627\u0644\u062a\u062e\u0641\u064a\u0636\u0627\u062a","\u0627\u0644\u062a\u062d\u0648\u0644 \u0645\u0646 \u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629 \u0625\u0644\u0649 \u0634\u0631\u0643\u0629 \u2013 \u0634\u0631\u0643\u0629 \u0645\u0633\u0627\u0647\u0645\u0629 \u0623\u0648 \u0645\u0633\u0627\u0647\u0645\u0629 \u0645\u0628\u0633\u0637\u0629","\u0627\u0644\u062a\u062d\u0648\u0644 \u0645\u0646 \u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629 \u0625\u0644\u0649 \u0634\u0631\u0643\u0629 \u2013 \u0634\u0631\u0643\u0629 \u0630\u0627\u062a \u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0645\u062d\u062f\u0648\u062f\u0629","\u0627\u0644\u062a\u062d\u0648\u0644 \u0645\u0646 \u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629 \u0625\u0644\u0649 \u0634\u0631\u0643\u0629 \u2013 \u0634\u0631\u0643\u0629 \u062a\u0636\u0627\u0645\u0646 \u0623\u0648 \u062a\u0648\u0635\u064a\u0629 \u0628\u0633\u064a\u0637\u0629","\u062a\u0639\u062f\u064a\u0644 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0644\u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629","\u0627\u0644\u062a\u0646\u0627\u0632\u0644 \u0639\u0646 \u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0644\u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629","\u062a\u0639\u062f\u064a\u0644 \u0639\u0642\u062f \u0627\u0644\u062a\u0623\u0633\u064a\u0633 \/ \u0646\u0638\u0627\u0645 \u0623\u0633\u0627\u0633","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0645\u0633\u0627\u0647\u0645\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0645\u0633\u0627\u0647\u0645\u0629 \u0645\u0628\u0633\u0637\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u062a\u0636\u0627\u0645\u0646\u064a\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u062a\u0648\u0635\u064a\u0629 \u0628\u0633\u064a\u0637\u0629","\u062a\u0623\u0633\u064a\u0633 \u0634\u0631\u0643\u0629 \u0630\u0627\u062a \u0645\u0633\u0624\u0648\u0644\u064a\u0629 \u0645\u062d\u062f\u0648\u062f\u0629","\u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0639\u0646 \u0627\u0644\u0645\u062e\u0627\u0644\u0641\u0627\u062a \u0627\u0644\u0641\u0648\u0631\u064a\u0629","\u062a\u062d\u062f\u064a\u062b \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0631\u062e\u0635 \u0627\u0644\u062a\u0634\u063a\u064a\u0644\u064a\u0629 \u0644\u0645\u0624\u0633\u0633\u0629 \u0641\u0631\u062f\u064a\u0629","\u062a\u062d\u062f\u064a\u062b \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0631\u062e\u0635 \u0627\u0644\u062a\u0634\u063a\u064a\u0644\u064a\u0629 \u0644\u0634\u0631\u0643\u0629","\u0631\u0641\u0639 \u062a\u0639\u0644\u064a\u0642 \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0631\u0626\u064a\u0633\u064a \u0644\u0634\u0631\u0643\u0629","\u062e\u062f\u0645\u0629 \u0625\u0628\u0644\u0627\u063a \u0627\u0644\u0645\u0646\u0634\u0622\u062a \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629 \u0639\u0646 \u062d\u0627\u0644\u0627\u062a \u0627\u0644\u062a\u0633\u062a\u0631 \u0641\u064a \u0645\u0646\u0634\u0622\u062a \u0623\u062e\u0631\u0649","\u0634\u0637\u0628 \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0627\u0644\u0641\u0631\u0639\u064a \u0644\u0634\u0631\u0643\u0629","\u062a\u062d\u062f\u064a\u062b \u0628\u064a\u0627\u0646\u0627\u062a \u0645\u0627\u0644\u0643 \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u062a\u062c\u0627\u0631\u064a","\u0645\u062e\u0627\u0644\u0641\u0627\u062a \u0646\u0638\u0627\u0645 \u0627\u0644\u0627\u0645\u062a\u064a\u0627\u0632 \u0627\u0644\u062a\u062c\u0627\u0631\u064a","\u0627\u0644\u062a\u0641\u0648\u064a\u0636 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a","\u0634\u0643\u0627\u0648\u0649 \u0645\u062e\u0627\u0644\u0641\u0627\u062a \u0646\u0638\u0627\u0645 \u0627\u0644\u0634\u0631\u0643\u0627\u062a","\u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0639\u0646 \u0627\u0644\u0648\u0643\u0627\u0644\u0627\u062a \u0627\u0644\u062a\u062c\u0627\u0631\u064a\u0629 \u0627\u0644\u0642\u0627\u0626\u0645\u0629","\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0639\u0646 \u0627\u0644\u0645\u0639\u0627\u0645\u0644\u0627\u062a","\u0625\u0644\u063a\u0627\u0621 \u0627\u0633\u0645 \u062a\u062c\u0627\u0631\u064a \u0645\u062d\u062c\u0648\u0632","\u0625\u0644\u063a\u0627\u0621 \u0642\u064a\u062f \u0627\u0645\u062a\u064a\u0627\u0632 \u062a\u062c\u0627\u0631\u064a","\u062e\u062f\u0645\u0629 \u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646 \u0627\u0644\u0648\u062b\u0627\u0626\u0642","\u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0639\u0646 \u0627\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0645\u0639\u064a\u0628\u0629","\u0637\u0644\u0628 \u062a\u0635\u0627\u0631\u064a\u062d \u0627\u0644\u0633\u0641\u0631 \u062e\u0627\u0631\u062c\u064a\u064b\u0627 \u0644\u063a\u0631\u0636 \u0627\u0644\u0627\u0633\u062a\u062b\u0645\u0627\u0631","\u0625\u0641\u0627\u062f\u0629 \u062a\u062c\u0627\u0631\u064a\u0629","\u062e\u062f\u0645\u0629 \u0627\u0644\u0625\u0628\u0644\u0627\u063a \u0639\u0646 \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0633\u062a\u0641\u064a\u062f \u0627\u0644\u062d\u0642\u064a\u0642\u064a","\u0637\u0644\u0628 \u062a\u0639\u062f\u064a\u0644 \u0642\u064a\u062f \u0648\u0643\u0627\u0644\u0629 \u062a\u062c\u0627\u0631\u064a\u0629","\u0637\u0644\u0628 \u062a\u062c\u062f\u064a\u062f \u0642\u064a\u062f \u0648\u0643\u0627\u0644\u0629 \u062a\u062c\u0627\u0631\u064a\u0629","\u0637\u0644\u0628 \u0634\u0637\u0628 \u0642\u064a\u062f \u0648\u0643\u0627\u0644\u0629 \u062a\u062c\u0627\u0631\u064a\u0629 \u0645\u0646 \u0642\u0628\u0644 \u0627\u0644\u0648\u0643\u064a\u0644","\u0625\u0635\u062f\u0627\u0631 \u062a\u0631\u062e\u064a\u0635 \u0645\u0647\u0646\u0629 \u0627\u0633\u062a\u0634\u0627\u0631\u064a\u0629","\u0625\u0635\u062f\u0627\u0631 \u0641\u0631\u0639 \u062a\u0631\u062e\u064a\u0635 \u0645\u0647\u0646\u0629 \u0627\u0633\u062a\u0634\u0627\u0631\u064a\u0629"]'
+                    data-services-en='["Arabic Trade Name Reservation","Commercial Registration Renewal","English Trade Name Reservation","Non-Conflict Certificate","Annual Confirmation of Main Commercial Registration Data \u2013 Joint Stock or Simplified Joint Stock Company","Issuance of a new commercial registration for a sole proprietorship","Annual Confirmation of Main Commercial Registration Data \u2013 Limited Liability Company","Annual Confirmation of Main Commercial Registration Data \u2013 General or Limited Partnership Company","Reassign Main Commercial Registration","Annual Confirmation of Branch Commercial Registration Data \u2013 Joint Stock or Simplified Joint Stock Company","Annual Confirmation of Branch Commercial Registration Data \u2013 Limited Liability Company","Annual Confirmation of Branch Commercial Registration Data \u2013 General or Limited Partnership Company","Annual Confirmation of Commercial Registration Data for a Sole Proprietorship","Establish a Company Under an Investment License \u2013 Joint Stock or Simplified Joint Stock Company","Establish a Company Under an Investment License \u2013 Limited Liability Company","Establish a Company Under an Investment License \u2013 General or Limited Partnership Company","Assign a Trade Name for a Company Branch","Establish a Company Under an Economic Cities and Special Zones Authority License \u2013 Joint Stock or Simplified Joint Stock Company","Establish a Company Under an Economic Cities and Special Zones Authority License \u2013 Limited Liability Company","Establish a Company Under an Economic Cities and Special Zones Authority License \u2013 General or Limited Partnership Company","Register a Commercial Franchise","Amend a Commercial Franchise Registration","\u0627\u0644\u062a\u0646\u0627\u0632\u0644 \u0639\u0646 \u0627\u0644\u0627\u0633Assign a Trade Name for a Company\u0645 \u0627\u0644\u062a\u062c\u0627\u0631\u064a \u0644\u0634\u0631\u0643\u0629","Publication of Extraordinary General Assembly Resolutions","Commercial Registration Extract","Extend a Trade Name Reservation","Transfer Ownership of a Sole Proprietorship Commercial Registration","Amend Main Commercial Registration Data for a Company","Issue a Commercial Registration for a Sole Proprietorship","Amend Branch Commercial Registration Data for a Company","Register a Commercial Agency","Discount Licenses","Convert a Sole Proprietorship into a Company \u2013 Joint Stock or Simplified Joint Stock Company","Convert a Sole Proprietorship into a Company \u2013 Limited Liability Company","Convert a Sole Proprietorship into a Company \u2013 General or Limited Partnership Company","Amend Commercial Registration Data for a Sole Proprietorship","Assign a Trade Name to a Sole Proprietorship","Amend Articles of Association \/ Bylaws","Establish a Joint Stock Company","Establish a Simplified Joint Stock Company","Establish a General Partnership Company","Establish a Limited Partnership Company","Establish a Limited Liability Company","Inquiry About Immediate Violations","Update Operating License Data for a Sole Proprietorship","Update Operating License Data for a Company","Lift Suspension of a Company\u0027s Main Commercial Registration","Reporting Commercial Concealment by Other Establishments","Cancel a Company Branch Commercial Registration","Update Commercial Registration Owner Data","Report Franchise Law Violations","Electronic Authorization","Company Law Violation Complaints","Inquiry About Existing Commercial Agencies","Transaction Inquiry","Cancel a Reserved Trade Name","Cancel a Commercial Franchise Registration","Document Verification","Defective Product Recall Inquiry","Overseas Travel Permit for Investment Purposes","Commercial Statement","Beneficial Owner Data Reporting","Amend a Commercial Agency Registration","Renew a Commercial Agency Registration","Cancel a Commercial Agency Registration by the Agent","Issue a Consulting Profession License","Issue a Branch Consulting Profession License"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة التجارة.jpeg" alt="وزارة التجارة"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-shopping-cart hidden text-5xl" style="color:#AD1457;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#AD145712; color:#AD1457;">التجارة والأعمال</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة التجارة"
+                            data-en="Ministry of Commerce">وزارة التجارة</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-3">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">67</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/4" class="cui-entity cui-fade group"
+                    style="--ent-color: #4A148C;" data-name-ar="وزارة العدل" data-name-en="ministry of justice"
+                    data-tag-ar="القضاء والتوثيق"
+                    data-services-ar='["\u0627\u0644\u062a\u0648\u062b\u064a\u0642 \u0627\u0644\u0642\u0627\u0646\u0648\u0646\u064a","\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u0648\u062b\u064a\u0642\u0629 \u0632\u0648\u0627\u062c","\u0625\u0641\u0631\u0627\u063a \u0627\u0644\u0639\u0642\u0627\u0631\u0627\u062a"]'
+                    data-services-en='["Legal Documentation","Marriage Certificate","Property Transfer"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة العدل.jpg" alt="وزارة العدل"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-scale hidden text-5xl" style="color:#4A148C;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#4A148C12; color:#4A148C;">القضاء والتوثيق</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة العدل"
+                            data-en="Ministry of Justice">وزارة العدل</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-4">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">3</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/5" class="cui-entity cui-fade group"
+                    style="--ent-color: #C62828;" data-name-ar="وزارة الصحة" data-name-en="ministry of health"
+                    data-tag-ar="الرعاية الصحية"
+                    data-services-ar='["\u062a\u0633\u062c\u064a\u0644 \u0645\u0646\u0634\u0623\u0629 \u0635\u062d\u064a\u0629","\u062a\u0631\u062e\u064a\u0635 \u0627\u0644\u0645\u0645\u0627\u0631\u0633\u0629 \u0627\u0644\u0635\u062d\u064a\u0629"]'
+                    data-services-en='["Health Facility Registration","Health Practice License"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة الصحه.webp" alt="وزارة الصحة"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-heart-rate-monitor hidden text-5xl" style="color:#C62828;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#C6282812; color:#C62828;">الرعاية الصحية</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة الصحة"
+                            data-en="Ministry of Health">وزارة الصحة</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-5">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">2</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/6" class="cui-entity cui-fade group"
+                    style="--ent-color: #0277BD;" data-name-ar="وزارة الموارد البشرية"
+                    data-name-en="ministry of human resources" data-tag-ar="العمل والتوظيف"
+                    data-services-ar='["\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u062a\u0635\u0631\u064a\u062d \u0639\u0645\u0644","\u0646\u0642\u0644 \u0627\u0644\u0643\u0641\u0627\u0644\u0629","\u062a\u0633\u062c\u064a\u0644 \u0645\u0646\u0634\u0623\u0629 \u062a\u062c\u0627\u0631\u064a\u0629","\u062a\u0623\u0633\u064a\u0633 \u0627\u0644\u0635\u0646\u0627\u062f\u064a\u0642 \u0627\u0644\u0639\u0627\u0626\u0644\u064a\u0629","\u0646\u0642\u0644 \u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0639\u0627\u0645\u0644 \u0627\u0644\u0648\u0627\u0641\u062f","\u062a\u0648\u062b\u064a\u0642 \u0648\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0639\u0642\u0648\u062f"]'
+                    data-services-en='["Work Permit","Sponsorship Transfer","Business Establishment Registration","Establishing Family Funds","Transfer of Expatriate Worker Services","Contract Documentation and Management"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة الموارد البشريه.webp"
+                            alt="وزارة الموارد البشرية"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-users hidden text-5xl" style="color:#0277BD;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#0277BD12; color:#0277BD;">العمل والتوظيف</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900"
+                            data-ar="وزارة الموارد البشرية" data-en="Ministry of Human Resources">وزارة الموارد البشرية
+                        </h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-6">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">6</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/7" class="cui-entity cui-fade group"
+                    style="--ent-color: #1A237E;" data-name-ar="وزارة المالية" data-name-en="ministry of finance"
+                    data-tag-ar="المالية والميزانية"
+                    data-services-ar='["\u0627\u0644\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0636\u0631\u064a\u0628\u064a\u0629","\u0627\u0633\u062a\u062e\u0631\u0627\u062c \u0634\u0647\u0627\u062f\u0629 \u0627\u0644\u0632\u0643\u0627\u0629"]'
+                    data-services-en='["Tax Services","Zakat Certificate"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة الماليةة.jpg" alt="وزارة المالية"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-coin hidden text-5xl" style="color:#1A237E;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#1A237E12; color:#1A237E;">المالية والميزانية</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة المالية"
+                            data-en="Ministry of Finance">وزارة المالية</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-7">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">2</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/8" class="cui-entity cui-fade group"
+                    style="--ent-color: #00695C;" data-name-ar="وزارة التعليم" data-name-en="ministry of education"
+                    data-tag-ar="التعليم والتدريب"
+                    data-services-ar='["\u0642\u0628\u0648\u0644 \u0627\u0644\u0637\u0644\u0627\u0628","\u062a\u0648\u062b\u064a\u0642 \u0627\u0644\u0634\u0647\u0627\u062f\u0627\u062a","\u062a\u0631\u062e\u064a\u0635 \u0645\u0646\u0634\u0623\u0629 \u062a\u0639\u0644\u064a\u0645\u064a\u0629"]'
+                    data-services-en='["Student Admission","Certificate Authentication","Educational Institution License"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة التعليم.png" alt="وزارة التعليم"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-school hidden text-5xl" style="color:#00695C;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#00695C12; color:#00695C;">التعليم والتدريب</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة التعليم"
+                            data-en="Ministry of Education">وزارة التعليم</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-8">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">3</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/9" class="cui-entity cui-fade group"
+                    style="--ent-color: #00838F;" data-name-ar="وزارة السياحة" data-name-en="ministry of tourism"
+                    data-tag-ar="السياحة والضيافة"
+                    data-services-ar='["\u062a\u0631\u0627\u062e\u064a\u0635 \u0627\u0644\u0641\u0646\u0627\u062f\u0642","\u062a\u0631\u062e\u064a\u0635 \u0648\u0643\u0627\u0644\u0629 \u0633\u064a\u0627\u062d\u064a\u0629"]'
+                    data-services-en='["Hotel Licenses","Travel Agency License"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة السياحه.png" alt="وزارة السياحة"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-plane hidden text-5xl" style="color:#00838F;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#00838F12; color:#00838F;">السياحة والضيافة</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة السياحة"
+                            data-en="Ministry of Tourism">وزارة السياحة</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-9">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">2</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/10" class="cui-entity cui-fade group"
+                    style="--ent-color: #2E7D32;" data-name-ar="وزارة الاستثمار" data-name-en="ministry of investment"
+                    data-tag-ar="الاستثمار والأعمال"
+                    data-services-ar='["\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0634\u0631\u0643\u0627\u062a \u063a\u064a\u0631 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629 \u0644\u063a\u0631\u0636 \u062a\u0645\u0644\u0643 \u0627\u0644\u0639\u0642\u0627\u0631","\u0627\u0644\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0633\u0646\u0648\u064a \u0644\u062a\u0633\u062c\u064a\u0644 \u062a\u0645\u0644\u0643 \u0627\u0644\u0639\u0642\u0627\u0631 \u0644\u0644\u0634\u0631\u0643\u0627\u062a \u063a\u064a\u0631 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629","\u062f\u0645\u062c \u0633\u062c\u0644\u0627\u062a \u0627\u0644\u0627\u0633\u062a\u062b\u0645\u0627\u0631","\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u0645\u0644\u0643\u064a\u0629 \u0641\u064a \u0627\u0644\u062a\u0633\u062c\u064a\u0644","\u062a\u0639\u062f\u064a\u0644 \u0645\u0639\u0644\u0648\u0645\u0627\u062a \u062a\u0633\u062c\u064a\u0644 \u062a\u0645\u0644\u0643 \u0627\u0644\u0639\u0642\u0627\u0631 \u0644\u0644\u0634\u0631\u0643\u0627\u062a \u063a\u064a\u0631 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629","\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649 \u062a\u0645\u0644\u0643 \u0627\u0644\u0639\u0642\u0627\u0631 \u0644\u0644\u0634\u0631\u0643\u0627\u062a \u0627\u0644\u0627\u0633\u062a\u062b\u0645\u0627\u0631\u064a\u0629 \u062e\u0627\u0631\u062c \u0627\u0644\u0646\u0637\u0627\u0642 \u0627\u0644\u062c\u063a\u0631\u0627\u0641\u064a","\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u0623\u0646\u0634\u0637\u0629 \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u2014 \u0627\u0644\u0623\u0646\u0634\u0637\u0629 \u0627\u0644\u0645\u0642\u064a\u062f\u0629 \u0623\u0648 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0631\u064a\u0627\u062f\u064a","\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0627\u062a \u0639\u0644\u0649 \u062a\u0645\u0644\u0643\/\u0628\u064a\u0639 \u0627\u0644\u0623\u0646\u0634\u0637\u0629 \u0627\u0644\u0639\u0642\u0627\u0631\u064a\u0629","\u0625\u0636\u0627\u0641\u0629\/\u062d\u0630\u0641 \u0627\u0644\u0623\u0646\u0634\u0637\u0629 \u0627\u0644\u0645\u062a\u0627\u062d\u0629","\u062a\u062d\u062f\u064a\u062b\/\u062a\u0639\u062f\u064a\u0644 \u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0648\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0645\u0646\u0634\u0623\u0629 \u2014 \u062a\u0639\u062f\u064a\u0644\u0627\u062a \u062a\u062a\u0637\u0644\u0628 \u0645\u0631\u0627\u062c\u0639\u0629","\u062a\u0639\u062f\u064a\u0644 \u0627\u0633\u0645 \u0627\u0644\u0645\u0646\u0634\u0623\u0629","\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u0643\u064a\u0627\u0646 \u0627\u0644\u0642\u0627\u0646\u0648\u0646\u064a","\u062a\u0639\u062f\u064a\u0644 \u0645\u0648\u0642\u0639 \u0627\u0644\u0645\u0646\u0634\u0623\u0629","\u0632\u064a\u0627\u062f\u0629 \u0631\u0623\u0633 \u0627\u0644\u0645\u0627\u0644","\u0625\u0644\u063a\u0627\u0621 \u062a\u0633\u062c\u064a\u0644 \u062a\u0645\u0644\u0643 \u0627\u0644\u0639\u0642\u0627\u0631 \u0644\u0644\u0634\u0631\u0643\u0627\u062a \u063a\u064a\u0631 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629","\u0625\u0641\u0627\u062f\u0629 \u0644\u063a\u0631\u0636 \u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u062e\u062a\u064a\u0627\u0631\u064a\u064b\u0627","\u0625\u0635\u062f\u0627\u0631 \u0642\u0631\u0627\u0631 \u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u062e\u062a\u064a\u0627\u0631\u064a\u064b\u0627","\u0628\u0631\u0646\u0627\u0645\u062c \u0645\u064a\u0632\u0627","\u062e\u062f\u0645\u0629 \u0645\u0648\u0627\u0621\u0645\u0629 \u0627\u0644\u0645\u0633\u062a\u062b\u0645\u0631\u064a\u0646","\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0633\u0646\u0648\u064a","\u0627\u0644\u062a\u0631\u0627\u062e\u064a\u0635 \u0627\u0644\u0645\u062a\u0639\u0644\u0642\u0629 \u0628\u0623\u0646\u0634\u0637\u0629 \u0627\u0645\u062a\u0644\u0627\u0643 \u0627\u0644\u0639\u0642\u0627\u0631\u0627\u062a \u0648\u0628\u064a\u0639\u0647\u0627","\u0645\u0639\u0627\u0644\u062c\u0629 \u0627\u0644\u0631\u062f \u0639\u0644\u0649 \u0627\u0644\u0625\u062e\u0637\u0627\u0631 \u0627\u0644\u0643\u062a\u0627\u0628\u064a","\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0633\u062a\u0641\u0633\u0627\u0631\u0627\u062a \u0627\u0644\u0645\u062a\u0639\u0644\u0642\u0629 \u0628\u0640 Dynamics","\u062a\u062e\u0641\u064a\u0636 \u0631\u0623\u0633 \u0627\u0644\u0645\u0627\u0644 (\u0648\u0641\u0642\u064b\u0627 \u0644\u0644\u0648\u0627\u0626\u062d)","\u0627\u0644\u0631\u062f \u0639\u0644\u0649 \u0627\u0644\u0625\u062e\u0637\u0627\u0631 \u0627\u0644\u0643\u062a\u0627\u0628\u064a","\u062a\u0645\u062f\u064a\u062f \u0627\u0644\u0645\u0648\u0639\u062f \u0627\u0644\u0646\u0647\u0627\u0626\u064a \u0644\u0644\u0631\u062f \u0639\u0644\u0649 \u0627\u0644\u0625\u062e\u0637\u0627\u0631 \u0627\u0644\u0643\u062a\u0627\u0628\u064a","\u0628\u0631\u0646\u0627\u0645\u062c \u0627\u0644\u0645\u0633\u062a\u062b\u0645\u0631\u064a\u0646 \u0627\u0644\u0627\u0633\u062a\u0631\u0627\u062a\u064a\u062c\u064a\u064a\u0646"]'
+                    data-services-en='["Registration of Non-Saudi Companies for Real Estate Ownership Purposes","Annual Update of Real Estate Ownership Registration for Non-Saudi Companies","Merging Investment Records","Amending Ownership in the Registration","Amending Real Estate Ownership Registration Information for Non-Saudi Companies","Approval for Investment Companies to Own Real Estate Outside the Geographic Scope","Amending Economic Activities \u2014 Restricted Activities or Entrepreneurial Registration","Approvals for Ownership\/Sale of Real Estate Activities","Adding\/Removing Available Activities","Updating\/Amending Establishment Information \u2014 ReviewUpdating\/Amending Establishment Information \u2014 Review-Required Changes-Required Changes","Amending Establishment Name","Amending the Legal Entity","Amending Establishment Location","Capital Increase","Cancellation of Real Estate Ownership Registration for Non-Saudi Companies","Statement for Voluntary Registration Cancellation","Issuing a Voluntary Registration Cancellation Decision","Meeza Program","Investors Matchmaking Service","Annual Registration Update","Approvals for Owning\/Selling Real Estate Activities","Processing the Response to Written Notification","Dynamics Inquiry Service","Capital Reduction (as per Regulations)","Response to Written Notification","Extending the Written Notification Deadline","Strategic Investor Program"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة الاستثمار.avif" alt="وزارة الاستثمار"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-trending-up hidden text-5xl" style="color:#2E7D32;"></i>
+                        <span class="absolute right-3 top-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold"
+                            style="background:#2E7D3212; color:#2E7D32;">الاستثمار والأعمال</span>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة الاستثمار"
+                            data-en="Ministry of Investment">وزارة الاستثمار</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-10">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">27</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/38" class="cui-entity cui-fade group"
+                    style="--ent-color: #2E7D32;" data-name-ar="وزارة الخارجية"
+                    data-name-en="ministry of foreign affairs" data-tag-ar=""
+                    data-services-ar='["\u062a\u0635\u062f\u064a\u0642 \u0627\u0644\u0648\u062b\u0627\u0626\u0642","\u062d\u062c\u0632 \u0645\u0648\u0639\u062f \u0644\u0644\u062a\u0635\u0627\u062f\u064a\u0642","\u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0639\u0646 \u062a\u0623\u0634\u064a\u0631\u0629 \u0635\u0627\u062f\u0631\u0629 \u0645\u0646 \u0648\u0632\u0627\u0631\u0629 \u0627\u0644\u062e\u0627\u0631\u062c\u064a\u0629","\u0627\u0644\u0627\u0633\u062a\u0639\u0644\u0627\u0645 \u0639\u0646 \u0637\u0644\u0628 \u062a\u0623\u0634\u064a\u0631\u0629","\u0637\u0644\u0628 \u0632\u064a\u0627\u0631\u0629 \u0639\u0627\u0626\u0644\u064a\u0629 \u0644\u0644\u0645\u0648\u0627\u0637\u0646\u064a\u0646","\u0637\u0644\u0628 \u0632\u064a\u0627\u0631\u0629 \u0639\u0627\u0626\u0644\u064a\u0629 \u0644\u0644\u0645\u0642\u064a\u0645\u064a\u0646","\u0637\u0644\u0628 \u0632\u064a\u0627\u0631\u0629 \u0639\u0627\u0626\u0644\u064a\u0629 \u0644\u0645\u0648\u0627\u0637\u0646\u064a \u062f\u0648\u0644 \u0645\u062c\u0644\u0633 \u0627\u0644\u062a\u0639\u0627\u0648\u0646","\u0637\u0644\u0628 \u0632\u064a\u0627\u0631\u0629 \u0634\u062e\u0635\u064a\u0629","\u0637\u0644\u0628 \u062a\u0645\u062f\u064a\u062f \u062a\u0623\u0634\u064a\u0631\u0629 \u0627\u0644\u0639\u0648\u062f\u0629","\u0637\u0644\u0628 \u062a\u0623\u0634\u064a\u0631\u0629 \u062f\u062e\u0648\u0644 \u0645\u0646 \u0645\u0645\u062b\u0644\u064a\u0627\u062a \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0641\u064a \u0627\u0644\u062e\u0627\u0631\u062c","\u062a\u0641\u0648\u064a\u0636 \u0639\u0644\u0649 \u062a\u0623\u0634\u064a\u0631\u0629 \u0639\u0645\u0644","\u0627\u0644\u062a\u0623\u0634\u064a\u0631\u0629 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a\u0629","\u0627\u0644\u0625\u0639\u0641\u0627\u0621 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a \u0645\u0646 \u0627\u0644\u062a\u0623\u0634\u064a\u0631\u0629","\u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646 \u0625\u0635\u062f\u0627\u0631 \u0627\u0644\u0634\u0647\u0627\u062f\u0629 \u0627\u0644\u0635\u062d\u064a\u0629"]'
+                    data-services-en='["Document Attestation","Attestation Appointment Booking","Inquiry About a Visa Issued by the Ministry of Foreign Affairs","Visa Application Inquiry","Family Visit Request for Citizens","Family Visit Request for Residents","Family Visit Request for GCC Citizens","Personal Visit Request","Request to Extend Return Visa","Visa Application Through Saudi Missions Abroad","Work Visa Authorization","Electronic Visa","Electronic Visa Waiver","Health Certificate Verification"]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزاره الخاجية.webp" alt="وزارة الخارجية"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-file-export hidden text-5xl" style="color:#2E7D32;"></i>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900" data-ar="وزارة الخارجية"
+                            data-en="Ministry of Foreign Affairs">وزارة الخارجية</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-38">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">14</span>
+                                    <span class="svc-lbl">خدمة متاحة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+                <a href="http://localhost/catalog/ministries/39" class="cui-entity cui-fade group"
+                    style="--ent-color: #1B5E20;" data-name-ar="وزارة الاقتصاد والتخطيط"
+                    data-name-en="ministry of economy and planning" data-tag-ar="" data-services-ar='[]'
+                    data-services-en='[]'>
+
+                    <!-- Icon Area -->
+                    <div
+                        class="relative flex h-32 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/60">
+                        <img src="http://localhost/images/uploads/وزارة الاقتصاد والتخطيط.jpg"
+                            alt="وزارة الاقتصاد والتخطيط"
+                            class="cui-entity-icon h-20 w-20 rounded-xl object-contain drop-shadow-sm"
+                            onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');">
+                        <i class="ti ti-trending-up hidden text-5xl" style="color:#1B5E20;"></i>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="flex flex-1 flex-col p-4">
+                        <h3 class="text-[14px] font-extrabold leading-snug text-slate-900"
+                            data-ar="وزارة الاقتصاد والتخطيط" data-en="Ministry of Economy and Planning">وزارة الاقتصاد
+                            والتخطيط</h3>
+
+                        <div class="mt-auto pt-3">
+                            <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+                                <span class="inline-flex items-center gap-1 text-[12px] font-bold text-[#006C35]"
+                                    id="svc-cnt-39">
+                                    <i class="ti ti-file-text text-[13px]"></i>
+                                    <span class="svc-num">0</span>
+                                    <span class="svc-lbl">خدمة</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <div class="flex items-center justify-between bg-slate-50/80 px-4 py-2.5">
+                        <span class="cui-entity-cta text-[12px] font-bold text-slate-600">التقديم على الخدمة</span>
+                        <span
+                            class="cui-entity-arrow flex h-8 w-8 items-center justify-center rounded-lg bg-[#006C35]/10 text-[#006C35]">
+                            <i class="ti ti-arrow-left text-[17px]"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- No search results -->
+            <div id="no-results"
+                class="hidden mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-[#006C35]/10">
+                    <i class="ti ti-search-off text-3xl text-[#006C35]"></i>
+                </div>
+                <p class="text-sm font-bold text-slate-600">لا توجد نتائج مطابقة لبحثك</p>
+                <button type="button"
+                    class="mt-3 cursor-pointer rounded-lg border-0 bg-transparent px-4 py-2 text-[13px] font-bold text-[#006C35] transition-colors hover:bg-[#006C35]/10"
+                    onclick="clearSearch()">
+                    <i class="ti ti-rotate text-[14px] ml-1"></i>إظهار الكل
+                </button>
+            </div>
+
+            <!-- ══════════ PAGINATION ══════════ -->
+            <div class="mt-8 flex items-center justify-center gap-2">
+
+                <a href="" class="cui-page-link cui-page-disabled border-slate-200 bg-white text-slate-600">
+                    <i class="ti ti-chevron-right text-[15px]"></i>
+                </a>
+
+
+                <a href="http://localhost/catalog/ministries?page=1" class="cui-page-link cui-page-active">
+                    1
+                </a>
+                <a href="http://localhost/catalog/ministries?page=2"
+                    class="cui-page-link border-slate-200 bg-white text-slate-700">
+                    2
+                </a>
+
+
+
+                <a href="http://localhost/catalog/ministries?page=2"
+                    class="cui-page-link  border-slate-200 bg-white text-slate-600">
+                    <i class="ti ti-chevron-left text-[15px]"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ FOOTER ══════════ -->
+    <footer class="mt-16 border-t border-slate-200 bg-white">
+        <div class="mx-auto w-full max-w-[1400px]">
+            <!-- Main Footer -->
+            <div class="grid grid-cols-1 gap-8 px-4 py-10 md:grid-cols-2 md:px-6 lg:grid-cols-4">
+                <!-- Brand -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2.5">
+                        <span
+                            class="flex h-[46px] w-[46px] items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-[#f8fafc]">
+                            <img src="http://localhost/images/official-logo.jpg" alt="آمر تم"
+                                class="h-[42px] w-[42px] object-contain">
+                        </span>
+                        <span class="text-lg font-black text-[#006C35]">آمر تم</span>
+                    </div>
+                    <p class="text-sm leading-relaxed text-gray-500">
+                        منصة سعودية متكاملة لتقديم الخدمات الحكومية إلكترونياً بكل سهولة وأمان.
+                    </p>
+                </div>
+
+                <!-- روابط المنصة -->
+                <div>
+                    <h3 class="mb-4 text-sm font-bold text-gray-900">روابط المنصة</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="http://localhost"
+                                class="transition-colors no-underline duration-200 hover:text-[#006C35]">الرئيسية</a>
+                        </li>
+                        <li><a href="#services"
+                                class="transition-colors no-underline duration-200 hover:text-[#006C35]">الخدمات</a>
+                        </li>
+                        <li><a href="http://localhost/offices/law"
+                                class="transition-colors no-underline duration-200 hover:text-[#006C35]">المكاتب
+                                المعتمدة</a></li>
+                    </ul>
+                </div>
+
+                <!-- حسابات -->
+                <div>
+                    <h3 class="mb-4 text-sm font-bold text-gray-900">حسابك</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li><a href="http://localhost/login"
+                                class="transition-colors no-underline duration-200 hover:text-[#006C35]">دخول</a></li>
+                        <li><a href="http://localhost/register"
+                                class="transition-colors no-underline duration-200 hover:text-[#006C35]">تسجيل جديد</a>
+                        </li>
+                        <li><a href="http://localhost/dashboard"
+                                class="transition-colors no-underline duration-200 hover:text-[#006C35]">لوحة
+                                المستخدم</a></li>
+                    </ul>
+                </div>
+
+                <!-- تواصل -->
+                <div>
+                    <h3 class="mb-4 text-sm font-bold text-gray-900">تواصل معنا</h3>
+                    <ul class="space-y-3 text-sm text-gray-500">
+                        <li class="flex items-center gap-2"><i class="fa fa-envelope text-[#006C35]"></i>
+                            support@amrtm.sa</li>
+                        <li class="flex items-center gap-2"><i class="fa fa-phone text-[#006C35]"></i> 920000000</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-slate-200 py-5 text-center text-sm text-gray-500" id="fcp">
+                © 2025 <b class="text-[#006C35]">آمر تم</b> — جميع الحقوق محفوظة
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window._NAV_T = {
+            ar: { home: 'الرئيسية', svcs: 'الخدمات', li: 'دخول', re: 'تسجيل', da: 'حسابي', mn_h: 'الرئيسية', mn_s: 'الخدمات', mn_l: 'تسجيل الدخول', mn_r: 'إنشاء حساب' },
+            en: { home: 'Home', svcs: 'Services', li: 'Sign In', re: 'Register', da: 'My Account', mn_h: 'Home', mn_s: 'Services', mn_l: 'Sign In', mn_r: 'Create Account' }
+        };
+
+        function _applyNavLang(l) {
+            var t = window._NAV_T[l] || window._NAV_T.ar;
+            var ids = { 'nl-li': 'li', 'nl-re': 're', 'nl-da': 'da', 'mn-h': 'mn_h', 'mn-s': 'mn_s', 'mn-l': 'mn_l', 'mn-r': 'mn_r' };
+            Object.keys(ids).forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) el.textContent = t[ids[id]];
+            });
+        }
+
+        window.navLang = function (l) {
+            if (typeof setLang === 'function') {
+                setLang(l);
+            } else {
+                localStorage.setItem('amrtm_lang', l);
+                document.documentElement.setAttribute('lang', l);
+                document.documentElement.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+                _applyNavLang(l);
+            }
+            _setLangBtn('la', l === 'ar');
+            _setLangBtn('le', l === 'en');
+        };
+
+        function _setLangBtn(id, active) {
+            var el = document.getElementById(id);
+            if (!el) return;
+            el.classList.remove('bg-[#006C35]', 'text-white', 'text-gray-400');
+            if (active) {
+                el.classList.add('bg-[#006C35]', 'text-white');
+            } else {
+                el.classList.add('text-gray-400');
+            }
+        }
+
+        window.togMob = function () {
+            var d = document.getElementById('mob-dd');
+            if (d) { d.classList.toggle('hidden'); d.classList.toggle('flex'); }
+        };
+        window.clsMob = function () {
+            var d = document.getElementById('mob-dd');
+            if (d) { d.classList.remove('flex'); d.classList.add('hidden'); }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var l = localStorage.getItem('amrtm_lang') || 'ar';
+            if (l !== 'ar') navLang(l);
+        });
+    </script>
+    <script>
+        window.AMRTM_USER = null;
+        window.AMRTM_CSRF = 'izLU45vhYhan7wcXlUPgdCeMRsj2uZfvvmWShnzN';
+        window.AMRTM_API_BASE = 'http://localhost/amrtm/api';
+        window.AMRTM_ROUTES = {
+            login: 'http://localhost/login',
+            logout: 'http://localhost/logout',
+            home: 'http://localhost',
+            userDashboard: 'http://localhost/dashboard',
+            adminDashboard: 'http://localhost/admin',
+        };
+
+        function updateFilterCount() {
+            const cards = document.querySelectorAll('.cui-entity');
+            let visible = 0;
+            cards.forEach(c => { if (c.style.display !== 'none') visible++; });
+            const el = document.getElementById('filter-count-val');
+            if (el) el.textContent = visible;
+        }
+
+        function searchServices(value) {
+            const q = (value || '').trim().toLowerCase();
+            const suggestions = document.getElementById('searchSuggestions');
+            const grid = document.getElementById('entities-grid');
+            const noResults = document.getElementById('no-results');
+            const clearBtn = document.getElementById('clearSearch');
+            suggestions.innerHTML = '';
+
+            if (clearBtn) clearBtn.classList.toggle('hidden', q === '');
+
+            if (q === '') {
+                suggestions.style.display = 'none';
+                document.querySelectorAll('.cui-entity').forEach(card => card.style.display = '');
+                if (noResults) noResults.classList.add('hidden');
+                if (grid) grid.classList.remove('hidden');
+                document.getElementById('category-empty')?.classList.add('hidden');
+                updateFilterCount();
+                return;
+            }
+
+            let matched = 0;
+            let html = '';
+
+            document.querySelectorAll('.cui-entity').forEach(card => {
+                const name = (card.getAttribute('data-name-ar') || '').toLowerCase();
+                const tag = (card.getAttribute('data-tag-ar') || '').toLowerCase();
+                let services = [];
+                try {
+                    services = JSON.parse(card.getAttribute('data-services-ar') || '[]').map(s => String(s).toLowerCase());
+                } catch (e) { services = []; }
+
+                const nameMatch = name.includes(q);
+                const tagMatch = tag.includes(q);
+                const matchedService = services.find(s => s.includes(q)) || '';
+
+                if (nameMatch || tagMatch || matchedService) {
+                    card.style.display = '';
+                    matched++;
+                    const title = matchedService || card.querySelector('h3')?.textContent || '';
+                    html += `
+                        <div class="cui-suggest-item" onclick="location.href='${card.href}'">
+                            <div class="cui-suggest-ico"><i class="ti ${matchedService ? 'ti-file-text' : 'ti-building'}"></i></div>
+                            <div class="flex-1 min-w-0">
+                                <div class="truncate text-[13px] font-bold text-[#0E4A2C]">${title}</div>
+                                <div class="truncate text-[11px] text-[#6B8A78]">${nameMatch ? card.querySelector('h3')?.textContent : ''}</div>
+                            </div>
+                        </div>`;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            suggestions.innerHTML = html;
+            suggestions.style.display = html ? 'block' : 'none';
+
+            if (matched === 0) {
+                noResults?.classList.remove('hidden');
+                grid?.classList.add('hidden');
+            } else {
+                noResults?.classList.add('hidden');
+                grid?.classList.remove('hidden');
+                document.getElementById('category-empty')?.classList.add('hidden');
+            }
+            updateFilterCount();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('serviceSearch');
+            if (input) input.value = '';
+            searchServices('');
+        }
+
+        document.getElementById('serviceSearch')?.addEventListener('input', function () { searchServices(this.value); });
+        document.getElementById('clearSearch')?.addEventListener('click', clearSearch);
+
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.max-w-xl')) {
+                document.getElementById('searchSuggestions').style.display = 'none';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateFilterCount();
+        });
+    </script>
+</body>
+
+</html>

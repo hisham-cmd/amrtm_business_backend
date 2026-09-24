@@ -1,0 +1,91 @@
+services:
+  - type: web
+    name: amrtm-business
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_NAME
+        value: Amrtm
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        sync: false
+      - key: APP_DEBUG
+        value: "true"
+      - key: APP_URL
+        value: https://amrtm-business.onrender.com
+      - key: APP_LOCALE
+        value: ar
+      - key: APP_FALLBACK_LOCALE
+        value: ar
+      - key: APP_FAKER_LOCALE
+        value: ar_SA
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: debug
+
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        value: db65613.public.databaseasp.net
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        value: db65613.databaseasp.net
+      - key: DB_USERNAME
+        value: db65613.databaseasp.net
+      - key: DB_PASSWORD
+        sync: false
+
+      - key: DB_BUSINESS_HOST
+        value: db65613.public.databaseasp.net
+      - key: DB_BUSINESS_PORT
+        value: "3306"
+      - key: DB_BUSINESS_DATABASE
+        value: db65613.databaseasp.net
+      - key: DB_BUSINESS_USERNAME
+        value: db65613.databaseasp.net
+      - key: DB_BUSINESS_PASSWORD
+        sync: false
+
+      - key: BS_DB_HOST
+        value: db65613.public.databaseasp.net
+      - key: BS_DB_PORT
+        value: "3306"
+      - key: BS_DB_DATABASE
+        value: db65613.databaseasp.net
+      - key: BS_DB_USERNAME
+        value: db65613.databaseasp.net
+      - key: BS_DB_PASSWORD
+        value: "4d?NrK5+2#Pp"
+
+      - key: DB_JOBS_HOST
+        value: db65613.public.databaseasp.net
+      - key: DB_JOBS_PORT
+        value: "3306"
+      - key: DB_JOBS_DATABASE
+        value: db65613.databaseasp.net
+      - key: DB_JOBS_USERNAME
+        value: db65613.databaseasp.net
+      - key: DB_JOBS_PASSWORD
+        sync: false
+
+      - key: SESSION_DRIVER
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: MAIL_MAILER
+        value: resend
+      - key: MAIL_FROM_ADDRESS
+        value: no-reply@amrtm.com.sa
+      - key: MAIL_FROM_NAME
+        value: Amrtm
+      - key: RESEND_KEY
+        sync: false
+
+    healthCheckPath: /
+    autoDeploy: true
+    branch: main
