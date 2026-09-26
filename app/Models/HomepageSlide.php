@@ -29,12 +29,14 @@ class HomepageSlide extends Model
         }
 
         // الملفات المخزنة على قرص public (homepage/slides/...) تُخدم عبر
-        // route /media/public/* التي تقرأ من storage/app/public عبر Laravel
-        // مباشرة — دون الاعتماد على السيم لينك public/storage الذي قد يكون
-        // معطلاً على الاستضافة (أخطاء 403 Forbidden).
+        // مسار /storage الذي يقرأ من storage/app/public مباشرة — دون الاعتماد
+        // على السيم لينك public/storage الذي قد يكون معطلاً على الاستضافة (403).
+        //
+        // اسم المسار الفعلي في Laravel هو 'storage.public' (لا public.storage)،
+        // لأن ملف storage/routes.php يُسجَّل بـ name('storage.') ثم 'public.'.
         if (str_starts_with($this->image_path, 'homepage/')) {
             if (Storage::disk('public')->exists($this->image_path)) {
-                return route('public.storage', ['path' => $this->image_path]);
+                return route('storage.public', ['path' => $this->image_path]);
             }
 
             // بديل: صورة بنفس الاسم (بدون البادئة الرقمية) داخل public/images
@@ -43,11 +45,11 @@ class HomepageSlide extends Model
                 return asset('images/' . $cleanName);
             }
 
-            // الملف غير موجود بعد — نعيد رابط route حتى لا يظهر مسار storage معطل
-            return route('public.storage', ['path' => $this->image_path]);
+            // الملف غير موجود بعد — رابط بديل بدل مسار storage معطل
+            return asset('images/' . $cleanName);
         }
 
-        // أي مسار مخزن آخر (compat): عبر route /storage التي تخدم من القرص أيضاً
+        // أي مسار مخزن آخر (compat): عبر مسار /storage الذي يخدم من القرص أيضاً
         return url('storage/' . ltrim($this->image_path, '/'));
     }
 

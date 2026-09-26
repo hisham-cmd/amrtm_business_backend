@@ -676,102 +676,270 @@
             display: flex;
         }
 
+        /* ═══════════════════════════════════════════
+           الحقول المخصصة — نظام عرض احترافي
+           ═══════════════════════════════════════════ */
         .cui-custom-fields {
-            margin: 1.1rem 0;
+            margin: 1.25rem 0 .5rem;
+            animation: cuiFadeUp .35s cubic-bezier(.22, 1, .36, 1);
         }
 
+        @keyframes cuiFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* ── بطاقة الخدمة ───────────────────────── */
         .cui-custom-service {
-            border: 1px solid rgba(0, 108, 53, .12);
-            background: #FBFDFC;
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: .8rem;
+            position: relative;
+            border: 1px solid rgba(0, 108, 53, .13);
+            background: linear-gradient(180deg, #FDFEFD, #F7FBF8);
+            border-radius: 18px;
+            padding: 0;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 108, 53, .05);
+            transition: box-shadow .25s, transform .25s, border-color .25s;
         }
 
-        .cui-custom-service-title {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            color: #006C35;
-            font-size: 13px;
-            font-weight: 800;
-            margin-bottom: .9rem;
-        }
-
-        .cui-custom-help {
-            display: block;
-            color: #64748B;
-            font-size: 11px;
-            margin-top: 4px;
-        }
-
-        /* ── Custom fields (enhanced) ────────────────── */
-        .cui-custom-fields {
-            margin: 1.1rem 0 .4rem;
-        }
-
-        .cui-custom-service {
-            border: 1px solid rgba(0, 108, 53, .14);
-            background: linear-gradient(180deg, #FDFEFD, #F8FBF9);
-            border-radius: 14px;
-            padding: 1.1rem 1.15rem;
-            margin-bottom: .9rem;
-            box-shadow: 0 2px 10px rgba(0, 108, 53, .04);
-            transition: box-shadow .2s;
+        .cui-custom-service::before {
+            content: "";
+            position: absolute;
+            inset-inline-start: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #006C35, #00A651);
+            opacity: .85;
         }
 
         .cui-custom-service:hover {
-            box-shadow: 0 4px 16px rgba(0, 108, 53, .09);
+            box-shadow: 0 10px 28px rgba(0, 108, 53, .10);
+            border-color: rgba(0, 108, 53, .22);
         }
 
+        /* رأس البطاقة */
         .cui-custom-service-title {
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: #006C35;
-            font-size: 13.5px;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            padding-bottom: .7rem;
-            border-bottom: 1px dashed rgba(0, 108, 53, .18);
+            gap: .7rem;
+            color: #06301F;
+            font-size: 14px;
+            font-weight: 900;
+            padding: 1rem 1.2rem .9rem 1.2rem;
+            border-bottom: 1px solid rgba(0, 108, 53, .10);
+            background: rgba(0, 108, 53, .035);
         }
 
         .cui-custom-service-title i {
-            width: 28px;
-            height: 28px;
+            width: 34px;
+            height: 34px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
-            background: rgba(0, 108, 53, .1);
-            font-size: 14px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #006C35, #00A651);
+            color: #fff;
+            font-size: 15px;
             flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 108, 53, .22);
+        }
+
+        .cui-custom-service-title .cui-svc-txt {
+            flex: 1;
+            min-width: 0;
+            line-height: 1.4;
         }
 
         .cui-custom-req-badge {
-            margin-inline-start: auto;
             font-size: 10.5px;
-            font-weight: 700;
+            font-weight: 800;
             color: #C62828;
-            background: rgba(198, 40, 40, .08);
-            border: 1px solid rgba(198, 40, 40, .16);
-            padding: 2px 9px;
+            background: rgba(198, 40, 40, .07);
+            border: 1px solid rgba(198, 40, 40, .18);
+            padding: 3px 10px;
             border-radius: 20px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        /* حقول مخصصة داخل بطاقة الخدمة — تباعد وترتيب أنيق */
-        .cui-custom-service .cui-fld {
-            margin-bottom: 1rem;
+        /* شبكة الحقول داخل البطاقة */
+        .cui-custom-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem 1.1rem;
+            padding: 1.15rem 1.2rem 1.3rem;
         }
 
-        .cui-custom-service .cui-fld:last-child {
+        .cui-custom-grid>.cui-custom-item {
             margin-bottom: 0;
         }
 
-        .cui-custom-service .cui-fld label {
+        /* الحقول التي يجب أن تأخذ عرض العمودين كاملاً */
+        .cui-custom-grid>.cui-custom-item[data-wide="1"] {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 640px) {
+            .cui-custom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── عنصر الحقل ───────────────────────── */
+        .cui-custom-item .cui-fld label {
+            display: flex;
+            align-items: center;
+            gap: .35rem;
             font-size: 12.5px;
+            font-weight: 800;
+            color: #0B3D2A;
+            margin-bottom: .45rem;
+        }
+
+        .cui-custom-item .cui-fld label .req-star {
+            color: #C62828;
+            font-weight: 900;
+        }
+
+        .cui-custom-item .cui-fld input,
+        .cui-custom-item .cui-fld select,
+        .cui-custom-item .cui-fld textarea {
+            background: #fff;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            min-height: 48px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #04241A;
+            padding: 0 14px;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+        }
+
+        .cui-custom-item .cui-fld textarea {
+            height: auto;
+            min-height: 108px;
+            padding: 12px 14px;
+            line-height: 1.7;
+        }
+
+        .cui-custom-item .cui-fld select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23006C35' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 14px center;
+            padding-inline-end: 14px;
+            padding-inline-start: 38px;
+            cursor: pointer;
+        }
+
+        .cui-custom-item .cui-fld input::placeholder,
+        .cui-custom-item .cui-fld textarea::placeholder {
+            color: #A8B8C0;
+            font-weight: 500;
+        }
+
+        .cui-custom-item .cui-fld input:hover,
+        .cui-custom-item .cui-fld select:hover,
+        .cui-custom-item .cui-fld textarea:hover {
+            border-color: #BFD4C7;
+        }
+
+        .cui-custom-item .cui-fld input:focus,
+        .cui-custom-item .cui-fld select:focus,
+        .cui-custom-item .cui-fld textarea:focus {
+            outline: none;
+            border-color: #006C35;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(0, 108, 53, .09);
+        }
+
+        .cui-custom-item .cui-fld input.err,
+        .cui-custom-item .cui-fld select.err,
+        .cui-custom-item .cui-fld textarea.err {
+            border-color: #C62828;
+            background: #FFF8F8;
+            box-shadow: 0 0 0 4px rgba(198, 40, 40, .08);
+            animation: cuiShake .32s;
+        }
+
+        @keyframes cuiShake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        .cui-custom-help {
+            display: flex;
+            align-items: flex-start;
+            gap: 5px;
+            color: #6A8A7C;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-top: 5px;
+        }
+
+        .cui-custom-help i {
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ── حالة فارغة ───────────────────────── */
+        .cui-custom-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: .55rem;
+            border: 1.5px dashed rgba(0, 108, 53, .2);
+            background: linear-gradient(180deg, #FBFDFC, #F6FAF7);
+            border-radius: 18px;
+            padding: 2rem 1.2rem;
+            margin: 1.25rem 0 .5rem;
+        }
+
+        .cui-custom-empty-ico {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 108, 53, .08);
+            color: #006C35;
+            font-size: 23px;
+        }
+
+        .cui-custom-empty-t {
+            font-size: 14px;
+            font-weight: 900;
             color: #06301F;
+        }
+
+        .cui-custom-empty-s {
+            font-size: 12px;
+            color: #6A8A7C;
+            max-width: 320px;
+            line-height: 1.8;
         }
 
         /* عارض ملف أنيق للحقول المخصصة من نوع ملف */
@@ -779,19 +947,20 @@
             position: relative;
             display: flex;
             align-items: center;
-            gap: 8px;
-            border: 1.5px dashed rgba(0, 108, 53, .25);
-            border-radius: 10px;
-            background: #fff;
-            padding: 0 14px;
-            min-height: 46px;
+            gap: 10px;
+            border: 1.5px dashed rgba(0, 108, 53, .3);
+            border-radius: 13px;
+            background: linear-gradient(180deg, #FBFDFC, #F6FAF7);
+            padding: 10px 14px;
+            min-height: 56px;
             cursor: pointer;
-            transition: border-color .2s, background .2s;
+            transition: border-color .2s, background .2s, box-shadow .2s;
         }
 
         .cui-custom-file:hover {
             border-color: #006C35;
-            background: rgba(0, 108, 53, .03);
+            background: rgba(0, 108, 53, .05);
+            box-shadow: 0 4px 12px rgba(0, 108, 53, .08);
         }
 
         .cui-custom-file input[type="file"] {
@@ -807,18 +976,18 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
             background: rgba(0, 108, 53, .1);
             color: #006C35;
-            font-size: 13px;
+            font-size: 15px;
             flex-shrink: 0;
         }
 
         .cui-custom-file-name {
             font-size: 12.5px;
-            font-weight: 600;
+            font-weight: 700;
             color: #21493B;
             white-space: nowrap;
             overflow: hidden;
@@ -834,130 +1003,54 @@
             flex-shrink: 0;
         }
 
-        /* خيارات radio/checkbox — حالة الاختيار */
-        .cui-custom-option {
-            transition: border-color .15s, background .15s, box-shadow .15s;
-        }
-
-        .cui-custom-option:hover {
-            border-color: rgba(0, 108, 53, .45);
-            background: rgba(0, 108, 53, .04);
-        }
-
-        .cui-custom-option:has(input:checked) {
-            border-color: #006C35;
-            background: rgba(0, 108, 53, .08);
-            box-shadow: 0 1px 6px rgba(0, 108, 53, .1);
-        }
-
-        /* منطقة الحقول الثابتة — إخفاء/إظهار ناعم */
-        #legacy-fields {
-            transition: opacity .2s;
-        }
-
-        #legacy-fields[hidden] {
-            display: none !important;
-        }
-
+        /* خيارات radio/checkbox — بطاقات اختيار احترافية */
         .cui-custom-options {
             display: flex;
             flex-wrap: wrap;
             gap: .55rem;
         }
 
+        .cui-custom-options:has(input:only-of-type) {
+            flex-direction: column;
+        }
+
         .cui-custom-option {
             display: flex !important;
             align-items: center;
-            gap: 7px;
-            padding: .65rem .8rem;
-            border: 1px solid rgba(0, 108, 53, .12);
-            border-radius: 9px;
+            gap: .55rem;
+            padding: .7rem .9rem;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
             background: #fff;
             cursor: pointer;
-            font-weight: 600 !important;
+            font-weight: 700 !important;
+            font-size: 13px !important;
+            color: #0B3D2A;
             margin: 0 !important;
+            transition: border-color .18s, background .18s, box-shadow .18s, transform .18s;
+        }
+
+        .cui-custom-option:hover {
+            border-color: rgba(0, 108, 53, .5);
+            background: rgba(0, 108, 53, .04);
+            transform: translateY(-1px);
+        }
+
+        .cui-custom-option:has(input:checked) {
+            border-color: #006C35;
+            background: linear-gradient(180deg, rgba(0, 108, 53, .09), rgba(0, 108, 53, .05));
+            box-shadow: 0 4px 12px rgba(0, 108, 53, .13);
+            color: #05301E;
         }
 
         .cui-custom-option input {
-            width: 17px !important;
-            height: 17px !important;
+            width: 18px !important;
+            height: 18px !important;
             padding: 0 !important;
             box-shadow: none !important;
             accent-color: #006C35;
-        }
-
-        /* ── File upload ────────────────── */
-        .cui-area {
-            border: 2px dashed rgba(0, 108, 53, .25);
-            border-radius: 12px;
-            padding: 1.2rem;
-            text-align: center;
-            background: #F8FBF9;
             cursor: pointer;
-            transition: all .2s;
-            position: relative;
-        }
-
-        .cui-area:hover {
-            border-color: #006C35;
-            background: rgba(0, 108, 53, .04);
-        }
-
-        .cui-area input {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-
-        .cui-area-ico {
-            font-size: 26px;
-            color: #6A8A7C;
-        }
-
-        .cui-area-t {
-            font-size: 12.5px;
-            font-weight: 700;
-            color: #21493B;
-            margin-top: .4rem;
-        }
-
-        .cui-area-s {
-            font-size: 11px;
-            color: #6A8A7C;
-            margin-top: 3px;
-        }
-
-        .cui-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: .7rem;
-            justify-content: center;
-        }
-
-        .cui-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 9px;
-            border-radius: 7px;
-            background: rgba(0, 108, 53, .08);
-            color: #006C35;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .cui-chip-x {
-            cursor: pointer;
-            color: #6A8A7C;
-            font-size: 12px;
-        }
-
-        .cui-chip-x:hover {
-            color: #C62828;
+            flex-shrink: 0;
         }
 
         /* ── Privacy note ──────────────── */
@@ -1125,130 +1218,6 @@
             font-weight: 700;
             cursor: pointer;
             border: 1.5px solid rgba(0, 108, 53, .25);
-        }
-
-        /* ── Company card ──────────────── */
-        .cui-company-check input {
-            display: none;
-        }
-
-        .cui-company-label {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 16px 18px;
-            border: 1px solid var(--cui-border);
-            border-radius: 14px;
-            background: #fff;
-            cursor: pointer;
-            transition: .3s;
-            user-select: none;
-        }
-
-        .cui-company-label:hover {
-            border-color: #006C35;
-            box-shadow: 0 8px 20px rgba(0, 108, 53, .08);
-        }
-
-        .cui-company-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: rgba(0, 108, 53, .05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .cui-company-icon i {
-            font-size: 24px;
-            color: #006C35;
-        }
-
-        .cui-company-text {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cui-company-text strong {
-            color: #04241A;
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .cui-company-text small {
-            color: #6A8A7C;
-            font-size: 13px;
-            margin-top: 2px;
-        }
-
-        .cui-company-switch {
-            width: 48px;
-            height: 26px;
-            background: #d1d5db;
-            border-radius: 30px;
-            position: relative;
-            transition: .3s;
-            direction: ltr;
-        }
-
-        .cui-company-switch::before {
-            content: '';
-            width: 20px;
-            height: 20px;
-            background: #fff;
-            border-radius: 50%;
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            transition: .3s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
-        }
-
-        .cui-company-check input:checked+.cui-company-label {
-            border-color: #006C35;
-            background: #F8FBF9;
-        }
-
-        .cui-company-check input:checked+.cui-company-label .cui-company-switch {
-            background: #006C35;
-        }
-
-        .cui-company-check input:checked+.cui-company-label .cui-company-switch::before {
-            left: 25px;
-        }
-
-        .cui-company-card {
-            margin-top: 20px;
-            padding: 22px;
-            background: #FBFDFC;
-            border: 1px solid var(--cui-border);
-            border-inline-start: 5px solid #006C35;
-            border-radius: 14px;
-            animation: cuiFadeIn .35s ease;
-        }
-
-        .cui-company-card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 18px;
-            color: #006C35;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .cui-company-card-header i {
-            width: 42px;
-            height: 42px;
-            border-radius: 10px;
-            background: rgba(0, 108, 53, .06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
         }
 
         /* ── Agreement box ─────────────── */
@@ -1837,57 +1806,8 @@
                             <input type="hidden" id="fph" name="phone" value="{{ auth('business')->user()->phone ?? '' }}">
                             <input type="hidden" id="fem" name="email" value="{{ auth('business')->user()->email ?? '' }}">
 
-                            <!-- Custom fields -->
+                            <!-- الحقول المخصصة المُضافة من لوحة التحكم -->
                             <div class="cui-custom-fields" id="custom-fields-container" style="display:none;"></div>
-
-                            <!-- Company checkbox -->
-                            <div id="legacy-fields">
-                            <div class="cui-company-check">
-                                <input type="checkbox" id="isCompany">
-                                <label for="isCompany" class="cui-company-label">
-                                    <span class="cui-company-icon"><i class="ti ti-building"></i></span>
-                                    <span class="cui-company-text">
-                                        <strong>هل تمثل شركة؟</strong>
-                                        <small>حدد هذا الخيار إذا كنت تسجل نيابةً عن شركة أو مؤسسة.</small>
-                                    </span>
-                                    <span class="cui-company-switch"></span>
-                                </label>
-                            </div>
-
-                            <div id="companyFields" class="cui-company-card" style="display:none;">
-                                <div class="cui-company-card-header">
-                                    <i class="ti ti-building"></i>
-                                    <span>بيانات الشركة</span>
-                                </div>
-                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                    <div class="cui-fld">
-                                        <label>اسم الشركة</label>
-                                        <input type="text" id="fco" placeholder="مثال: شركة النور للخدمات">
-                                    </div>
-                                    <div class="cui-fld">
-                                        <label>السجل التجاري</label>
-                                        <input type="text" id="fcr" placeholder="مثال: 1010123456" dir="ltr">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="cui-fld">
-                                <label><span id="lno">ملاحظات</span></label>
-                                <textarea id="fno" placeholder="اكتب أي تفاصيل إضافية عن طلبك..."></textarea>
-                            </div>
-
-                            <div class="cui-fld">
-                                <label id="lfi">إرفاق ملفات</label>
-                                <div class="cui-area" id="f-area">
-                                    <input type="file" id="ffi" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                                        onchange="hndFiles(this)" />
-                                    <div class="cui-area-ico"><i class="ti ti-cloud-upload"></i></div>
-                                    <div class="cui-area-t" id="fat">اضغط لرفع الملفات أو اسحبها هنا</div>
-                                    <div class="cui-area-s" id="fas">PDF, JPG, PNG — حد أقصى 10MB</div>
-                                    <div class="cui-chips" id="f-chips"></div>
-                                </div>
-                            </div>
-                            </div><!-- /#legacy-fields -->
 
                             <div class="cui-prv"><i class="ti ti-shield-check"></i><span id="prv-t">بياناتك محمية ومشفرة. لن يتم
                                     مشاركتها مع أي جهة خارجية دون موافقتك.</span></div>
@@ -1950,12 +1870,7 @@
                             <div class="rounded-xl border border-[rgba(0,108,53,.1)] bg-[#FBFDFC] p-4 mb-5">
                                 <div class="cui-mitem"><span>الخدمة</span><strong id="rService"></strong></div>
                                 <div class="cui-mitem"><span>مدة التنفيذ</span><strong id="rDays"></strong></div>
-                                <div class="cui-mitem"><span>اسم الشركة</span><strong id="rCompany"></strong></div>
-                                <div class="cui-mitem"><span>السجل التجاري</span><strong id="rCR" dir="ltr"></strong></div>
-                                <div class="cui-mitem"><span>الملاحظات</span><strong id="rNotes"></strong></div>
                                 <div class="cui-mitem" id="rCustomFieldsWrap" style="display:none;"><span>معلومات إضافية</span><strong id="rCustomFields"></strong></div>
-                                <div class="cui-mitem" style="border:none;"><span>المرفقات</span><strong id="rFiles"></strong>
-                                </div>
                             </div>
 
                             <div
@@ -2079,8 +1994,6 @@
                 sel: 'اختر الخدمة المطلوبة...', dur: 'مدة الإنجاز:',
                 bl: 'رصيدك الحالي:', sar: 'ر.س',
                 ln: 'الاسم الكامل', lph: 'رقم الجوال', lem: 'البريد الإلكتروني',
-                lco: 'اسم الشركة', lcr: 'السجل التجاري', lno: 'ملاحظات', lfi: 'إرفاق ملفات',
-                fat: 'اضغط لرفع الملفات أو اسحبها هنا', fas: 'PDF, JPG, PNG — حد أقصى 10MB',
                 prv: 'بياناتك محمية ومشفرة. لن يتم مشاركتها مع أي جهة خارجية دون موافقتك.',
                 chngsvc: 'تغيير الخدمة',
                 sub: 'تقديم الطلب', erq: 'مطلوب', eph: 'غير صحيح', eem: 'غير صحيح',
@@ -2096,8 +2009,6 @@
                 bl: 'Your balance:', sar: 'SAR',
                 search: "Search for your service...",
                 ln: 'Full Name', lph: 'Mobile Number', lem: 'Email Address',
-                lco: 'Company Name', lcr: 'Commercial Registration', lno: 'Notes', lfi: 'Attach Files',
-                fat: 'Click to upload or drag & drop', fas: 'PDF, JPG, PNG — Max 10MB',
                 prv: 'Your data is protected and encrypted. It will not be shared with any third party.',
                 chngsvc: 'Change service',
                 sub: 'Submit Application', erq: 'Required', eph: 'Invalid', eem: 'Invalid',
@@ -2110,7 +2021,6 @@
         };
 
         let lang = localStorage.getItem('amrtm_lang') || 'ar';
-        let files = [];
         let curBalance = 0;
         let currentStep = 1;
         let selectedServices = [];
@@ -2132,12 +2042,17 @@
             const entTagEl = document.getElementById('ent-tag');
             if (entTagEl) entTagEl.textContent = pageData.entityTag[lang] || '';
 
-            const ids = ['lno', 'lfi', 'fat', 'fas', 'prv-t', 'chng-svc', 'lg-ttl', 'lg-sub', 'lg-login-lbl', 'lg-reg-lbl', 'sc-t', 'sc-s', 'sc-dl', 'sc-nl', 'bal-lbl'];
+            const ids = ['prv-t', 'chng-svc', 'lg-ttl', 'lg-sub', 'lg-login-lbl', 'lg-reg-lbl', 'sc-t', 'sc-s', 'sc-dl', 'sc-nl', 'bal-lbl'];
             ids.forEach(id => {
                 const el = document.getElementById(id);
                 if (el && t[id] !== undefined) el.textContent = t[id];
             });
             if (document.getElementById('sc-r')) document.getElementById('sc-r').textContent = t.scr + ' —';
+            // إعادة رسم الحقول المخصصة بال-language الحالية
+            if (typeof selectedServices !== 'undefined' && selectedServices.length) {
+                renderCustomFields();
+                syncCustomValues();
+            }
         }
 
         function updateNavAuth() {
@@ -2225,30 +2140,32 @@
         function renderCustomField(svcId, f, value) {
             const key = f.key;
             const id = customFieldId(svcId, key);
-            const label = (lang === 'ar' ? (f.label_ar || key) : (f.label_en || f.label_ar || key));
-            const placeholder = lang === 'ar' ? f.placeholder_ar : f.placeholder_en;
-            const help = lang === 'ar' ? f.help_ar : f.help_en;
-            const req = f.required ? '<span style="color:#dc2626;"> *</span>' : '';
+            const isAr = lang === 'ar';
+            const label = isAr ? (f.label_ar || key) : (f.label_en || f.label_ar || key);
+            const placeholder = isAr ? f.placeholder_ar : f.placeholder_en;
+            const help = isAr ? f.help_ar : f.help_en;
+            const req = f.required ? '<span class="req-star">*</span>' : '';
             const reqAttr = f.required ? '1' : '';
             const dir = ['number', 'tel', 'date'].includes(f.type) ? ' dir="ltr"' : '';
             let control = '';
+            let wide = ['textarea', 'file', 'radio', 'checkbox', 'select'].includes(f.type) ? '1' : '0';
 
             switch (f.type) {
                 case 'textarea':
-                    control = `<textarea id="${id}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}" placeholder="${htmlEscape(placeholder)}">${htmlEscape(value)}</textarea>`;
+                    control = `<textarea id="${id}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}" placeholder="${htmlEscape(placeholder || (isAr ? 'اكتب التفاصيل هنا...' : 'Type details here...'))}">${htmlEscape(value)}</textarea>`;
                     break;
                 case 'select': {
                     const opts = (f.options || []).map(o => {
-                        const oLabel = lang === 'ar' ? (o.label_ar || o.value) : (o.label_en || o.label_ar || o.value);
+                        const oLabel = isAr ? (o.label_ar || o.value) : (o.label_en || o.label_ar || o.value);
                         const sel = String(value) === String(o.value) ? ' selected' : '';
                         return `<option value="${htmlEscape(o.value)}"${sel}>${htmlEscape(oLabel)}</option>`;
                     }).join('');
-                    control = `<select id="${id}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}"><option value="">${lang === 'ar' ? '— اختر —' : '— Select —'}</option>${opts}</select>`;
+                    control = `<select id="${id}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}"><option value="">${isAr ? '— اختر —' : '— Select —'}</option>${opts}</select>`;
                     break;
                 }
                 case 'radio': {
                     const opts = (f.options || []).map(o => {
-                        const oLabel = lang === 'ar' ? (o.label_ar || o.value) : (o.label_en || o.label_ar || o.value);
+                        const oLabel = isAr ? (o.label_ar || o.value) : (o.label_en || o.label_ar || o.value);
                         const chk = String(value) === String(o.value) ? ' checked' : '';
                         return `<label class="cui-custom-option"><input type="radio" name="${id}" value="${htmlEscape(o.value)}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}"${chk}>${htmlEscape(oLabel)}</label>`;
                     }).join('');
@@ -2256,28 +2173,30 @@
                     break;
                 }
                 case 'checkbox':
-                    control = `<label class="cui-custom-option"><input type="checkbox" id="${id}" value="1" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}"${value ? ' checked' : ''}>${lang === 'ar' ? 'نعم، أوافق' : 'Yes, agree'}</label>`;
+                    control = `<label class="cui-custom-option"><input type="checkbox" id="${id}" value="1" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}"${value ? ' checked' : ''}>${isAr ? 'نعم، أوافق' : 'Yes, agree'}</label>`;
                     break;
                 case 'file': {
                     const fileName = (value && value.name) ? htmlEscape(value.name) : '';
-                    const hint = lang === 'ar' ? 'اختر ملفاً' : 'Choose file';
+                    const hint = isAr ? 'اختر ملفاً' : 'Choose file';
                     control = `<div class="cui-custom-file">
                         <span class="cui-custom-file-ico"><i class="ti ti-paperclip"></i></span>
-                        <span class="cui-custom-file-name" id="${id}_name">${fileName || (lang === 'ar' ? 'اضغط لاختيار الملف' : 'Click to choose file')}</span>
+                        <span class="cui-custom-file-name" id="${id}_name">${fileName || (isAr ? 'اضغط لاختيار الملف' : 'Click to choose file')}</span>
                         <span class="cui-custom-file-hint">${fileName ? '✓' : hint}</span>
                         <input type="file" id="${id}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}" accept=".pdf,.jpg,.jpeg,.png">
                     </div>`;
                     break;
                 }
                 default:
-                    control = `<input type="${['number', 'email', 'tel', 'date'].includes(f.type) ? f.type : 'text'}" id="${id}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}" placeholder="${htmlEscape(placeholder)}"${dir}>`;
+                    control = `<input type="${['number', 'email', 'tel', 'date'].includes(f.type) ? f.type : 'text'}" id="${id}" value="${htmlEscape(value)}" data-type="${f.type}" data-field data-required="${reqAttr}" data-key="${key}" data-svc="${svcId}" placeholder="${htmlEscape(placeholder)}"${dir}>`;
                     break;
             }
 
-            return `<div class="cui-fld" style="margin-bottom:.9rem;">
-                <label>${htmlEscape(label)}${req}</label>
-                ${control}
-                ${help ? `<span class="cui-custom-help">${htmlEscape(help)}</span>` : ''}
+            return `<div class="cui-custom-item" data-wide="${wide}">
+                <div class="cui-fld">
+                    <label for="${id}">${htmlEscape(label)}${req}</label>
+                    ${control}
+                    ${help ? `<span class="cui-custom-help"><i class="ti ti-info-circle"></i>${htmlEscape(help)}</span>` : ''}
+                </div>
             </div>`;
         }
 
@@ -2324,36 +2243,56 @@
             const el = document.getElementById('custom-fields-container');
             if (!el) return;
             const svcs = selectedServices.filter(s => (s.customFields || []).length);
-            const legacy = document.getElementById('legacy-fields');
+            const isAr = lang === 'ar';
 
+            // لا توجد أي حقول مخصصة → حالة فارغة أنيقة (بدون حقول ثابتة)
             if (!svcs.length) {
-                el.innerHTML = '';
-                el.style.display = 'none';
-                // لا توجد حقول مخصصة → تُظهر الحقول العامة الثابتة
-                if (legacy) legacy.removeAttribute('hidden');
+                el.innerHTML = selectedServices.length
+                    ? `<div class="cui-custom-empty">
+                        <span class="cui-custom-empty-ico"><i class="ti ti-forms"></i></span>
+                        <span class="cui-custom-empty-t">${isAr ? 'لا توجد حقول مخصصة' : 'No custom fields'}</span>
+                        <span class="cui-custom-empty-s">${isAr
+                            ? 'الخدمات المختارة لا تتطلب إدخال أي بيانات إضافية. يمكنك المتابعة مباشرة إلى مراجعة الطلب.'
+                            : 'The selected services require no additional input. You can continue straight to review.'}</span>
+                    </div>`
+                    : '';
+                el.style.display = selectedServices.length ? 'block' : 'none';
+                bindCustomFieldEvents(el);
                 return;
             }
 
-            // توجد حقول مخصصة → تُعرض الحقول المخصصة فقط وتُخفى الثابتة
-            if (legacy) legacy.setAttribute('hidden', '');
-
             const html = svcs.map(svc => {
                 const vals = customValues[svc.id] || {};
-                const title = (lang === 'ar' ? svc.nameAr : svc.nameEn) || '';
-                const fieldHtml = svc.customFields.map(f => renderCustomField(svc.id, f, vals[f.key] ?? '')).join('');
+                const title = (isAr ? svc.nameAr : svc.nameEn) || '';
+                const fieldsHtml = svc.customFields.map(f => renderCustomField(svc.id, f, vals[f.key] ?? '')).join('');
                 const reqCount = svc.customFields.filter(f => f.required).length;
                 const badge = reqCount > 0
-                    ? `<span class="cui-custom-req-badge">${reqCount} ${lang === 'ar' ? 'حقول مطلوبة' : 'required'}</span>`
-                    : '';
+                    ? `<span class="cui-custom-req-badge">${reqCount} ${isAr ? 'مطلوب' : 'required'}</span>`
+                    : `<span class="cui-custom-req-badge" style="color:#006C35;background:rgba(0,108,53,.07);border-color:rgba(0,108,53,.16);">${isAr ? 'اختياري' : 'optional'}</span>`;
                 return `<div class="cui-custom-service">
-                    <div class="cui-custom-service-title"><i class="ti ti-forms"></i>${htmlEscape(title)}${badge}</div>
-                    ${fieldHtml}
+                    <div class="cui-custom-service-title">
+                        <i class="ti ti-forms"></i>
+                        <span class="cui-svc-txt">${htmlEscape(title)}</span>
+                        ${badge}
+                    </div>
+                    <div class="cui-custom-grid">${fieldsHtml}</div>
                 </div>`;
             }).join('');
             el.innerHTML = html;
             el.style.display = 'block';
+            bindCustomFieldEvents(el);
+        }
+
+        function bindCustomFieldEvents(el) {
+            if (!el) return;
             ['input', 'change'].forEach(evt => el.removeEventListener(evt, syncCustomValues));
             ['input', 'change'].forEach(evt => el.addEventListener(evt, syncCustomValues));
+
+            // إزالة علامة الخطأ فور التصحيح
+            el.querySelectorAll('[data-field].err').forEach(ctrl => {
+                const ev = ctrl.type === 'select' || ctrl.type === 'radio' || ctrl.type === 'checkbox' ? 'change' : 'input';
+                ctrl.addEventListener(ev, () => ctrl.classList.remove('err'), { once: true });
+            });
 
             // تحديث اسم الملف المختار داخل الحقول المخصصة من نوع ملف
             el.querySelectorAll('input[type="file"][data-field]').forEach(inp => {
@@ -2567,9 +2506,6 @@
             document.getElementById('rName').textContent = window.AMRTM_USER.name;
             document.getElementById('rPhone').textContent = window.AMRTM_USER.phone;
             document.getElementById('rEmail').textContent = window.AMRTM_USER.email;
-            document.getElementById('rCompany').textContent = document.getElementById('fco')?.value || '-';
-            document.getElementById('rCR').textContent = document.getElementById('fcr')?.value || '-';
-            document.getElementById('rNotes').textContent = document.getElementById('fno')?.value || 'لا توجد';
             const svcEl = document.getElementById('rService');
             if (svcEl) svcEl.innerHTML = selectedServices.length
                 ? selectedServices.map(s => '<div style="font-size:13px;line-height:1.5;">' + '&bull; ' + (lang === 'ar' ? s.nameAr : s.nameEn) + '</div>').join('')
@@ -2612,29 +2548,7 @@
             }
             if (rcf) rcf.innerHTML = cfHtml;
             if (rcfWrap) rcfWrap.style.display = cfHtml ? '' : 'none';
-
-            const cnt = document.getElementById('ffi')?.files.length || 0;
-            document.getElementById('rFiles').textContent = cnt ? cnt + ' ملف' : 'لا توجد';
         }
-
-        /* ═══ File Handling ═══ */
-        function hndFiles(inp) {
-            Array.from(inp.files).forEach(f => {
-                if (f.size > 10 * 1024 * 1024) return;
-                files.push(f);
-            });
-            renderChips();
-            inp.value = '';
-        }
-
-        function renderChips() {
-            const el = document.getElementById('f-chips');
-            if (el) el.innerHTML = files.map((f, i) =>
-                `<div class="cui-chip"><i class="ti ti-file"></i>${f.name.length > 18 ? f.name.slice(0, 15) + '...' : f.name}<span class="cui-chip-x" onclick="rmFile(${i})"><i class="ti ti-x"></i></span></div>`
-            ).join('');
-        }
-
-        function rmFile(i) { files.splice(i, 1); renderChips(); }
 
         /* ═══ Validation ═══ */
         function validate() {
@@ -2722,10 +2636,6 @@
                 fd.append('client_name', window.AMRTM_USER?.name || '');
                 fd.append('client_email', window.AMRTM_USER?.email || '');
                 fd.append('client_phone', window.AMRTM_USER?.phone || '');
-                fd.append('company_name', document.getElementById('fco')?.value.trim() || '');
-                fd.append('company_cr', document.getElementById('fcr')?.value.trim() || '');
-                fd.append('notes', document.getElementById('fno')?.value.trim() || '');
-                files.forEach((file) => fd.append('attachments[]', file));
                 return fd;
             };
 
@@ -2779,7 +2689,6 @@
 
         function rstFm() {
             selectedServices = [];
-            files = [];
             customValues = {};
             currentStep = 1;
             try {
@@ -2799,11 +2708,6 @@
             const searchInp = document.getElementById('svcSearchInput');
             if (searchInp) searchInp.value = '';
             filterOptions('');
-            ['fco', 'fcr', 'fno'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = '';
-            });
-            renderChips();
             document.querySelectorAll('#svcGrid .cui-svc-card:not(.empty-state)').forEach(c => c.classList.remove('selected'));
             const nextBtn = document.getElementById('step1Next');
             if (nextBtn) nextBtn.disabled = true;
@@ -2859,14 +2763,6 @@
             if (stored !== 'ar') setLang(stored);
             if (window.AMRTM_USER) loadBalance();
         });
-
-        const isCompany = document.getElementById('isCompany');
-        const companyFields = document.getElementById('companyFields');
-        if (isCompany && companyFields) {
-            isCompany.addEventListener('change', function () {
-                companyFields.style.display = this.checked ? 'block' : 'none';
-            });
-        }
 
         document.getElementById('usrModal')?.addEventListener('click', function (e) {
             if (e.target === this) closeUserModal();

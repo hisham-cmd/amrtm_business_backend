@@ -7,9 +7,9 @@
                         <h3 class="flex items-center gap-2 text-base font-bold text-gray-900 dark:text-white"><i
                                 class="ti ti-wallet text-emerald-600"></i><span
                                 id="bal-modal-ttl">تعديل الرصيد</span></h3>
-                        <button type="button" aria-label="إغلاق"
-                            class="ms-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-                            onclick="closeBalanceModal()"><i class="ti ti-x"></i></button>
+                        <x-ui.button variant="ghost" size="sm" aria-label="إغلاق"
+                            class="ms-auto h-8! w-8! shrink-0 rounded-lg! bg-transparent! p-0! text-sm! text-gray-400! hover:bg-gray-200! hover:text-gray-900! dark:hover:bg-gray-600! dark:hover:text-white!"
+                            onclick="closeBalanceModal()"><i class="ti ti-x"></i></x-ui.button>
                     </div>
                     <div class="flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 dark:bg-gray-700">
                         <span class="text-[13px] font-bold text-slate-700 dark:text-gray-200" id="bal-user-name">—</span>
@@ -54,9 +54,9 @@
                 <div class="flex items-center justify-between rounded-t-2xl border-b border-gray-200 p-4 dark:border-gray-600 md:p-5">
                     <h3 class="flex items-center gap-2 text-base font-bold text-gray-900 dark:text-white"><i
                             class="ti ti-wallet text-emerald-600"></i><span>شحن رصيد يدوي</span></h3>
-                    <button type="button" aria-label="إغلاق"
-                        class="ms-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onclick="closeManualCharge()"><i class="ti ti-x"></i></button>
+                    <x-ui.button variant="ghost" size="sm" aria-label="إغلاق"
+                        class="ms-auto h-8! w-8! shrink-0 rounded-lg! bg-transparent! p-0! text-sm! text-gray-400! hover:bg-gray-200! hover:text-gray-900! dark:hover:bg-gray-600! dark:hover:text-white!"
+                        onclick="closeManualCharge()"><i class="ti ti-x"></i></x-ui.button>
                 </div>
                 <div class="max-h-[85vh] space-y-4 overflow-y-auto p-4 md:p-5">
                     <div>
@@ -118,9 +118,9 @@
                 <div class="flex items-center justify-between rounded-t-2xl border-b border-gray-200 p-4 dark:border-gray-600 md:p-5">
                     <h3 class="flex items-center gap-2 text-base font-bold text-gray-900 dark:text-white"><i
                             class="ti ti-user-plus text-emerald-600"></i>إضافة مدير جديد</h3>
-                    <button type="button" aria-label="إغلاق"
-                        class="ms-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onclick="closeCreateAdminModal()"><i class="ti ti-x"></i></button>
+                    <x-ui.button variant="ghost" size="sm" aria-label="إغلاق"
+                        class="ms-auto h-8! w-8! shrink-0 rounded-lg! bg-transparent! p-0! text-sm! text-gray-400! hover:bg-gray-200! hover:text-gray-900! dark:hover:bg-gray-600! dark:hover:text-white!"
+                        onclick="closeCreateAdminModal()"><i class="ti ti-x"></i></x-ui.button>
                 </div>
                 <div class="max-h-[85vh] space-y-4 overflow-y-auto p-4 md:p-5">
                     <div><x-ui.label>الاسم</x-ui.label><x-ui.input type="text" id="new-admin-name"
@@ -147,9 +147,9 @@
                 <div class="flex items-center justify-between rounded-t-2xl border-b border-gray-200 p-4 dark:border-gray-600 md:p-5">
                     <h3 class="flex items-center gap-2 text-base font-bold text-gray-900 dark:text-white"><i
                             class="ti ti-file-description text-emerald-600"></i><span>عرض العقد</span></h3>
-                    <button type="button" aria-label="إغلاق"
-                        class="ms-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
-                        onclick="closeContractView()"><i class="ti ti-x"></i></button>
+                    <x-ui.button variant="ghost" size="sm" aria-label="إغلاق"
+                        class="ms-auto h-8! w-8! shrink-0 rounded-lg! bg-transparent! p-0! text-sm! text-gray-400! hover:bg-gray-200! hover:text-gray-900! dark:hover:bg-gray-600! dark:hover:text-white!"
+                        onclick="closeContractView()"><i class="ti ti-x"></i></x-ui.button>
                 </div>
                 <div class="max-h-[85vh] space-y-1.5 overflow-y-auto p-4 md:p-5">
 

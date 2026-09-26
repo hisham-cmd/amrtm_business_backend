@@ -17,9 +17,11 @@ use App\Models\GovService;
 use App\Models\ServicePayment;
 use App\Models\ServiceRequest;
 use App\Services\ServiceRequestService;
+use App\Support\ApiResponse;
 use App\Support\AttachmentScanner;
 use App\Support\ContactDataGuard;
 use App\Support\MessageAttachmentStorage;
+use App\Support\ServiceDuration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +30,8 @@ use Illuminate\View\View;
 
 class ServiceCatalogController extends Controller
 {
+    use ApiResponse;
+
     public function index(): View
     {
         $categories = collect();
@@ -1394,39 +1398,91 @@ class ServiceCatalogController extends Controller
     }
 
     /**
+     * بنية خدمة واحدة كما يعرضها كتالوج الواجهة.
+     * كل الحقول مأخوذة حرفياً من قاعدة البيانات — لا قيم افتراضية وهمية.
+     *
+     * @return array<string, mixed>
+     */
+    private function catalogServicePayload(GovService $s): array
+    {
+        return [
+            'id'             => $s->id,
+            'entity_id'      => $s->entity_id,
+            'name_ar'        => $s->name_ar,
+            'name_en'        => $s->name_en,
+            'icon'           => $s->icon,
+            'price'          => (float) $s->price,
+            'duration'       => ServiceDuration::format($s->duration_min, $s->duration_max, $s->duration_unit),
+            'duration_min'   => $s->duration_min,
+            'duration_max'   => $s->duration_max,
+            'duration_unit'  => $s->duration_unit,
+            'description_ar' => $s->description_ar,
+            'description_en' => $s->description_en,
+            // الحقول المخصصة المعرّفة في لوحة التحكم — تُمرَّر كما هي
+            // حتى تبني الواجهة نموذج الطلب الديناميكي منها.
+            'custom_fields'  => $s->custom_fields ?: [],
+            'custom_fields_count' => count($s->custom_fields ?: []),
+            'sort_order'     => (int) $s->sort_order,
+            'image_url'      => $this->uploadedImageUrl($s->images),
+        ];
+    }
+
+    /**
+     * رابط مطلق حقيقي لصورة مرفوعة في قاعدة البيانات، أو null إن لم توجد.
+     * لا يُختلق رابط بديل — absence بيانات يعني null.
+     */
+    private function uploadedImageUrl(?string $file): ?string
+    {
+        $file = trim((string) $file);
+
+        if ($file === '') {
+            return null;
+        }
+
+        // مسار مطلق مخزّن مسبقاً (storage أو رابط خارجي) — يُعاد كما هو.
+        if (str_starts_with($file, 'http://') || str_starts_with($file, 'https://') || str_starts_with($file, '/')) {
+            return $file;
+        }
+
+        return url('/media/uploads/' . rawurlencode($file));
+    }
+
+    /**
      * JSON: صفحة تصنيف الكتالوج — نفس بيانات view('update_service.catalog_category').
+     * لا بيانات وهمية إطلاقاً: إن لم يوجد التصنيف الفعّال يُعاد 404.
      */
     public function apiCatalogCategory(string $key): JsonResponse
     {
         try {
             $category = Category::where('key', $key)->where('is_active', true)->first();
 
-            if (!$category) {
-                $category = new Category([
-                    'key' => $key,
-                    'name_ar' => $key === 'ministries' ? 'الوزارات' : ($key === 'authorities' ? 'الهيئات والمؤسسات الحكومية' : 'الشركات والجهات الخاصة'),
-                    'name_en' => ucfirst($key),
-                ]);
-                $category->setRelation('entities', collect());
+            if (! $category) {
+                return response()->json([
+                    'isSuccess' => false,
+                    'value'     => null,
+                    'error'     => ['message' => 'التصنيف غير موجود', 'code' => 'CATEGORY_NOT_FOUND'],
+                    'statusCode' => 404,
+                ], 404);
             }
 
-            $entitiesQuery = Entity::where('category_id', $category->id)
+            $entities = Entity::where('category_id', $category->id)
                 ->where('is_active', true)
-                ->with(['govServices' => fn($q) => $q->where('is_active', true)->orderBy('sort_order')])
-                ->orderBy('sort_order');
-
-            $entities = $entitiesQuery->get();
-            $category->setRelation('entities', $entities);
+                ->with(['govServices' => fn($q) => $q->where('is_active', true)->orderBy('sort_order')->orderBy('id')])
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get();
 
             return response()->json([
                 'category' => [
-                    'id'      => $category->id,
-                    'key'     => $category->key,
-                    'name_ar' => $category->name_ar,
-                    'name_en' => $category->name_en,
-                    'icon'    => $category->icon,
-                    'color'   => $category->color,
-                    'bg'      => $category->bg,
+                    'id'       => $category->id,
+                    'key'      => $category->key,
+                    'name_ar'  => $category->name_ar,
+                    'name_en'  => $category->name_en,
+                    'icon'     => $category->icon,
+                    'color'    => $category->color,
+                    'bg'       => $category->bg,
+                    'entities_count' => $entities->count(),
+                    'services_count' => $entities->sum(fn($e) => $e->govServices->count()),
                 ],
                 'entities' => $entities->map(fn($e) => [
                     'id'         => $e->id,
@@ -1438,76 +1494,83 @@ class ServiceCatalogController extends Controller
                     'tag_ar'     => $e->tag_ar,
                     'tag_en'     => $e->tag_en,
                     'images'     => $e->images,
-                    'services'   => $e->govServices->map(fn($s) => [
-                        'id'      => $s->id,
-                        'name_ar' => $s->name_ar,
-                        'name_en' => $s->name_en,
-                    ]),
+                    'image_url'  => $this->uploadedImageUrl($e->images),
+                    'services_count' => $e->govServices->count(),
+                    'services'   => $e->govServices->map(fn($s) => $this->catalogServicePayload($s)),
                 ]),
             ]);
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('apiCatalogCategory DB error: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('apiCatalogCategory DB error: ' . $e->getMessage());
 
-            return response()->json(['category' => ['key' => $key, 'name_ar' => $key, 'name_en' => $key, 'icon' => null, 'color' => null, 'bg' => null], 'entities' => []]);
+            return response()->json([
+                'isSuccess' => false,
+                'value'     => null,
+                'error'     => ['message' => 'تعذّر تحميل بيانات التصنيف', 'code' => 'CATEGORY_FETCH_FAILED'],
+                'statusCode' => 500,
+            ], 500);
         }
     }
 
     /**
      * JSON: صفحة جهة — نفس بيانات view('update_service.catalog_entity').
+     * لا بيانات وهمية إطلاقاً: الجهة غير الموجودة أو غير الفعّالة تُرجع 404.
      */
     public function apiCatalogEntity(string $key, int $entityId): JsonResponse
     {
         try {
             $category = Category::where('key', $key)->where('is_active', true)->first();
-            $entity = Entity::where('id', $entityId)->where('is_active', true)->first();
+            $entity   = Entity::where('id', $entityId)->where('is_active', true)->first();
 
-            if (!$entity) {
-                return response()->json(['category' => ['key' => $key, 'name_ar' => 'الجهة', 'name_en' => 'Entity'], 'entity' => null, 'services' => []]);
+            if (! $entity) {
+                return response()->json([
+                    'isSuccess' => false,
+                    'value'     => null,
+                    'error'     => ['message' => 'الجهة غير موجودة', 'code' => 'ENTITY_NOT_FOUND'],
+                    'statusCode' => 404,
+                ], 404);
             }
 
             $services = GovService::where('entity_id', $entity->id)
                 ->where('is_active', true)
                 ->orderBy('sort_order')
+                ->orderBy('id')
                 ->get()
-                ->map(fn($s) => [
-                    'id'            => $s->id,
-                    'name_ar'       => $s->name_ar,
-                    'name_en'       => $s->name_en,
-                    'icon'          => $s->icon,
-                    'price'         => (float) $s->price,
-                    'duration'      => \App\Support\ServiceDuration::format($s->duration_min, $s->duration_max, $s->duration_unit),
-                    'duration_min'  => $s->duration_min,
-                    'duration_max'  => $s->duration_max,
-                    'duration_unit' => $s->duration_unit,
-                    'description'   => $s->description,
-                ]);
+                ->map(fn($s) => $this->catalogServicePayload($s));
 
             return response()->json([
-                'category' => [
-                    'id'      => $category?->id,
-                    'key'     => $category?->key ?? $key,
-                    'name_ar' => $category?->name_ar ?? 'الجهة',
-                    'name_en' => $category?->name_en ?? 'Entity',
-                    'color'   => $category?->color,
-                    'bg'      => $category?->bg,
-                ],
+                'category' => $category ? [
+                    'id'      => $category->id,
+                    'key'     => $category->key,
+                    'name_ar' => $category->name_ar,
+                    'name_en' => $category->name_en,
+                    'icon'    => $category->icon,
+                    'color'   => $category->color,
+                    'bg'      => $category->bg,
+                ] : null,
                 'entity' => [
-                    'id'      => $entity->id,
-                    'name_ar' => $entity->name_ar,
-                    'name_en' => $entity->name_en,
-                    'icon'    => $entity->icon,
-                    'color'   => $entity->color,
-                    'bg'      => $entity->bg,
-                    'tag_ar'  => $entity->tag_ar,
-                    'tag_en'  => $entity->tag_en,
-                    'images'  => $entity->images,
+                    'id'       => $entity->id,
+                    'category_id' => $entity->category_id,
+                    'name_ar'  => $entity->name_ar,
+                    'name_en'  => $entity->name_en,
+                    'icon'     => $entity->icon,
+                    'color'    => $entity->color,
+                    'bg'       => $entity->bg,
+                    'tag_ar'   => $entity->tag_ar,
+                    'tag_en'   => $entity->tag_en,
+                    'images'   => $entity->images,
+                    'image_url' => $this->uploadedImageUrl($entity->images),
                 ],
                 'services' => $services,
             ]);
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('apiCatalogEntity DB error: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('apiCatalogEntity DB error: ' . $e->getMessage());
 
-            return response()->json(['category' => ['key' => $key, 'name_ar' => 'الجهة', 'name_en' => 'Entity'], 'entity' => null, 'services' => []]);
+            return response()->json([
+                'isSuccess' => false,
+                'value'     => null,
+                'error'     => ['message' => 'تعذّر تحميل بيانات الجهة', 'code' => 'ENTITY_FETCH_FAILED'],
+                'statusCode' => 500,
+            ], 500);
         }
     }
 
@@ -1601,29 +1664,21 @@ class ServiceCatalogController extends Controller
     }
 
     /**
-     * JSON: صفحة دليل المكاتب — تخصصات النوع مع عدّادات (مطابق لـ office_directory.blade.php).
+     * JSON: صفحة دليل المكاتب — تخصصات النوع مع عدّادات (مطابق 1:1 لـ office_directory.blade.php).
+     *
+     * نفس مصدر بيانات الواجهة القديمة تماماً (aggregateSpecialtyCards):
+     * كروت التخصصات تُبنى من خدمات المكاتب المساندة المعتمدة ذات specialty_id،
+     * وليس من كل التخصصات النشطة أو خدمات الحكومة المرتبطة (bs_specialty_services).
      */
     public function apiOfficeSpecialties(string $type): JsonResponse
     {
         try {
-            $specialties = \App\Models\Business\Specialty::where('is_active', true)
-                ->where('office_type', $type)
-                ->with(['services' => fn($q) => $q->where('is_active', true)->orderBy('sort_order')])
-                ->orderBy('name_ar')
-                ->get();
-
-            // عدّ المكاتب المرتبطة بكل تخصص
-            $pivot = \Illuminate\Support\Facades\DB::connection('business')
-                ->table('bs_office_specialties')
-                ->whereIn('specialty_id', $specialties->pluck('id'))
-                ->selectRaw('specialty_id, count(*) as offices_count')
-                ->groupBy('specialty_id')
-                ->pluck('offices_count', 'specialty_id');
+            $cards = $this->aggregateSpecialtyCards($type);
 
             $totalOffices = \App\Models\Business\Office::where('type', $type)
                 ->where('is_active', true)
                 ->where('is_verified', true)
-                ->visibleInDirectory()
+                ->supportingOffices()
                 ->count();
 
             $cfg = $this->officeTypeConfig($type);
@@ -1631,20 +1686,20 @@ class ServiceCatalogController extends Controller
             return response()->json([
                 'type'          => $type,
                 'config'        => $cfg,
-                'total_specialties' => $specialties->count(),
+                'total_specialties' => count($cards),
                 'total_offices' => $totalOffices,
-                'specialties'   => $specialties->map(fn($s) => [
-                    'id'            => $s->id,
-                    'name_ar'       => $s->name_ar,
-                    'name_en'       => $s->name_en ?? $s->name_ar,
-                    'offices_count' => (int) ($pivot[$s->id] ?? 0),
-                    'services_count' => $s->services->count(),
-                    'services'      => $s->services->take(3)->map(fn($svc) => [
-                        'name_ar' => $svc->name_ar,
-                        'name_en' => $svc->name_en ?? $svc->name_ar,
-                    ]),
-                    'more_count'    => max(0, $s->services->count() - 3),
-                ]),
+                'specialties'   => collect($cards)->map(fn($card) => [
+                    'id'            => $card['id'],
+                    'name_ar'       => $card['specialty']->name_ar,
+                    'name_en'       => $card['specialty']->name_en ?? $card['specialty']->name_ar,
+                    'offices_count' => (int) $card['offices_count'],
+                    'services_count' => (int) $card['services_count'],
+                    'services'      => collect($card['services'])->take(3)->map(fn($svc) => [
+                        'name_ar' => $svc['name_ar'],
+                        'name_en' => $svc['name_en'],
+                    ])->values(),
+                    'more_count'    => max(0, (int) $card['services_count'] - 3),
+                ])->values(),
             ]);
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning('apiOfficeSpecialties DB error: ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
@@ -1657,6 +1712,93 @@ class ServiceCatalogController extends Controller
                 'specialties' => [],
             ]);
         }
+    }
+
+    /**
+     * JSON: صفحة تخصص موحّدة — الخدمات المعتمدة بلا تكرار (مطابق 1:1 لـ specialty_detail.blade.php).
+     * معرفات المكاتب القديمة تُحوَّل تلقائياً إلى تخصصها الرئيسي (تصحيح 301 مثل الواجهة القديمة).
+     */
+    public function apiSpecialtyDetail(string $type, int $specialtyId): JsonResponse
+    {
+        try {
+            $specialty = \App\Models\Business\Specialty::where('id', $specialtyId)
+                ->where('office_type', $type)
+                ->where('is_active', true)
+                ->first();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiSpecialtyDetail DB error: ' . $e->getMessage());
+            $specialty = null;
+        }
+
+        if (! $specialty) {
+            // معرف مكتب قديم؟ حوّله لتخصصه الرئيسي مثل specialtyDetail
+            try {
+                $office = \App\Models\Business\Office::where('id', $specialtyId)
+                    ->where('type', $type)
+                    ->where('is_active', true)
+                    ->where('is_verified', true)
+                    ->supportingOffices()
+                    ->first();
+
+                $primary = $office?->specialtiesRelation()->where('is_active', true)->first();
+
+                if ($primary) {
+                    return response()->json([
+                        'isSuccess'  => false,
+                        'value'      => null,
+                        'error'      => null,
+                        'statusCode' => 200,
+                        'redirect'   => ['to' => "/offices/{$type}/{$primary->id}", 'permanent' => true],
+                    ], 200);
+                }
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('apiSpecialtyDetail office→specialty lookup failed: ' . $e->getMessage());
+            }
+
+            return $this->fail("التخصص غير موجود في {$type}", 404, 'SPECIALTY_NOT_FOUND');
+        }
+
+        try {
+            $services     = [];
+            $officesCount = 0;
+
+            foreach ($this->aggregateSpecialtyCards($type) as $card) {
+                if ($card['id'] === $specialty->id) {
+                    $services     = $card['services'];
+                    $officesCount = $card['offices_count'];
+                    break;
+                }
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('apiSpecialtyDetail aggregation error: ' . $e->getMessage());
+            $services = [];
+            $officesCount = 0;
+        }
+
+        $cfg = $this->officeTypeConfig($type);
+
+        return $this->ok([
+            'type'          => $type,
+            'config'        => $cfg,
+            'specialty'     => [
+                'id'      => $specialty->id,
+                'name_ar' => $specialty->name_ar,
+                'name_en' => $specialty->name_en ?? $specialty->name_ar,
+            ],
+            'offices_count' => $officesCount,
+            'services_count' => count($services),
+            'services'      => collect($services)->map(fn($svc) => [
+                'office_service_id' => $svc['office_service_id'],
+                'service_id'        => $svc['service_id'],
+                'name_ar'           => $svc['name_ar'],
+                'name_en'           => $svc['name_en'],
+                'description_ar'    => $svc['description_ar'],
+                'description_en'    => $svc['description_en'],
+                'price'             => (float) $svc['price'],
+                'duration'          => $svc['duration'],
+                'offices_count'     => (int) $svc['offices_count'],
+            ])->values(),
+        ]);
     }
 
     private function officeTypeConfig(string $type): array

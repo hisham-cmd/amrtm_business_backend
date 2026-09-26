@@ -14,9 +14,10 @@ class CompleteOfficeProfile
         |--------------------------------------------------------------------------
         | التسجيل المؤقت
         |--------------------------------------------------------------------------
+        | طلبات API التوكنية بلا جلسة (Stateless) — نتجاوز الفحص بأمان.
         */
 
-        if ($request->session()->has('office_register')) {
+        if ($request->hasSession() && $request->session()->has('office_register')) {
             return $next($request);
         }
 

@@ -778,7 +778,7 @@ async function init() {
         </div>
         <!-- Set estimated time -->
         <div class="time-row">
-          <input type="text" id="ti-${i}" value="${req.estimated_completion||''}" placeholder="${t.timePh}" class="time-inp focus:ring-0!"/>
+          ${xuiInput(`id="ti-${i}" value="${req.estimated_completion||''}" placeholder="${t.timePh}" class="time-inp focus:ring-0!"`)}
           <x-ui.button type="button" class="time-btn focus:ring-0!" onclick="setTime(${i},'${req.id||req.ref_number||i}')">${t.timeSave}</x-ui.button>
         </div>
         <!-- Status actions (منطقي حسب رحلة الطلب والصلاحيات) -->
@@ -806,28 +806,22 @@ async function init() {
             <!-- فلترة القوائم المنسدلة والبحث السريع -->
             <div class="of-filters-grid">
               <div class="of-select-wrap">
-                <select id="of-city-${i}" onchange="filterOfficeList(${i}, '${req.id||i}')">
-                  <option value="">${lang==='ar'?'جميع المدن':'All Cities'}</option>
-                </select>
+                ${xuiSelect(`<option value="">${lang==='ar'?'جميع المدن':'All Cities'}</option>`, `id="of-city-${i}" onchange="filterOfficeList(${i}, '${req.id||i}')"`)}
                 <i class="ti ti-chevron-down"></i>
               </div>
               <div class="of-select-wrap">
-                <select id="of-type-${i}" onchange="filterOfficeList(${i}, '${req.id||i}')">
-                  <option value="">${lang==='ar'?'جميع التخصصات / الأنشطة':'All Specialties'}</option>
-                </select>
+                ${xuiSelect(`<option value="">${lang==='ar'?'جميع التخصصات / الأنشطة':'All Specialties'}</option>`, `id="of-type-${i}" onchange="filterOfficeList(${i}, '${req.id||i}')"`)}
                 <i class="ti ti-chevron-down"></i>
               </div>
               <div class="of-search-wrap" style="margin-bottom:0">
                 <i class="ti ti-search"></i>
-                <input type="text" id="of-search-${i}" class="of-search-inp" placeholder="${lang==='ar'?'بحث سريع بالاسم...':'Quick name search...'}" oninput="filterOfficeList(${i}, '${req.id||i}')" />
+                ${xuiInput(`id="of-search-${i}" class="of-search-inp" placeholder="${lang==='ar'?'بحث سريع بالاسم...':'Quick name search...'}" oninput="filterOfficeList(${i}, '${req.id||i}')"`)}
               </div>
             </div>
             <!-- قائمة منسدلة للإسناد السريع المباشر -->
             <div class="of-quick-assign-box">
               <div class="of-select-wrap" style="flex:1">
-                <select id="of-select-${i}">
-                  <option value="">${lang==='ar'?'-- اختر مكتباً من القائمة للإسناد المباشر --':'-- Select office from dropdown to assign --'}</option>
-                </select>
+                ${xuiSelect(`<option value="">${lang==='ar'?'-- اختر مكتباً من القائمة للإسناد المباشر --':'-- Select office from dropdown to assign --'}</option>`, `id="of-select-${i}"`)}
                 <i class="ti ti-chevron-down"></i>
               </div>
               <x-ui.button type="button" class="of-quick-assign-btn focus:ring-0!" onclick="doQuickAssign(${i}, '${req.id||i}')">

@@ -3,6 +3,7 @@
 use App\Http\Controllers\UpdateService\AdminServiceController;
 use App\Http\Controllers\UpdateService\AmrtmAuthController;
 use App\Http\Controllers\UpdateService\ApiAuthController;
+use App\Http\Controllers\UpdateService\ContractController;
 use App\Http\Controllers\UpdateService\ContractsController;
 use App\Http\Controllers\UpdateService\HomepageController;
 use App\Http\Controllers\UpdateService\MessageAttachmentController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\UpdateService\NotificationController;
 use App\Http\Controllers\UpdateService\OfficeDashboardController;
 use App\Http\Controllers\UpdateService\PaymentController;
 use App\Http\Controllers\UpdateService\ServiceCatalogController;
+use App\Http\Controllers\UpdateService\SupervisorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +34,45 @@ use Illuminate\Support\Facades\Route;
 |
 | تبويب النسخ: بادئة /v1 قابلة للتكرار (v2, v3...) دون كسر العملاء.
 */
+
+/*
+|--------------------------------------------------------------------------
+| API Index — /api
+|--------------------------------------------------------------------------
+| صفحة تعريفية تعرض المسارات المتاحة بدل 404.
+*/
+Route::get('/', function () {
+    return response()->json([
+        'name'    => 'Amrtm Business API',
+        'version' => 'v1',
+        'base'    => url('/api/v1'),
+        'docs'    => [
+            'auth'      => [
+                'POST /api/v1/auth/login'    => 'تسجيل الدخول (يعيد token)',
+                'POST /api/v1/auth/register' => 'إنشاء حساب جديد',
+                'POST /api/v1/auth/logout'   => 'خروج (يتطلب Bearer token)',
+                'GET  /api/v1/auth/me'       => 'بيانات المستخدم الحالي (يتطلب Bearer token)',
+            ],
+            'public'    => [
+                'GET /api/v1/services'                 => 'كل الفئات والجهات والخدمات الحكومية',
+                'GET /api/v1/home'                     => 'بيانات الصفحة الرئيسية',
+                'GET /api/v1/office-types'             => 'عدد المكاتب لكل نوع',
+                'GET /api/v1/consultants'              => 'دليل المستشارين',
+                'GET /api/v1/consultant-specialties'   => 'تخصصات المستشارين',
+                'GET /api/v1/consultants/{officeId}'   => 'تفاصيل مكتب/مستشار',
+                'GET /api/v1/catalog/{key}'            => 'فئة من الكتالوج (ministries, authorities...)',
+                'GET /api/v1/catalog/{key}/{entityId}' => 'جهة محددة من الكتالوج',
+                'GET /api/v1/offices/{type}'           => 'دليل المكاتب حسب النوع (law|services|customs|accounting|engineering|freelance)',
+            ],
+            'protected' => [
+                'GET /api/v1/requests'         => 'طلبات المستخدم (يتطلب توكن)',
+                'GET /api/v1/dashboard/user'   => 'إحصائيات المستخدم',
+                'GET /api/v1/notifications'    => 'الإشعارات',
+                'GET /api/v1/payments/history' => 'سجل المدفوعات',
+            ],
+        ],
+    ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+})->name('api.index');
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
 
@@ -63,7 +104,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('catalog/{key}', [ServiceCatalogController::class, 'apiCatalogCategory'])->name('catalog.category');
     Route::get('catalog/{key}/{entityId}', [ServiceCatalogController::class, 'apiCatalogEntity'])->name('catalog.entity');
     Route::get('offices/{type}', [ServiceCatalogController::class, 'apiOfficeSpecialties'])->name('offices.directory');
-    Route::get('offices/{type}/{officeId}', [ServiceCatalogController::class, 'apiOfficeDetail'])->name('offices.detail');
+    Route::get('offices/{type}/{specialtyId}', [ServiceCatalogController::class, 'apiSpecialtyDetail'])->name('offices.specialty');
+    Route::get('offices/{type}/office/{officeId}', [ServiceCatalogController::class, 'apiOfficeDetail'])->name('offices.detail');
 
     /*
     |--------------------------------------------------------------------------
@@ -117,7 +159,10 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('admin/conversations', [AdminServiceController::class, 'adminConversations'])->name('admin.conversations');
             Route::post('admin/requests/{id}/note', [AdminServiceController::class, 'sendNote'])->name('admin.requests.note');
             Route::post('admin/requests/{id}/info', [AdminServiceController::class, 'requestInfo'])->name('admin.requests.info');
+            Route::get('admin/requests/assignable-offices', [AdminServiceController::class, 'adminAssignableOffices'])->name('admin.requests.assignable-offices');
             Route::get('admin/requests/{id}/eligible-offices', [AdminServiceController::class, 'adminEligibleOffices'])->name('admin.requests.eligible-offices');
+            Route::post('admin/requests/{id}/assign', [AdminServiceController::class, 'assignRequest'])->name('admin.requests.assign');
+            Route::post('admin/requests/{id}/take-internal', [AdminServiceController::class, 'takeRequestInternal'])->name('admin.requests.take-internal');
             Route::post('admin/requests/{id}/broadcast', [AdminServiceController::class, 'broadcastRequest'])->name('admin.requests.broadcast');
             Route::put('admin/services/{id}/price', [AdminServiceController::class, 'updateServicePrice'])->name('admin.services.price');
             Route::put('admin/services/{id}', [AdminServiceController::class, 'updateService'])->name('admin.services.update');
@@ -154,6 +199,33 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
             Route::get('admin/logs', [AdminServiceController::class, 'adminActivityLogs'])->name('admin.logs');
             Route::get('admin/analytics', [AdminServiceController::class, 'adminAnalytics'])->name('admin.analytics');
+
+            /* نقاط نهاية إضافية تستهلكها لوحة الأدمن (واجهة Blade المنفصلة) */
+            Route::get('admin/specialties', [AdminServiceController::class, 'adminSpecialties'])->name('admin.specialties');
+            Route::post('admin/specialties', [AdminServiceController::class, 'createSpecialty'])->name('admin.specialties.create');
+            Route::delete('admin/specialties/{id}', [AdminServiceController::class, 'deleteOfficeSpecialty'])->name('admin.specialties.delete');
+            Route::get('admin/office-services/pending', [AdminServiceController::class, 'adminPendingOfficeServices'])->name('admin.office-services.pending');
+            Route::get('admin/office-financial', [AdminServiceController::class, 'officeFinancialReport'])->name('admin.office-financial');
+            Route::get('admin/office-requests', [AdminServiceController::class, 'adminOfficeRequestsList'])->name('admin.office-requests');
+
+            /* إدارة الصلاحيات (المشرف) */
+            Route::get('supervisor/admins', [SupervisorController::class, 'admins'])->name('supervisor.admins');
+            Route::post('supervisor/admins', [SupervisorController::class, 'createAdmin'])->name('supervisor.admins.create');
+            Route::put('supervisor/admins/{id}/permissions', [SupervisorController::class, 'updateAdminPermissions'])->name('supervisor.admins.permissions');
+            Route::post('supervisor/admins/{id}/toggle', [SupervisorController::class, 'toggleAdmin'])->name('supervisor.admins.toggle');
+
+            /* العقود (إدارة شاملة) */
+            Route::get('admin/contracts', [ContractController::class, 'adminListContracts'])->name('admin.contracts');
+            Route::post('admin/contracts', [ContractController::class, 'adminStoreContract'])->name('admin.contracts.store');
+            Route::get('admin/contracts/{id}/pdf', [ContractController::class, 'adminContractPdf'])->name('admin.contracts.pdf');
+            Route::get('admin/contract-types', [ContractController::class, 'adminListTypes'])->name('admin.contract-types');
+            Route::post('admin/contract-types', [ContractController::class, 'adminStoreType'])->name('admin.contract-types.store');
+            Route::put('admin/contract-types/{typeId}', [ContractController::class, 'adminUpdateType'])->name('admin.contract-types.update');
+            Route::delete('admin/contract-types/{typeId}', [ContractController::class, 'adminDeleteType'])->name('admin.contract-types.delete');
+            Route::get('admin/contract-types/{typeId}/clauses', [ContractController::class, 'adminListClauses'])->name('admin.contract-types.clauses');
+            Route::post('admin/contract-types/{typeId}/clauses', [ContractController::class, 'adminStoreClause'])->name('admin.contract-types.clauses.store');
+            Route::put('admin/contract-types/{typeId}/clauses/{clauseId}', [ContractController::class, 'adminUpdateClause'])->name('admin.contract-types.clauses.update');
+            Route::delete('admin/contract-types/{typeId}/clauses/{clauseId}', [ContractController::class, 'adminDeleteClause'])->name('admin.contract-types.clauses.delete');
         });
     });
 });
@@ -223,7 +295,10 @@ Route::prefix('v1/admin/homepage')->name('api.v1.admin.homepage.')->middleware([
     Route::post('settings', [HomepageController::class, 'saveSettings'])->name('settings.save');
     Route::get('slides', [HomepageController::class, 'listSlides'])->name('slides');
     Route::post('slides', [HomepageController::class, 'storeSlide'])->name('slides.store');
-    Route::put('slides/{id}', [HomepageController::class, 'updateSlide'])->name('slides.update');
-    Route::post('slides/{id}/toggle', [HomepageController::class, 'toggleSlide'])->name('slides.toggle');
-    Route::delete('slides/{id}', [HomepageController::class, 'deleteSlide'])->name('slides.delete');
+    // ⚠️ reorder يجب أن يسبق slides/{id} وإلا ابتلعه المسار العام.
+    //    تقييد {id} بالأرقام يمنع ابتلاع أي اسم آخر مثل "reorder".
+    Route::post('slides/reorder', [HomepageController::class, 'reorderSlides'])->name('slides.reorder');
+    Route::put('slides/{id}', [HomepageController::class, 'updateSlide'])->whereNumber('id')->name('slides.update');
+    Route::post('slides/{id}/toggle', [HomepageController::class, 'toggleSlide'])->whereNumber('id')->name('slides.toggle');
+    Route::delete('slides/{id}', [HomepageController::class, 'deleteSlide'])->whereNumber('id')->name('slides.delete');
 });
