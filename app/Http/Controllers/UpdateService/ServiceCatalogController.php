@@ -156,6 +156,10 @@ class ServiceCatalogController extends Controller
         return view('update_service.user_dashboard');
     }
 
+    /**
+     * صفحة تصنيف الكتالوج (Blade القديم).
+     * قاعدة البيانات هي المصدر الوحيد: أي فشل ⇒ 404 حقيقي، ولا بيانات وهمية أبداً.
+     */
     public function categoryPage(Request $request, string $key): View
     {
         $perPage = max(1, min(48, (int) $request->input('per_page', 12)));
@@ -163,76 +167,62 @@ class ServiceCatalogController extends Controller
         try {
             $category = Category::where('key', $key)->where('is_active', true)->first();
 
-            if (!$category) {
-                $category = new Category([
-                    'key' => $key,
-                    'name_ar' => $key === 'ministries' ? 'الوزارات' : ($key === 'authorities' ? 'الهيئات والمؤسسات الحكومية' : 'الشركات والجهات الخاصة'),
-                    'name_en' => ucfirst($key),
-                ]);
-                $category->setRelation('entities', collect());
+            if (! $category) {
+                abort(404, 'التصنيف غير موجود');
             }
 
-            $entitiesQuery = Entity::where('category_id', $category->id)
+            $entities = Entity::where('category_id', $category->id)
                 ->where('is_active', true)
-                ->with(['govServices' => fn($q) => $q->where('is_active', true)->orderBy('sort_order')])
-                ->orderBy('sort_order');
+                ->with(['govServices' => fn($q) => $q->where('is_active', true)->orderBy('sort_order')->orderBy('id')])
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get();
 
-            $entities = $entitiesQuery->get();
             $category->setRelation('entities', $entities);
 
-            $totalServices = $entities->sum(fn($e) => $e->govServices->count());
-            $allServicesCount = $category->entities()->where('is_active', true)
-                ->whereHas('govServices', fn($q) => $q->where('is_active', true))
-                ->sum(\Illuminate\Support\Facades\DB::raw('(SELECT COUNT(*) FROM bs_services WHERE bs_services.entity_id = bs_entities.id AND bs_services.is_active = 1)'));
+            $totalServices    = $entities->sum(fn($e) => $e->govServices->count());
+            $allServicesCount = $totalServices;
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('categoryPage DB error: ' . $e->getMessage());
-            $category = new Category([
-                'key' => $key,
-                'name_ar' => $key === 'ministries' ? 'الوزارات' : ($key === 'authorities' ? 'الهيئات والمؤسسات الحكومية' : 'الشركات والجهات الخاصة'),
-                'name_en' => ucfirst($key),
-            ]);
-            $category->setRelation('entities', collect());
-            $entities = collect();
-            $totalServices = 0;
-            $allServicesCount = 0;
+            \Illuminate\Support\Facades\Log::error('categoryPage DB error: ' . $e->getMessage());
+
+            abort(500, 'تعذّر تحميل بيانات التصنيف');
         }
 
         return view('update_service.catalog_category', compact('category', 'entities', 'totalServices', 'allServicesCount'));
     }
 
+    /**
+     * صفحة جهة (Blade القديم).
+     * قاعدة البيانات هي المصدر الوحيد: أي فشل ⇒ 404 حقيقي، ولا بيانات وهمية أبداً.
+     */
     public function entityPage(Request $request, string $key, int $entityId): View
     {
         $perPage = max(1, min(48, (int) $request->input('per_page', 6)));
 
         try {
             $category = Category::where('key', $key)->where('is_active', true)->first();
-            if (!$category) {
-                $category = new Category(['key' => $key, 'name_ar' => 'الجهة', 'name_en' => 'Entity']);
-            }
 
             $entity = Entity::where('id', $entityId)
                 ->where('is_active', true)
                 ->first();
 
-            if (!$entity) {
-                $entity = new Entity(['id' => $entityId, 'name_ar' => 'الجهة المطلوبة', 'name_en' => 'Requested Entity']);
-                $entity->setRelation('govServices', collect());
-                $allServices = collect();
-            } else {
-                $servicesBase = GovService::where('entity_id', $entity->id)
-                    ->where('is_active', true)
-                    ->orderBy('sort_order');
-
-                $allServices = $servicesBase->get();
-                $services = $servicesBase->paginate($perPage)->withQueryString();
-                $entity->setRelation('govServices', $services);
+            if (! $entity) {
+                abort(404, 'الجهة غير موجودة');
             }
+
+            $allServices = GovService::where('entity_id', $entity->id)
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get();
+
+            $entity->setRelation('govServices', $allServices);
+        } catch (\Illuminate\Http\Exceptions\HttpResponseException $e) {
+            throw $e;
         } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('entityPage DB error: ' . $e->getMessage());
-            $category = new Category(['key' => $key, 'name_ar' => 'الجهة', 'name_en' => 'Entity']);
-            $entity = new Entity(['id' => $entityId, 'name_ar' => 'الجهة المطلوبة', 'name_en' => 'Requested Entity']);
-            $entity->setRelation('govServices', collect());
-            $allServices = collect();
+            \Illuminate\Support\Facades\Log::error('entityPage DB error: ' . $e->getMessage());
+
+            abort(500, 'تعذّر تحميل بيانات الجهة');
         }
 
         return view('update_service.catalog_entity', compact('category', 'entity', 'allServices'));
@@ -324,6 +314,67 @@ class ServiceCatalogController extends Controller
      *     consultants_count: int
      * }>
      */
+    /** GET /api/v1/consultant-specialties/{id} — تخصص واحد ومستشاراته */
+    public function apiConsultantSpecialtyDetail(int $id): JsonResponse
+    {
+        try {
+            $spec = Specialty::where('id', $id)
+                ->where('is_consultant', true)
+                ->where('is_active', true)
+                ->first();
+
+            if (! $spec) {
+                return response()->json(['message' => 'التخصص غير موجود'], 404);
+            }
+
+            $officeIds = Office::consultants()
+                ->where('is_active', true)
+                ->where('is_verified', true)
+                ->visibleInDirectory()
+                ->pluck('id');
+
+            $offices = Office::consultants()
+                ->whereIn('id', $officeIds)
+                ->whereHas('specialtiesRelation', fn ($q) => $q->where('bs_specialties.id', $id))
+                ->with(['specialtiesRelation' => fn ($q) => $q->where('bs_specialties.id', $id)])
+                ->get()
+                ->map(fn ($o) => [
+                    'id'          => $o->id,
+                    'office_code' => $o->office_code,
+                    'name_ar'     => $o->name_ar,
+                    'name_en'     => $o->name_en,
+                    'bio'         => $o->bio,
+                    'logo'        => $o->logo,
+                    'type'        => $o->type,
+                    'city'        => $o->city,
+                    'region'      => $o->region,
+                    'is_verified' => (bool) $o->is_verified,
+                    'views_count' => (int) $o->views_count,
+                    'specialties' => $o->specialtiesRelation->map(fn ($s) => [
+                        'id'      => $s->id,
+                        'name_ar' => $s->name_ar,
+                        'name_en' => $s->name_en,
+                    ])->values(),
+                ])
+                ->values();
+
+            return response()->json([
+                'specialty' => [
+                    'id'                => $spec->id,
+                    'name_ar'           => $spec->name_ar,
+                    'name_en'           => $spec->name_en ?? $spec->name_ar,
+                    'office_type'       => $spec->office_type,
+                    'category'          => $spec->category,
+                    'business_activity' => $spec->business_activity,
+                ],
+                'consultants' => $offices,
+                'total'       => $offices->count(),
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'تعذر تحميل التخصص.'], 500);
+        }
+    }
+
     private function consultantSpecialtyCards(): array
     {
         $cards = [];
@@ -1255,12 +1306,15 @@ class ServiceCatalogController extends Controller
 
         return response()->json([
             'user' => [
-                'id'      => $user->id,
-                'name'    => $user->name,
-                'email'   => $user->email,
-                'phone'   => $user->phone ?? '',
-                'role'    => $user->role,
-                'balance' => ServicePayment::getBalance($uid),
+                'id'         => $user->id,
+                'name'       => $user->name,
+                'email'      => $user->email,
+                'phone'      => $user->phone ?? '',
+                'role'       => $user->role,
+                // صورة حقيقية من قاعدة البيانات أو null — لا صورة رمزية مولّدة.
+                'avatar_url' => $user->avatar_url,
+                'initials'   => $user->initials,
+                'balance'    => ServicePayment::getBalance($uid),
                 'stats'   => [
                     'total'      => (int) $counts->total,
                     'pending'    => (int) $counts->pending,
@@ -1423,28 +1477,8 @@ class ServiceCatalogController extends Controller
             'custom_fields'  => $s->custom_fields ?: [],
             'custom_fields_count' => count($s->custom_fields ?: []),
             'sort_order'     => (int) $s->sort_order,
-            'image_url'      => $this->uploadedImageUrl($s->images),
+            'image_url'      => $s->image_url,
         ];
-    }
-
-    /**
-     * رابط مطلق حقيقي لصورة مرفوعة في قاعدة البيانات، أو null إن لم توجد.
-     * لا يُختلق رابط بديل — absence بيانات يعني null.
-     */
-    private function uploadedImageUrl(?string $file): ?string
-    {
-        $file = trim((string) $file);
-
-        if ($file === '') {
-            return null;
-        }
-
-        // مسار مطلق مخزّن مسبقاً (storage أو رابط خارجي) — يُعاد كما هو.
-        if (str_starts_with($file, 'http://') || str_starts_with($file, 'https://') || str_starts_with($file, '/')) {
-            return $file;
-        }
-
-        return url('/media/uploads/' . rawurlencode($file));
     }
 
     /**
@@ -1494,7 +1528,7 @@ class ServiceCatalogController extends Controller
                     'tag_ar'     => $e->tag_ar,
                     'tag_en'     => $e->tag_en,
                     'images'     => $e->images,
-                    'image_url'  => $this->uploadedImageUrl($e->images),
+                    'image_url'  => $e->image_url,
                     'services_count' => $e->govServices->count(),
                     'services'   => $e->govServices->map(fn($s) => $this->catalogServicePayload($s)),
                 ]),
@@ -1558,7 +1592,7 @@ class ServiceCatalogController extends Controller
                     'tag_ar'   => $entity->tag_ar,
                     'tag_en'   => $entity->tag_en,
                     'images'   => $entity->images,
-                    'image_url' => $this->uploadedImageUrl($entity->images),
+                    'image_url' => $entity->image_url,
                 ],
                 'services' => $services,
             ]);
@@ -1644,16 +1678,48 @@ class ServiceCatalogController extends Controller
                     'is_verified'    => (bool) $office->is_verified,
                     'views_count'    => (int) $office->views_count,
                     'total_requests_count' => (int) ($office->total_requests_count ?? 0),
+
+                    /*
+                     * حقول يطلبها قالب consultant_detail ولم تكن في الـ payload
+                     * السابق، فتظهر القيم فارغة أو undefined.
+                     */
+                    'description_ar' => $office->description_ar,
+                    'description_en' => $office->description_en,
+                    'phone'          => $office->phone,
+                    'email'          => $office->email,
+                    'cr_number'      => $office->cr_number,
+                    'category'       => $office->category,
+                    'category_label' => $this->officeTypeLabel($office->type),
+                    'business_activity' => $office->business_activity,
+                    'business_activity_label' => $this->officeTypeLabel($office->business_activity),
+                    'video_consultation_enabled' => (bool) $office->video_consultation_enabled,
+                    'completed_consultations_count' => (int) $office->requests()
+                        ->where('status', 'done')
+                        ->count(),
+
                     'specialties'    => $office->specialtiesRelation->map(fn($s) => [
                         'id'      => $s->id,
                         'name_ar' => $s->name_ar,
                         'name_en' => $s->name_en,
-                    ]),
+                        'category' => $s->category,
+                        'business_activity' => $s->business_activity,
+                    ])->values(),
                     'services'       => $office->services->map(fn($svc) => [
-                        'id'      => $svc->id,
-                        'name_ar' => $svc->name_ar,
-                        'price'   => (float) $svc->price,
-                    ]),
+                        'id'             => $svc->id,
+                        'name_ar'        => $svc->name_ar,
+                        'name_en'        => $svc->name_en,
+                        'description_ar' => $svc->description_ar,
+                        'description_en' => $svc->description_en,
+                        'price'          => (float) $svc->price,
+                        'duration'       => \App\Support\ServiceDuration::format(
+                            $svc->duration_min,
+                            $svc->duration_max,
+                            $svc->duration_unit
+                        ),
+                        'duration_min'   => $svc->duration_min,
+                        'duration_max'   => $svc->duration_max,
+                        'duration_unit'  => $svc->duration_unit,
+                    ])->values(),
                 ],
             ]);
         } catch (\Throwable $e) {
@@ -1799,6 +1865,18 @@ class ServiceCatalogController extends Controller
                 'offices_count'     => (int) $svc['offices_count'],
             ])->values(),
         ]);
+    }
+
+    /**
+     * اسم عربي لنوع المكتب (law / services / customs / ...) — يرجع null إذا غير معروف.
+     */
+    private function officeTypeLabel(?string $type): ?string
+    {
+        if (! $type) {
+            return null;
+        }
+
+        return $this->officeTypeConfig($type)['name_ar'] ?? null;
     }
 
     private function officeTypeConfig(string $type): array

@@ -214,6 +214,9 @@ class ApiAuthController extends Controller
             'is_active'       => (bool) ($user->is_active ?? true),
             'is_admin'        => $user->isAdmin(),
             'profile_photo'   => $user->profile_photo,
+            // رابط الصورة الحقيقية من قاعدة البيانات، أو null — لا صورة رمزية مولّدة.
+            'avatar_url'      => $user->avatar_url,
+            'initials'        => $user->initials,
             'city'            => $user->city,
             'region'          => $user->region,
         ];

@@ -37,3 +37,18 @@ __pycache__/
 /standalone_FIX_ALL.py
 /test-results
 /playwright-report
+# أدوات النشر عبر FTP
+ftp-credentials.cfg
+.ftp-deploy-state.tsv
+deploy-logs/
+
+# ── أسرار: لا تُرفع إلى المستودع ──
+# app.yaml / render.yaml تحتوي APP_KEY وكلمة مرور قاعدة بيانات الإنتاج.
+# النسخ الخاصة في: C:\Users\hisha\.amrtm-deploy\sensitive-configs
+app.yaml
+render.yaml
+ftp-credentials.cfg
+.ftp-deploy-state.tsv
+deploy-logs/
+deploy-ftp.ps1
+deploy-ftp.bat

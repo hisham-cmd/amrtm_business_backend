@@ -100,6 +100,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('office-types', [ServiceCatalogController::class, 'publicOfficeTypes'])->name('office-types');
     Route::get('consultants', [ServiceCatalogController::class, 'apiConsultants'])->name('consultants');
     Route::get('consultant-specialties', [ServiceCatalogController::class, 'apiConsultantSpecialties'])->name('consultant-specialties');
+    Route::get('consultant-specialties/{id}', [ServiceCatalogController::class, 'apiConsultantSpecialtyDetail'])->whereNumber('id')->name('consultant-specialty.detail');
     Route::get('consultants/{officeId}', [ServiceCatalogController::class, 'apiOfficeDetail'])->name('consultant-detail');
     Route::get('catalog/{key}', [ServiceCatalogController::class, 'apiCatalogCategory'])->name('catalog.category');
     Route::get('catalog/{key}/{entityId}', [ServiceCatalogController::class, 'apiCatalogEntity'])->name('catalog.entity');
@@ -257,6 +258,41 @@ Route::prefix('v1/office')->name('api.v1.office.')->middleware(['auth.office', '
     Route::get('notifications', [OfficeDashboardController::class, 'notifications'])->name('notifications');
     Route::get('financial', [OfficeDashboardController::class, 'financial'])->name('financial');
     Route::get('settlements', [OfficeDashboardController::class, 'settlements'])->name('settlements');
+
+    /*
+     | كتالوج الخدمات: ربط خدمة مكتب بخدمة موجودة في كتالوج المنصة.
+     | الدوال كانت مكتوبة في OfficeDashboardController لكنها لم تُسجَّل هنا،
+     | فكان أي طلب لها يرجع 404. الترتيب: catalog-services/link قبل
+     | services/{id} (وليس بعده) حتى لا تبتلعه المسار العام.
+     */
+    Route::get('catalog-services', [OfficeDashboardController::class, 'catalogServices'])->name('catalog-services');
+    Route::post('catalog-services/link', [OfficeDashboardController::class, 'linkCatalogService'])->name('catalog-services.link');
+
+    /*
+     | العقود: نفس القصة — الدوال موجودة في نفس الـ controller
+     | (listContracts / storeContract / showContract / updateContractStatus /
+     |  deleteContract / listContractTypes / listContractClauses) ولم تكن
+     | مسجّلة، فكان تبويب "العقود" في لوحة المكتب يرجع 404.
+     */
+    Route::get('contract-types', [OfficeDashboardController::class, 'listContractTypes'])->name('contract-types');
+    Route::get('contract-types/{typeId}/clauses', [OfficeDashboardController::class, 'listContractClauses'])->whereNumber('typeId')->name('contract-clauses');
+    Route::get('contracts', [OfficeDashboardController::class, 'listContracts'])->name('contracts');
+    Route::post('contracts', [OfficeDashboardController::class, 'storeContract'])->name('contracts.store');
+    Route::get('contracts/{id}', [OfficeDashboardController::class, 'showContract'])->whereNumber('id')->name('contracts.show');
+    Route::put('contracts/{id}/status', [OfficeDashboardController::class, 'updateContractStatus'])->whereNumber('id')->name('contracts.status');
+    Route::delete('contracts/{id}', [OfficeDashboardController::class, 'deleteContract'])->whereNumber('id')->name('contracts.delete');
+});
+
+/*
+|--------------------------------------------------------------------------  
+| Office profile — /api/v1/office/profile
+|--------------------------------------------------------------------------
+| كتالوج تخصصات النشاط (لصفحة تعديل ملف المكتب) + حفظ التعديلات.
+| الدالة كانت موجودة في Controller لكن بلا route.
+*/
+Route::prefix('v1/office')->name('api.v1.office.')->middleware('auth.office')->group(function () {
+    Route::get('specialties', [OfficeDashboardController::class, 'listOfficeSpecialties'])->name('specialties');
+    Route::post('profile', [OfficeDashboardController::class, 'updateProfile'])->name('profile.save');
 });
 
 /*

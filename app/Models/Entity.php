@@ -18,6 +18,29 @@ class Entity extends Model
 
     protected $casts = ['is_active' => 'boolean'];
 
+    protected $appends = ['image_url'];
+
+    /**
+     * رابط الصورة المرفوعة فعلياً لهذه الجهة، أو null إن لم تُرفع صورة.
+     *
+     * لا يُختلق أي بديل: غياب صورة في قاعدة البيانات يعني null،
+     * وتعرض الواجهة عندها أيقونة الجهة بدل صورة وهمية.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        $file = trim((string) $this->images);
+
+        if ($file === '') {
+            return null;
+        }
+
+        if (str_starts_with($file, 'http://') || str_starts_with($file, 'https://') || str_starts_with($file, '/')) {
+            return $file;
+        }
+
+        return url('/media/uploads/' . rawurlencode($file));
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

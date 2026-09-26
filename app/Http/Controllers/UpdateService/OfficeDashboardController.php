@@ -97,6 +97,25 @@ class OfficeDashboardController extends Controller
             ->all();
     }
 
+    /**
+     * تخصصات نشاط المكتب — تغذّي قائمة الاختيار في صفحة تعديل الملف.
+     * GET /api/v1/office/specialties
+     */
+    public function listOfficeSpecialties(): JsonResponse
+    {
+        $office = $this->office();
+
+        $specialties = Specialty::where('office_type', $office->type)
+            ->where('is_active', true)
+            ->orderBy('name_ar')
+            ->get(['id', 'name_ar', 'name_en']);
+
+        return response()->json([
+            'specialties'  => $specialties,
+            'selected_ids' => $this->resolveSpecialtyIds($office, $specialties),
+        ]);
+    }
+
     public function updateProfile(Request $request)
     {
         $user   = $this->officeUser();

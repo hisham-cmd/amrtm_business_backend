@@ -6,12 +6,16 @@
 @php
     $entColor = $entity->color ?? '#006C35';
     $entBg = $entity->bg ?? 'rgba(0,108,53,.09)';
-    $hasLogo = !empty($entity->images);
+    // الصورة تُعرض فقط إذا كان هناك رابط حقيقي قادم من قاعدة البيانات.
+    $entImage = !empty($entity->image_url) ? $entity->image_url : null;
     $services = ($allServices ?? $entity->govServices);
     if ($services instanceof \Illuminate\Pagination\AbstractPaginator) {
         $services = $services->getCollection();
     }
-    $servicesCount = $services->count() > 0 ? $services->count() : ($entity->govServices->total() ?? 0);
+    // عدد الخدمات الفعّالة القادمة من قاعدة البيانات — بلا أي قيمة افتراضية.
+    $servicesCount = $services instanceof \Illuminate\Support\Collection
+        ? $services->count()
+        : count($services);
 @endphp
 
 @push('styles')
@@ -128,6 +132,18 @@
         }
 
         .cui-step-panel.active {
+            display: block;
+        }
+
+        /*
+         | كتلة متطلبات الخدمة (step-1-fields) للزائر: ليست خطوة مستقلة،
+         | لذلك لا تحمل صنف cui-step-panel. نمنع ظهورها افتراضياً ونترك
+         | serviceFieldsVisibility() هي التي-toggle عبر style.display فقط.
+         | display:block في CSS مع display:none المدمج في السمة — عندها
+         | تتجاوز السمة المدمجة قاعدة CSS، وهذا هو السلوك المطلوب.
+         */
+        #step-1-fields[style*="display: block"],
+        #step-1-fields[style*="display:block"] {
             display: block;
         }
 
@@ -1643,9 +1659,11 @@
             <div class="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl cui-glass shadow-lg ring-1 ring-white/15"
                 style="background:{{ $entBg }};">
                 <div class="absolute -right-3 -top-4 h-12 w-12 rounded-full bg-white/8 blur-xl"></div>
-                @if($hasLogo)
-                    <img src="{{ asset('images/uploads/' . $entity->images) }}" alt="{{ $entity->name_ar }}"
-                        class="h-24 w-24 object-contain drop-shadow-lg" />
+                @if($entImage)
+                    <img src="{{ $entImage }}" alt="{{ $entity->name_ar }}" loading="lazy"
+                        class="h-24 w-24 object-contain drop-shadow-lg"
+                        onerror="this.style.display='none';this.nextElementSibling.classList.remove('hidden');" />
+                    <i class="ti {{ $entity->icon ?? 'ti-building' }} hidden text-5xl text-white drop-shadow-lg"></i>
                 @else
                     <i class="ti {{ $entity->icon ?? 'ti-building' }} text-5xl text-white drop-shadow-lg"></i>
                 @endif
@@ -1764,9 +1782,43 @@
                 </div>
 
                 @auth('business')
-                    <!-- ═══ Step 2: Form Fields ═══ -->
-                    <div class="cui-step-panel" id="step-2">
+                    {{-- المستخدم مسجّل: الحقول المخصصة جزء من نموذج الخطوة الثانية،
+                         فتُدرج داخل لوحتها ليديرها معالج الخطوات كأي لوحة أخرى. --}}
+                @else
+                    {{-- زائر: كتلة متطلبات الخدمة تظهر أسفل الخطوة الأولى (وليست خطوة مستقلة).
+                         لذلك لا تحمل صنف cui-step-panel الذي يربطها بنظام مؤشرات الخطوات،
+                         وإلا بدت كـ "خطوة ثانية" مفتوحة أسفل الأولى. تُخفى عبر
+                         serviceFieldsVisibility() وهو يتحكم بها بـ style.display. --}}
+                    <div id="step-1-fields" style="display:none;">
                         <div class="cui-form-body p-6 md:p-8">
+                            {{-- فاصل بصري: يوضح أن هذا امتداد للخطوة الأولى وليس خطوة جديدة --}}
+                            <div class="mb-4 flex items-center gap-3 border-b border-dashed border-slate-200 pb-3">
+                                <span class="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-[13px]"
+                                    style="background:{{ $entBg }}; color:{{ $entColor }};">
+                                    <i class="ti ti-arrow-down"></i>
+                                </span>
+                                <p class="m-0 text-[11.5px] font-bold text-slate-400">
+                                    متطلبات الخدمة المختارة — تُملأ قبل تسجيل الدخول
+                                </p>
+                            </div>
+                            <div class="mb-4 flex items-center justify-between">
+                                <div class="text-right">
+                                    <h2 class="text-base font-black text-slate-900">البيانات المطلوبة لهذه الخدمة</h2>
+                                    <p class="text-[12px] text-slate-500">الحقول المخصصة المعرّفة في لوحة التحكم لهذه الخدمة</p>
+                                </div>
+                                <span class="flex h-10 w-10 items-center justify-center rounded-xl flex-shrink-0"
+                                    style="background:{{ $entBg }}; color:{{ $entColor }};">
+                                    <i class="ti ti-forms text-lg"></i>
+                                </span>
+                            </div>
+                            <div class="cui-custom-fields" id="custom-fields-container" style="display:none;"></div>
+                        </div>
+                    </div>
+                @endauth
+
+                @auth('business')
+                    <!-- ═══ Step 2: Form Fields ═══ -->
+                    <div class="cui-step-panel" id="step-2">                        <div class="cui-form-body p-6 md:p-8">
                             <div class="mb-5 flex items-center justify-between">
                                 <div class="text-right">
                                     <h2 class="text-lg font-black text-slate-900">بيانات الطلب</h2>
@@ -1806,7 +1858,7 @@
                             <input type="hidden" id="fph" name="phone" value="{{ auth('business')->user()->phone ?? '' }}">
                             <input type="hidden" id="fem" name="email" value="{{ auth('business')->user()->email ?? '' }}">
 
-                            <!-- الحقول المخصصة المُضافة من لوحة التحكم -->
+                            <!-- الحقول المخصصة المعرّفة في لوحة التحكم — داخل لوحة الخطوة الثانية -->
                             <div class="cui-custom-fields" id="custom-fields-container" style="display:none;"></div>
 
                             <div class="cui-prv"><i class="ti ti-shield-check"></i><span id="prv-t">بياناتك محمية ومشفرة. لن يتم
@@ -1907,7 +1959,7 @@
                                 <i class="ti ti-login"></i>
                                 <span id="lg-login-lbl">تسجيل الدخول</span>
                             </a>
-                            <a class="cui-lg-sec" href="{{ route('amrtm.register') }}">
+                            <a class="cui-lg-sec" href="{{ route('amrtm.login', ['mode' => 'register']) }}">
                                 <i class="ti ti-user-plus"></i>
                                 <span id="lg-reg-lbl">إنشاء حساب جديد</span>
                             </a>
@@ -1933,9 +1985,17 @@
             </div>
             <div class="cui-mbody">
                 <div class="mb-5 flex items-center gap-3">
-                    <img class="h-16 w-16 rounded-2xl object-cover ring-2 ring-[#006C35]/20"
-                        src="https://ui-avatars.com/api/?name={{ urlencode(auth('business')->user()->name ?? '') }}&background=006C35&color=fff&size=128"
-                        alt="صورة المستخدم">
+                    {{-- لا نستخدم أي صورة رمزية مولّدة من خدمات خارجية: لا شيء يُعرض
+                         غير ما هو مخزَّن فعلاً في قاعدة البيانات. --}}
+                    <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl ring-2 ring-[#006C35]/20"
+                        style="background:{{ $entBg }}; color:{{ $entColor }};">
+                        @if(!empty($entity->image_url))
+                            <img class="h-full w-full object-cover" src="{{ $entity->image_url }}"
+                                alt="{{ $entity->name_ar }}" loading="lazy">
+                        @else
+                            <i class="ti {{ $entity->icon ?? 'ti-building' }} text-3xl"></i>
+                        @endif
+                    </div>
                     <div>
                         <div class="text-lg font-black text-slate-900" id="mName"></div>
                         <div class="text-[12px] font-semibold text-slate-500">عضو مسجل في آمر تم</div>
@@ -1968,9 +2028,12 @@
         'phone' => auth('business')->user()->phone ?? '',
         'role' => auth('business')->user()->role,
         'balance' => 0,
+        // رابط الصورة الحقيقية من قاعدة البيانات (null إن لم تُرفع صورة)
+        'avatarUrl' => auth('business')->user()->avatar_url,
+        'initials' => auth('business')->user()->initials,
     ]) : 'null' !!};
         window.AMRTM_CSRF = '{{ csrf_token() }}';
-        window.AMRTM_API_BASE = '{{ url("/amrtm/api") }}';
+        window.AMRTM_API_BASE = '{{ url("/api") }}';
         window.AMRTM_ROUTES = {
             login: '{{ route("amrtm.login") }}',
             logout: '{{ route("amrtm.logout") }}',
@@ -2023,6 +2086,12 @@
         let lang = localStorage.getItem('amrtm_lang') || 'ar';
         let curBalance = 0;
         let currentStep = 1;
+        /*
+         | هل ضغط الزائر "المتابعة" في الخطوة الأولى؟
+         | كتلة المتطلبات (step-1-fields) لا تظهر قبل ذلك — يظهر التحديد وحده
+         | لا يكفي. يُصفَّر في rstFm() ومع أي انتقال لخطوة أخرى.
+         */
+        let step1Started = false;
         let selectedServices = [];
         let customValues = {};
 
@@ -2065,7 +2134,12 @@
                 const un = document.getElementById('nb-un');
                 if (un) un.textContent = u.name.split(' ')[0];
                 const av = document.getElementById('nb-av');
-                if (av) av.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=006C35&color=fff&size=64`;
+                // صورة الحساب: من قاعدة البيانات فقط — لا توليد صور رمزية خارجية.
+                if (typeof window.AMRTM_APPLY_NAV_AVATAR === 'function') {
+                    window.AMRTM_APPLY_NAV_AVATAR(u);
+                } else if (av) {
+                    av.style.display = 'none';
+                }
                 const dashUrl = u.role === 'admin' ? (AMRTM_ROUTES.adminDashboard || '/admin') : (AMRTM_ROUTES.userDashboard || '/dashboard');
                 const dashLink = document.getElementById('nb-dash-lnk');
                 if (dashLink) dashLink.href = dashUrl;
@@ -2239,11 +2313,33 @@
             return values;
         }
 
+        /**
+         * إظهار/إخفاء كتلة متطلبات الخدمة للزائر.
+         *
+         * الكتلة امتداد للخطوة الأولى (وليست خطوة مستقلة)، فتظهر للزائر فقط
+         * بعد ضغط "المتابعة" — أي بعد بدء الخدمة فعلياً.
+         *
+         * الفارق الجوهري: step1Started. مجرد اختيار خدمة لا يكفي؛ لو اكتفينا
+         * بـ currentStep === 1 لظهرت الكتلة فور التحديد لأن pickService()
+         * تستدعي renderCustomFields() → serviceFieldsVisibility() أثناء
+         * البقاء على الخطوة الأولى.
+         */
+        function serviceFieldsVisibility() {
+            const panel = document.getElementById('step-1-fields');
+            if (!panel) return;
+            const shouldShow = currentStep === 1
+                && step1Started
+                && selectedServices.length > 0;
+            panel.style.display = shouldShow ? 'block' : 'none';
+        }
+
         function renderCustomFields() {
             const el = document.getElementById('custom-fields-container');
             if (!el) return;
             const svcs = selectedServices.filter(s => (s.customFields || []).length);
             const isAr = lang === 'ar';
+
+            serviceFieldsVisibility();
 
             // لا توجد أي حقول مخصصة → حالة فارغة أنيقة (بدون حقول ثابتة)
             if (!svcs.length) {
@@ -2328,8 +2424,19 @@
                 el.classList.add('selected');
             }
             renderCustomFields();
+            // التحديد وحده لا يفتح كتلة المتطلبات (الزائر) — تظهر بعد "المتابعة"
+            serviceFieldsVisibility();
             try {
-                sessionStorage.setItem('amrtm_svc_' + pageData.entityId, JSON.stringify(selectedServices));
+                // نخزّن الاختيار فقط (المعرّفات + القيم التي أدخلها المستخدم).
+                // لا نخزّن تعريف الحقول المخصصة إطلاقاً: مصدرها الوحيد قاعدة
+                // البيانات، وتخزينها يجعلها تتقادم عند أي تعديل من لوحة التحكم.
+                sessionStorage.setItem('amrtm_svc_v2_' + pageData.entityId, JSON.stringify(
+                    selectedServices.map(s => ({
+                        id: s.id, nameAr: s.nameAr, nameEn: s.nameEn, icon: s.icon,
+                        price: s.price, durationMin: s.durationMin, durationMax: s.durationMax,
+                        durationUnit: s.durationUnit, desc: s.desc
+                    }))
+                ));
             } catch (_) { }
 
             updateSelectedSelect();
@@ -2354,6 +2461,7 @@
             selectedServices = [];
             customValues = {};
             try {
+                sessionStorage.removeItem('amrtm_svc_v2_' + pageData.entityId);
                 sessionStorage.removeItem('amrtm_svc_' + pageData.entityId);
                 sessionStorage.removeItem('amrtm_cfv_' + pageData.entityId);
             } catch (_) { }
@@ -2432,20 +2540,30 @@
             }
 
             if (!window.AMRTM_USER) {
-                // الزائر: يختار الخدمة ثم يظهر له تسجيل الدخول
+                /*
+                 | الزائر لا يرى لوحات الخطوات 2/3 — عمده محجوبة بالبوابة أسفل النموذج.
+                 | بعد "المتابعة" يبقى على الخطوة الأولى (حتى تظهر المتطلبات
+                 | أسفلها) ويُعرض معه في نفس الوقت بوابة تسجيل الدخول.
+                 */
+                document.querySelectorAll('.cui-step-panel').forEach(p => p.classList.remove('active'));
+                const p1 = document.getElementById('step-1');
+                if (p1) p1.classList.add('active');
+
                 if (step === 1) {
-                    currentStep = 1;
+                    // العودة للخطوة الأولى = إلغاء البدء ⇒ تُخفى المتطلبات والبوابة
+                    step1Started = false;
                     hideLoginGate();
-                    document.querySelectorAll('.cui-step-panel').forEach(p => p.classList.remove('active'));
-                    const p1 = document.getElementById('step-1');
-                    if (p1) p1.classList.add('active');
                     updateIndicators(1);
                 } else {
-                    currentStep = step;
-                    document.querySelectorAll('.cui-step-panel').forEach(p => p.classList.remove('active'));
+                    // ضغط "المتابعة" ⇒ تبدأ الخدمة ⇒ المتطلبات + بوابة الدخول
+                    step1Started = true;
                     showLoginGate();
-                    updateIndicators(step);
+                    updateIndicators(2);
                 }
+
+                // currentStep يبقى 1: كتلة المتطلبات تتبع الخطوة الأولى
+                currentStep = 1;
+                serviceFieldsVisibility();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 return;
             }
@@ -2471,6 +2589,7 @@
                 renderCustomFields();
             }
 
+            serviceFieldsVisibility();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -2691,7 +2810,9 @@
             selectedServices = [];
             customValues = {};
             currentStep = 1;
+            step1Started = false;
             try {
+                sessionStorage.removeItem('amrtm_svc_v2_' + pageData.entityId);
                 sessionStorage.removeItem('amrtm_svc_' + pageData.entityId);
                 sessionStorage.removeItem('amrtm_cfv_' + pageData.entityId);
             } catch (_) { }
@@ -2729,7 +2850,13 @@
         function restoreSelection() {
             let saved = null;
             try {
-                saved = JSON.parse(sessionStorage.getItem('amrtm_svc_' + pageData.entityId) || 'null');
+                // 'v2' = إصدار جديد للمفتاح:Definitions القديمة كانت تُخزَّن
+                // وتُعرض كأنها حقيقية بعد تعديلها في قاعدة البيانات.
+                // تغيير الإصدار يُبطل الذاكرة القديمة تلقائياً.
+                saved = JSON.parse(sessionStorage.getItem('amrtm_svc_v2_' + pageData.entityId) || 'null');
+                if (sessionStorage.getItem('amrtm_svc_' + pageData.entityId)) {
+                    sessionStorage.removeItem('amrtm_svc_' + pageData.entityId);
+                }
             } catch (_) { }
             if (!saved || !Array.isArray(saved) || !saved.length) return;
             saved.forEach(s => {
@@ -2738,7 +2865,12 @@
                 if (card) {
                     card.classList.add('selected');
                     if (!selectedServices.some(x => String(x.id) === String(s.id))) {
-                        selectedServices.push({ id: s.id, nameAr: s.nameAr, nameEn: s.nameEn, icon: s.icon, price: s.price, durationMin: s.durationMin || parseInt(card.dataset.durationMin || 0), durationMax: s.durationMax || parseInt(card.dataset.durationMax || 0), durationUnit: s.durationUnit || card.dataset.durationUnit || 'day', desc: s.desc, customFields: (s.customFields && s.customFields.length ? s.customFields : decodeCustomFields(card)) });
+                        // الحقول المخصصة تُقرأ دائماً من بطاقة الخدمة في الصفحة
+                        // (أي من قاعدة البيانات) ولا تُؤخذ من ذاكرة الجلسة.
+                        // حفظها في sessionStorage كان يعرض تعريفات قديمة لم تعد
+                        // موجودة في قاعدة البيانات بعد تعديلها من لوحة التحكم.
+                        const serverFields = decodeCustomFields(card);
+                        selectedServices.push({ id: s.id, nameAr: s.nameAr, nameEn: s.nameEn, icon: s.icon, price: s.price, durationMin: s.durationMin || parseInt(card.dataset.durationMin || 0), durationMax: s.durationMax || parseInt(card.dataset.durationMax || 0), durationUnit: s.durationUnit || card.dataset.durationUnit || 'day', desc: s.desc, customFields: serverFields });
                     }
                 }
             });
