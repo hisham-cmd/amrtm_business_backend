@@ -119,7 +119,6 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         // User-only actions (غير مسموح للأدمن)
         Route::middleware('no-admin')->group(function () {
             Route::post('requests', [ServiceCatalogController::class, 'submitRequest'])->name('requests.submit');
-            Route::post('payments/charge', [PaymentController::class, 'initiate'])->name('payments.charge');
             Route::post('office-requests', [ServiceCatalogController::class, 'submitOfficeRequest'])->name('office-requests.submit');
             Route::post('requests/{id}/messages', [ServiceCatalogController::class, 'sendRequestMessage'])->name('requests.messages.send');
         });
@@ -319,6 +318,18 @@ Route::prefix('v1/provider-account')->name('api.v1.provider.')->group(function (
     Route::post('/', [ProviderAccountController::class, 'store'])->name('store')->middleware('auth:sanctum');
     Route::post('', [ProviderAccountController::class, 'store'])->name('store-noslash')->middleware('auth:sanctum');
 });
+
+/*
+|--------------------------------------------------------------------------
+| الدفع (HyperPay) — POST /api/v1/payments/charge
+|--------------------------------------------------------------------------
+| خارج بادئة api.v1.* عن قصد: الواجهة و payment_checkout و
+| x-ui.notifications ينادون route('amrtm.api.payments.charge') بالاسم
+| الكامل. نفس الحماية: auth.api:business + no-admin.
+*/
+Route::post('v1/payments/charge', [PaymentController::class, 'initiate'])
+    ->middleware(['auth.api:business', 'no-admin'])
+    ->name('amrtm.api.payments.charge');
 
 /*
 |--------------------------------------------------------------------------

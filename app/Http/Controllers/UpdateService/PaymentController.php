@@ -31,6 +31,8 @@ class PaymentController extends Controller
         }
 
         try {
+            // صفحة الـ checkout تعيش على الباك اند (نفس أصل بوابة الدفع)؛
+            // return_url هو عنوان صفحة الواجهة التي نُعيد المستخدم إليها بعد الدفع.
             $checkout = $hp->createCheckout(
                 (float) $request->amount,
                 $user->id,
@@ -62,18 +64,26 @@ class PaymentController extends Controller
         );
 
         return response()->json([
-            'redirect_url' => route('amrtm.payment.checkout', ['id' => $checkout['checkout_id']]),
+            'redirect_url' => route('amrtm.payment.checkout', [
+                'id'         => $checkout['checkout_id'],
+                'return_url' => $this->safeReturnUrl($request->input('return_url')),
+            ]),
             'checkout_id'  => $checkout['checkout_id'],
         ]);
     }
 
     /* ── GET /payment/checkout/{id} — widget page hosting the HyperPay card form ── */
-    public function checkout(string $id): View
+    public function checkout(Request $request, string $id): View
     {
         $ref = 'HP-' . $id;
 
+        /*
+         * الجلسة على الباك اند غير مضمونة (الواجهة على سيرفر منفصل)،
+         * لذا نكتفي بمطابقة مرجع العملية وحالتها pending — الربط بالمستخدم
+         * تم عند initiate، والاعتماد النهائي يجري في callback عبر إعادة
+         * الاستعلام من بوابة الدفع (وليس من المتصفح).
+         */
         $initiated = ServicePayment::where('transaction_ref', $ref)
-            ->where('user_id', auth('business')->id())
             ->where('status', 'pending')
             ->first();
 
@@ -82,6 +92,18 @@ class PaymentController extends Controller
         }
 
         $hp = app(HyperPayService::class);
+
+        /*
+         * وجهة العودة: ?return_url من initiate (يفضَّل) ← Referer ← مسار لوحة
+         * المستخدم (ستاب يمرّر المتصفح إلى دومين الواجهة). تُحفظ في الجلسة
+         * ليلتقطها callback بعد رجوع بوابة الدفع.
+         */
+        $returnUrl = $this->safeReturnUrl(
+            $request->query('return_url')
+                ?: ($request->headers->get('referer') ?: null)
+        ) ?? route('amrtm.user.dashboard');
+
+        session(['payment_return_url' => $returnUrl]);
 
         $simulated   = $hp->isSimulated();
         $widgetUrl = (! $simulated && $hp->isConfigured())
@@ -99,8 +121,35 @@ class PaymentController extends Controller
             'purpose'         => str_contains((string) $initiated->description_ar, 'سداد قيمة خدمة')
                 ? 'service'
                 : 'charge',
-            'return_url'      => url()->previous(route('amrtm.index')),
+            'return_url'      => $returnUrl,
         ]);
+    }
+
+    /**
+     * حارس open-redirect: نسمح فقط بعناوين دومين الواجهة (FRONTEND_URL)
+     * أو المسارات النسبية الداخلية، ونُرجع null لغير ذلك.
+     */
+    private function safeReturnUrl(?string $url): ?string
+    {
+        $url = trim((string) $url);
+
+        if ($url === '') {
+            return null;
+        }
+
+        if (str_starts_with($url, '/') && ! str_starts_with($url, '//')) {
+            return $url;
+        }
+
+        $frontend = rtrim((string) env('FRONTEND_URL', 'http://localhost:5173'), '/');
+
+        foreach ([$frontend, preg_replace('#^https?://#', '', $frontend)] as $allowed) {
+            if ($allowed !== '' && str_starts_with($url, $allowed)) {
+                return $url;
+            }
+        }
+
+        return null;
     }
 
     /* ── POST /payment/simulate/{id} — يُسجّل قرار المحاكاة (بمبلغ مخصص ≥ حدّه الأدنى) ثم يحوّل للـ callback ── */

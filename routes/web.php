@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UpdateService\MediaController;
+use App\Http\Controllers\UpdateService\PaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,19 +13,78 @@ use Illuminate\Support\Facades\Route;
 | الواجهة الأمامية (Blade) تعيش في مشروع منفصل: /blade-frontend
 | وتستهلك البيانات من هنا عبر /api/v1/*.
 |
-| أي وصول إلى الجذر هنا يُجاب بـ JSON تعريفياً بدل صفحات Blade.
+| استثناء وحيد: صفحات/نقاط بوابة الدفع (HyperPay) تعيش على الباك اند
+| لأن بوابة الدفع تعيد المستخدم إلى سيرفر هذا المشروع مباشرة
+| (shopperResultUrl + الويبهوك)، والواجهة المنفصلة تحوّل المستخدم
+| إلى صفحة الـ checkout هنا ثم تستقبل رجوعه عبر return_url.
+|
 */
 
-Route::get('/', function () {
+$frontendUrl = rtrim((string) env('FRONTEND_URL', 'http://localhost:5173'), '/');
+
+Route::get('/', function () use ($frontendUrl) {
     return response()->json([
-        'app'     => 'AMRTM Business Backend (API-only)',
-        'docs'    => '/api/v1',
-        'status'  => 'ok',
-        'message' => 'هذا السيرفر يخدم الـ API فقط. الواجهة الأمامية في blade-frontend.',
+        'app'      => 'AMRTM Business Backend (API-only)',
+        'docs'     => '/api/v1',
+        'status'   => 'ok',
+        'message'  => 'هذا السيرفر يخدم الـ API فقط. الواجهة الأمامية في blade-frontend.',
+        'frontend' => $frontendUrl,
     ]);
-});
+})->name('amrtm.index');
 
 Route::get('/health', fn () => response()->json(['status' => 'ok', 'time' => now()->toIso8601String()]));
+
+/*
+|--------------------------------------------------------------------------
+| بوابة الدفع (HyperPay) — تعيش على الباك اند
+|--------------------------------------------------------------------------
+|
+| GET  /payment/checkout/{id}   صفحة widget البطاقة / المحاكاة
+| POST /payment/simulate/{id}   قرار المحاكاة (نجاح/فشل) — web CSRF العادي
+| GET  /payment/callback        shopperResultUrl — رجوع المستخدم/البوابة
+| POST /payment/webhook         إشعار HyperPay غير المتزامن
+|                               (CSRF-exempt في bootstrap/app.php مسبقاً)
+|
+*/
+
+Route::get('/payment/checkout/{id}', [PaymentController::class, 'checkout'])
+    ->name('amrtm.payment.checkout');
+
+Route::post('/payment/simulate/{checkout}', [PaymentController::class, 'simulateDecision'])
+    ->name('amrtm.payment.simulate');
+
+Route::get('/payment/callback', [PaymentController::class, 'callback'])
+    ->name('amrtm.payment.callback');
+
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])
+    ->name('amrtm.payment.webhook');
+
+/*
+|--------------------------------------------------------------------------
+| مسارات الواجهة الأمامية — تمرير آمن إلى دومين الواجهة
+|--------------------------------------------------------------------------
+|
+| PaymentController/callback و payment_checkout view و x-ui.notifications
+| يستدعون route('amrtm.user.dashboard') / route('amrtm.login') /
+| route('amrtm.logout') — هذه الصفحات تعيش على سيرفر الواجهة، لذا
+| نعيد التوجيه إلى FRONTEND_URL بدلاً من RouteNotFoundException.
+|
+*/
+
+Route::get('/dashboard', fn () => redirect()->away($frontendUrl . '/dashboard'))
+    ->name('amrtm.user.dashboard');
+
+Route::get('/login', fn () => redirect()->away($frontendUrl . '/login'))
+    ->name('amrtm.login');
+
+Route::post('/logout', fn () => redirect()->away($frontendUrl))
+    ->name('amrtm.logout');
+
+Route::get('/office/login', fn () => redirect()->away($frontendUrl . '/office/login'))
+    ->name('amrtm.office.login');
+
+Route::post('/office/logout', fn () => redirect()->away($frontendUrl))
+    ->name('amrtm.office.logout');
 
 /*
 |--------------------------------------------------------------------------
