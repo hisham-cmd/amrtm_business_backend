@@ -1479,7 +1479,13 @@ if ($isCommissionBased) {
         }
     }
 
-    public function updateOffice(Request $request, int $id): \Illuminate\Http\RedirectResponse
+    /*
+     * نوع الإرجاع موسّع عمداً: كان RedirectResponse فقط، فكانت استدعاءات
+     * النافذة المنبثقة (fetch + Accept: application/json) ترمي
+     * TypeError «Return value must be of type RedirectResponse» لأننا نردّ
+     * JsonResponse في مسار JSON. الآن الاثنان مقبولان.
+     */
+    public function updateOffice(Request $request, int $id)
     {
         $office = Office::find($id);
 
@@ -1696,12 +1702,13 @@ if ($isCommissionBased) {
                     $specialtyNames[] = trim((string) $request->manual_specialty);
                 }
                 $office->specialties = $specialtyNames;
-                $office->save();
+            $office->save();
             }
 
             if ($request->hasFile('commercial_register_image')) {
                 $this->saveOfficeDocument($connection, $office, $request->file('commercial_register_image'), 'commercial_register', 'commercial-register', $storedFiles);
             }
+
             if ($request->hasFile('license_image')) {
                 $this->saveOfficeDocument($connection, $office, $request->file('license_image'), 'license', 'license', $storedFiles);
             }
@@ -1772,6 +1779,19 @@ if ($isCommissionBased) {
                 'file'    => $e->getFile(),
                 'line'    => $e->getLine(),
             ]);
+
+            // نفس سبب الفرع أعلاه: back() = 302 يتبعه عميل HTTP فيقرأ 200
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'isSuccess'  => false,
+                    'value'      => null,
+                    'error'      => [
+                        'message' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage(),
+                        'code'    => 'UPDATE_FAILED',
+                    ],
+                    'statusCode' => 500,
+                ], 500);
+            }
 
             return back()->withErrors(['general' => 'حدث خطأ أثناء التحديث: ' . $e->getMessage()])->withInput();
         }
