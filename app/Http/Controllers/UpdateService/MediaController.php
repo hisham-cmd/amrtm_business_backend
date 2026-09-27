@@ -30,13 +30,15 @@ class MediaController extends Controller
      * @var array<string,string>
      */
     private const ROOT_MAP = [
-        // الأكثر تحديداً أولاً (المطابقة الأطول)
+        // الأطول أولاً (المطابقة بالأطول)
         'images/uploads' => 'public/images/uploads',
         'images/public'  => 'public/images/public',
         'images'         => 'public/images',
         'uploads'        => 'public/images/uploads',
         'public'         => 'public/images/public',
         'homepage'       => 'storage/app/public/homepage',
+        // فيديوهات الواجهة (0829.mp4 …) — كانت تُطلب عبر نطاق الباك اند
+        'videos'         => 'public/videos',
     ];
 
     private const MIME_MAP = [
@@ -50,6 +52,7 @@ class MediaController extends Controller
         'pdf'  => 'application/pdf',
         'mp4'  => 'video/mp4',
         'webm' => 'video/webm',
+        'mov'  => 'video/quicktime',
     ];
 
     public function show(Request $request, string $bucket, string $path = '')
