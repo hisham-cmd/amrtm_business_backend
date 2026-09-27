@@ -8,6 +8,7 @@ use App\Models\Business\BusinessUser;
 use App\Models\Business\OfficeUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -104,6 +105,13 @@ class ApiAuthController extends Controller
     /**
      * POST /api/v1/auth/register
      * إنشاء حساب Business جديد وإرجاع توكن مباشرة.
+     *
+     * يقبل حسابين:
+     *   - individual   : عميل فرد  (اسم الأب/الجد/العائلة، رقم الهوية، القطاع، الحالة الوظيفية)
+     *   - establishment: عميل منشأة (الاسم النظامي، نوع الكيان، السجل التجاري، العنوان…)
+     *
+     * ⚠️ كان يقبل 5 حقول فقط ويحفظها، فكانت كل بيانات النموذج الأخرى تُسقط
+     *    بصمت رغم وجودها في BusinessUser::$fillable. نتحقق ونحفظها الآن.
      */
     public function register(Request $request): JsonResponse
     {
@@ -113,11 +121,55 @@ class ApiAuthController extends Controller
             'phone'       => ['required', 'string', 'max:30'],
             'password'    => ['required', 'string', 'min:8', 'confirmed'],
             'account_type' => ['nullable', 'in:establishment,individual'],
+
+            // ── عميل فرد ──────────────────────────────────────────────
+            'father_name'      => ['nullable', 'string', 'max:255'],
+            'grandfather_name' => ['nullable', 'string', 'max:255'],
+            'family_name'      => ['nullable', 'string', 'max:255'],
+            'id_number'        => ['nullable', 'string', 'max:30'],
+            'job_sector'       => ['nullable', 'in:government,private'],
+            'employment_status'=> ['nullable', 'in:retired,affiliated'],
+
+            // ── عميل منشأة ────────────────────────────────────────────
+            'legal_name'            => ['nullable', 'string', 'max:255'],
+            'entity_type'           => ['nullable', 'string', 'max:100'],
+            'representative_name'   => ['nullable', 'string', 'max:255'],
+            'representative_role'   => ['nullable', 'string', 'max:255'],
+            'cr_number'             => ['nullable', 'string', 'max:50'],
+            'cr_expiry_date'        => ['nullable', 'date'],
+            'license_expiry_date'   => ['nullable', 'date'],
+
+            // ── عنوان مشترك ───────────────────────────────────────────
+            'phone_dial'      => ['nullable', 'string', 'max:10'],
+            'country'         => ['nullable', 'string', 'max:100'],
+            'region'          => ['nullable', 'string', 'max:100'],
+            'city'            => ['nullable', 'string', 'max:100'],
+            'district'        => ['nullable', 'string', 'max:100'],
+            'street'          => ['nullable', 'string', 'max:255'],
+            'building_number' => ['nullable', 'string', 'max:50'],
+            'office_number'   => ['nullable', 'string', 'max:50'],
+            'postal_code'     => ['nullable', 'string', 'max:20'],
+
+            // ── ملف الصورة الشخصية ─────────────────────────────────────
+            'profile_photo' => ['nullable', 'image', 'max:5120'],
         ]);
 
-        $accountType = $request->input('account_type', 'individual');
+        $accountType = $validated['account_type'] ?? 'individual';
 
-        $user = BusinessUser::create([
+        /*
+         * الحقول التي تُحفظ كما هي (نصية) — مطابقة لـ BusinessUser::$fillable.
+         * لا نحفظ ما لم يرسله النموذج إطلاقاً.
+         */
+        $persisted = [
+            'phone_dial', 'country', 'region', 'city', 'district', 'street',
+            'building_number', 'office_number', 'postal_code',
+            'father_name', 'grandfather_name', 'family_name', 'id_number',
+            'job_sector', 'employment_status',
+            'legal_name', 'entity_type', 'representative_name', 'representative_role',
+            'cr_number', 'cr_expiry_date', 'license_expiry_date',
+        ];
+
+        $data = [
             'name'         => $validated['name'],
             'email'        => $validated['email'],
             'phone'        => $validated['phone'],
@@ -125,7 +177,36 @@ class ApiAuthController extends Controller
             'role'         => 'user',
             'account_type' => $accountType,
             'is_active'    => true,
-        ]);
+        ];
+
+        foreach ($persisted as $field) {
+            if (array_key_exists($field, $validated) && $validated[$field] !== null && $validated[$field] !== '') {
+                $data[$field] = $validated[$field];
+            }
+        }
+
+        /*
+         * الصورة الشخصية.
+         *
+         * ⚠️ لا نستخدم ->store() على disk public هنا: BusinessUser::getAvatarUrlAttribute()
+         * يبني العنوان من  '/media/uploads/' . $file  ، و MediaController يخدم
+         * الملف من  public_path('images/uploads/')  وباسم **مسطّح** فقط
+         * (يرفض أي مسار يحتوي '/')  عبر MediaController::show.
+         * لذلك نكتب الملف في public/images/uploads ونخزّن الاسم فقط.
+         */
+        if ($request->hasFile('profile_photo')) {
+            $file = $request->file('profile_photo');
+            $dir  = public_path('images/uploads');
+            File::ensureDirectoryExists($dir);
+
+            $ext  = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+            $name = 'avatar-' . bin2hex(random_bytes(12)) . '.' . $ext;
+            $file->move($dir, $name);
+
+            $data['profile_photo'] = $name;
+        }
+
+        $user = BusinessUser::create($data);
 
         $token = $user->createToken('api-token', ['business'])->plainTextToken;
 
@@ -219,6 +300,17 @@ class ApiAuthController extends Controller
             'initials'        => $user->initials,
             'city'            => $user->city,
             'region'          => $user->region,
+            // حقول العميل الفرد
+            'father_name'     => $user->father_name,
+            'family_name'     => $user->family_name,
+            'id_number'       => $user->id_number,
+            'job_sector'      => $user->job_sector,
+            'employment_status' => $user->employment_status,
+            // حقول عميل المنشأة
+            'legal_name'      => $user->legal_name,
+            'entity_type'     => $user->entity_type,
+            'cr_number'       => $user->cr_number,
+            'cr_expiry_date'  => $user->cr_expiry_date,
         ];
     }
 }

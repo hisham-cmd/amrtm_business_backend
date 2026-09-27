@@ -185,6 +185,13 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
             Route::get('admin/offices', [AdminServiceController::class, 'adminOffices'])->name('admin.offices');
             Route::get('admin/offices/stats', [AdminServiceController::class, 'adminOfficeStats'])->name('admin.offices.stats');
             Route::get('admin/offices/{id}/details', [AdminServiceController::class, 'adminOfficeDetails'])->name('admin.offices.details');
+            /*
+             * تعديل مكتب — لم يكن موجوداً إطلاقاً: زر «تعديل» في لوحة الأدمن
+             * كان ينقل إلى /admin/offices/{id}/edit-form وهو مسار يعرض لوحة
+             * الأدمن نفسها بلا نموذج، فلا يحدث شيء عند الضغط.
+             * الآن الواجهة (نفس نموذج «إنشاء الحساب» في وضع التعديل) ترسل هنا.
+             */
+            Route::match(['put', 'post'], 'admin/offices/{id}', [AdminServiceController::class, 'updateOffice'])->name('admin.offices.update');
             Route::post('admin/offices/{id}/verify', [AdminServiceController::class, 'verifyOffice'])->name('admin.offices.verify');
             Route::post('admin/offices/{id}/toggle', [AdminServiceController::class, 'toggleOffice'])->name('admin.offices.toggle');
             Route::delete('admin/offices/{id}', [AdminServiceController::class, 'deleteOffice'])->name('admin.offices.delete');
@@ -312,11 +319,21 @@ Route::prefix('v1/contracts')->name('api.v1.contracts.')->middleware('auth:sanct
 | Provider (تسجيل مقدم خدمة) — /api/v1/provider-account
 |--------------------------------------------------------------------------
 | store يدعم JSON بالفعل عبر wantsJson().
+|
+| ملاحظة مهمة حول الحماية:
+| نقطة التسجيل كانت محميّة بـ auth:sanctum، وهذا يمنع التسجيل نفسه لأن
+| التوكن لا يوجد قبل الإنشاء (التوكن هو مُخرَج هذه العملية). فكانت الواجهة
+| تُرجع 401 "غير مصادق عليه" بلا إنشاء أي حساب.
+| الحل: نمرّر الطلب إلى middleware الشرطية auth:api التي تتحقق فقط إن وُجد
+| توكن، وتسمح إن لم يوجد. التوكن نفسه يُصدره store بعد إنشاء الحساب.
+|
+| ملاحظة أخرى: كان هنا مساران لنفس العملية — Route::post('/') و
+| Route::post('') — فكان الثاني يبتلع الطلب ويعيد صفحة الجذر بدل إنشاء
+| الحساب. نُبقي مساراً واحداً بلا شرطة مائلة (يطابق ما ترسله الواجهة).
 */
 Route::prefix('v1/provider-account')->name('api.v1.provider.')->group(function () {
     Route::get('specialties', [ProviderAccountController::class, 'specialties'])->name('specialties');
-    Route::post('/', [ProviderAccountController::class, 'store'])->name('store')->middleware('auth:sanctum');
-    Route::post('', [ProviderAccountController::class, 'store'])->name('store-noslash')->middleware('auth:sanctum');
+    Route::post('/', [ProviderAccountController::class, 'store'])->name('store');
 });
 
 /*

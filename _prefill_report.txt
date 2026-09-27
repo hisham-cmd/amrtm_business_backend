@@ -1,0 +1,26 @@
+=== office #55 ===
+  name_ar          OK        مكتب مساند اختباري
+  name_en          OK        مكتب مساند اختباري
+  office_type      OK        customs
+  entity_type      OK        company
+  phone            OK        5747244567
+  email            OK        office@gmail.com
+  country          OK        المملكة العربية السعودية
+  governorate      OK        منطقة الحدود الشمالية
+  city             OK        عرعر
+  cr_number        OK        564626235
+  license_number   OK        525262532
+
+=== bs_offices ===
+  type           : 'customs'
+  entity_type    : 'company'
+  name_en        : 'مكتب مساند اختباري'
+  email          : 'office@gmail.com'
+
+=== bs_office_profiles ===
+  country          'المملكة العربية السعودية'
+  governorate      'منطقة الحدود الشمالية'
+  city             'عرعر'
+  license_number   '525262532'
+  cr_number        '564626235'
+  mobile           '5747244567'

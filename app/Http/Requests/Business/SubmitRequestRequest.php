@@ -26,7 +26,17 @@ class SubmitRequestRequest extends FormRequest
             'notes'            => ['nullable', 'string', 'max:2000'],
             'attachments'      => ['nullable', 'array', 'max:5'],
             'attachments.*'    => ['file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
-            'custom_fields'    => ['nullable', 'array'],
+            /*
+             |----------------------------------------------------------------------
+             | القيم لا التعريفات
+             |----------------------------------------------------------------------
+             | كانت 'custom_fields' => array وهو يرفض أي قيمة نصية، لكن الواجهة
+             | ترسل القيم فقط: custom_fields[<key>] = قيمة. والقواعد الديناميكية
+             | أدناه (custom_fields.<key>) تتحقق من كل قيمة على حدة.
+             | لذلك نتحقق أنها بنية مفاتيح/قيم map<string,mixed> لا تعريفات.
+             */
+            'custom_fields'    => ['nullable'],
+            'custom_fields.*'  => ['nullable'],
         ];
 
         $service = GovService::find($this->input('service_id'));

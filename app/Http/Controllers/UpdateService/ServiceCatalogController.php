@@ -969,8 +969,25 @@ class ServiceCatalogController extends Controller
     /* ── JSON: submit service request ── */
     public function submitRequest(SubmitRequestRequest $request, ServiceRequestService $service): JsonResponse
     {
+        $data = $request->validated();
+
+        /*
+         |----------------------------------------------------------------------
+         | ملفات الحقول المخصصة
+         |----------------------------------------------------------------------
+         | validated() لا تحتوي كائنات UploadedFile، فكانت snapshotCustomFields
+         | ترى قيمة نصية/فارغة للحقل من نوع "file" ويفشل بـ "مطلوب" أو
+         | تُحفظ قيمة نصية بدل المسار. نقرأ الملفات من الـ request مباشرة
+         | وندمجها فوق القيم النصية قبل التمرير.
+         */
+        foreach ($request->file('custom_fields', []) as $key => $file) {
+            if ($file instanceof \Illuminate\Http\UploadedFile && $file->isValid()) {
+                $data['custom_fields'][$key] = $file;
+            }
+        }
+
         $sr = $service->submit(
-            $request->validated(),
+            $data,
             $request->file('attachments') ?? [],
             auth('business')->user()
         );

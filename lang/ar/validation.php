@@ -137,6 +137,38 @@ return [
     'uuid'                 => 'يجب أن يكون :attribute UUID صحيحاً.',
 
     'attributes' => [
+        // ── تسجيل حساب العميل (فردي) ──────────────────────────────
+        'name'                  => 'الاسم',
+        'email'                 => 'البريد الإلكتروني',
+        'phone'                 => 'رقم الجوال',
+        'phone_dial'            => 'مفتاح الدولة',
+        'password'              => 'كلمة المرور',
+        'password_confirmation' => 'تأكيد كلمة المرور',
+        'father_name'           => 'اسم الأب',
+        'grandfather_name'      => 'اسم الجد',
+        'family_name'           => 'اسم العائلة',
+        'id_number'             => 'رقم الهوية',
+        'job_sector'            => 'نوع الوظيفة',
+        'employment_status'     => 'الحالة الوظيفية',
+        'profile_photo'         => 'الصورة الشخصية',
+
+        // ── تسجيل حساب العميل (منشأة) ─────────────────────────────
+        'name_ar'               => 'الاسم بالعربية',
+        'name_en'               => 'الاسم بالإنجليزية',
+        'legal_name'            => 'الاسم النظامي',
+        'entity_type'           => 'نوع الكيان',
+        'office_type'           => 'النشاط التجاري',
+        'cr_number'             => 'رقم السجل التجاري',
+        'cr_expiry_date'        => 'تاريخ انتهاء السجل التجاري',
+        'license_number'        => 'رقم الترخيص',
+        'license_expiry_date'   => 'تاريخ انتهاء الترخيص',
+        'representative_name'   => 'اسم الممثل',
+        'representative_role'   => 'صفة الممثل',
+        'trademark_registration_number' => 'رقم العلامة التجارية',
+        'district'              => 'الحي',
+        'postal_code'           => 'الرمز البريدي',
+        'region'                => 'المنطقة',
+
         'account_type'           => 'نوع الحساب',
         'venue_name'             => 'اسم المنشأة',
         'venue_type'             => 'نوع المنشأة',

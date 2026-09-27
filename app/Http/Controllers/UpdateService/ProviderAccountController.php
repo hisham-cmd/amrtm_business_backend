@@ -1260,19 +1260,22 @@ class ProviderAccountController extends Controller
         $selectedSpecialtyIds = array_values(array_filter($rawSpecialties, fn($v) => is_numeric($v)));
 
         if (empty($selectedSpecialtyIds) && !$hasOther && !trim((string)$request->manual_specialty)) {
-            return back()
-                ->withErrors([
-                    'specialties' => 'يرجى اختيار تخصص واحد على الأقل أو كتابة تخصص يدوي.'
-                ])
-                ->withInput();
+            /*
+            |----------------------------------------------------------------------
+            | كان هنا back()->withErrors(...) وهو يولّد 302 نحو الجذر في مشروع
+            | API-only بلا نموذج Blade، فيختفي سبب الرفض تماماً وتبدو الواجهة
+            | كأن المستخدم أُعيد إلى الصفحة الرئيسية بلا سبب.
+            */
+
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'specialties' => 'يرجى اختيار تخصص واحد على الأقل أو كتابة تخصص يدوي.',
+            ]);
         }
 
         if ($hasOther && !trim((string)$request->manual_specialty) && empty($selectedSpecialtyIds)) {
-            return back()
-                ->withErrors([
-                    'manual_specialty' => 'يرجى كتابة التخصص اليدوي.'
-                ])
-                ->withInput();
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'manual_specialty' => 'يرجى كتابة التخصص اليدوي.',
+            ]);
         }
 
         /*
@@ -1956,23 +1959,25 @@ class ProviderAccountController extends Controller
             |--------------------------------------------------------------------------
             */
 
-            if ($request->wantsJson()) {
-                session()->flash(
-                    'success',
-                    'تم إرسال طلب تسجيل المكتب بنجاح، وسيتم مراجعته من الإدارة.'
-                );
+            /*
+            |----------------------------------------------------------------------
+            | نجاح العملية
+            |----------------------------------------------------------------------
+            | هذا المشروع API-only، لذا الاستجابة دائماً JSON.
+            | الاعتماد على wantsJson() كان يفعّل مسار redirect (302 نحو الجذر)
+            | عندما لا يصل Accept: application/json، فيبدو للواجهة كأن الطلب
+            | أُهمل وتمّ التوجيه للصفحة الرئيسية — وهو ما كان يحدث.
+            */
 
-                return response()->json([
-                    'redirect' => route('amrtm.provider.account.create'),
-                ]);
-            }
-
-            return redirect()
-                ->route('amrtm.provider.account.create')
-                ->with(
-                    'success',
-                    'تم إرسال طلب تسجيل المكتب بنجاح، وسيتم مراجعته من الإدارة.'
-                );
+            return response()->json([
+                'isSuccess'  => true,
+                'statusCode' => 201,
+                'value'      => [
+                    'redirect' => $this->frontendUrl('provider-account/create'),
+                    'officeId' => $office->id,
+                ],
+                'error'      => null,
+            ], 201);
 
 
         } catch (\Throwable $e) {
@@ -2045,33 +2050,50 @@ class ProviderAccountController extends Controller
 
 
             /*
-            |--------------------------------------------------------------------------
-            | إظهار الخطأ الحقيقي مؤقتاً
-            |--------------------------------------------------------------------------
-            |
-            | بعد ما نتأكد أن كل شيء يعمل، نرجع الرسالة العامة.
-            |
+            |----------------------------------------------------------------------
+            | الاستجابة عند الفشل
+            |----------------------------------------------------------------------
+            | هذا المشروع API-only، فلا يوجد نموذج Blade ليرجع إليه back()
+            | فيولّد 302 نحو الجذر ويبدو للواجهة كأن الأمر نجح بلا شيء.
+            | لذلك نعيد دائماً JSON يحمل أخطاء التحقق أو الرسالة العامة.
             */
 
-            if ($request->wantsJson()) {
-                if ($e instanceof \Illuminate\Validation\ValidationException) {
-                    throw $e;
-                }
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
 
                 return response()->json([
-                    'isSuccess' => false,
-                    'message'   => 'حدث خطأ غير متوقع أثناء حفظ الطلب.',
-                    'statusCode'=> 500,
-                ], 500);
+                    'isSuccess'  => false,
+                    'value'      => null,
+                    'message'    => collect($e->errors())->flatten()->first(),
+                    'errors'     => $e->errors(),
+                    'statusCode' => 422,
+                ], 422);
             }
 
-            return back()
-                ->withErrors([
-                    'registration' =>
-                        'الخطأ الحقيقي: ' .
-                        $e->getMessage(),
-                ])
-                ->withInput();
+            return response()->json([
+                'isSuccess'  => false,
+                'value'      => null,
+                'message'    => 'حدث خطأ غير متوقع أثناء حفظ الطلب.',
+                'error'      => [
+                    'message' => 'حدث خطأ غير متوقع أثناء حفظ الطلب.',
+                    'code'    => 'REGISTRATION_FAILED',
+                ],
+                'statusCode' => 500,
+            ], 500);
         }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | رابط الواجهة الأمامية
+    |--------------------------------------------------------------------------
+    | هذا المشروع API-only، لذا أي إعادة توجيه لصفحة الواجهة تتم عبر
+    | دومين FRONTEND_URL لا عبر route() (المسارات هنا للـ API فقط).
+    */
+
+    private function frontendUrl(string $path): string
+    {
+        $base = rtrim((string) env('FRONTEND_URL', 'http://127.0.0.1:8001'), '/');
+
+        return $base . '/' . ltrim($path, '/');
     }
 }

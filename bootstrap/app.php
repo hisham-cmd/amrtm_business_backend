@@ -18,7 +18,15 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 
-return Application::configure(basePath: dirname(__DIR__))
+/*
+ |--------------------------------------------------------------------------
+ | التطبيق
+ |--------------------------------------------------------------------------
+ | ⚠️ لا تستخدم `return Application::configure(...)` هنا: الـ return يوقف
+ | التنفيذ فوراً، فتصبح أي أسطر بعده (مثل useLangPath أسفله) شيفرة ميتة
+ | لا تُنفَّذ أبداً. لذلك نُسند النتيجة إلى $app ثم نُعيدها في النهاية.
+ */
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
@@ -85,3 +93,21 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->with('error', 'انتهت صلاحية الجلسة بسبب عدم النشاط. سجل الدخول مرة أخرى ثم أعد المحاولة.');
         });
     })->create();
+
+/*
+ |--------------------------------------------------------------------------
+ | مسار ملفات الترجمة
+ |--------------------------------------------------------------------------
+ | ⚠️ Laravel 11 يوجّه langPath() افتراضياً إلى resources/lang، بينما ملفات
+ | الترجمة في هذا المشروع موجودة في المجلد الجذر lang/ (بنية سابقة
+ | لترقية Laravel 10 ← 11). فكان المُحمِّل FileLoader يبحث في:
+ |   vendor/laravel/framework/.../lang
+ |   resources/lang            ← غير موجود
+ | فلا يجد أي ملف ترجمة، فتُعاد رسائل التحقق مفاتيح خام:
+ |   "validation.email" بدل "يجب أن يكون :attribute عنوان بريد إلكتروني صحيحاً."
+ |
+ | useLangPath() يجب أن يُستدعى قبل حلّ أي خدمة ترجمة (lazy).
+ */
+$app->useLangPath(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'lang');
+
+return $app;

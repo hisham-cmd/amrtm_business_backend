@@ -1488,48 +1488,11 @@ if ($isCommissionBased) {
         }
 
         $rules = $this->officeValidationRules();
-
-        /*
-         * في التعديل: كلمة المرور اختيارية (تبقى كما هي إن لم تُملأ)،
-         * وكل المستندات اختيارية أيضاً — يُستبدل الملف فقط إن أُرفق جديد.
-         *
-         * ⚠️ كان Relax لا يغطي سوى password وصورتين، بينما تبقّى:
-         *   cv                        → required  ⇒ أي حفظ يفشل بـ 422
-         *   commercial_register_image/ license_image (كانت required أصلاً)
-         *   trademark_certificate / certificates / appreciation_certificates
-         * فكان تعديل أي مكتب مستحيل دون إعادة رفع كل مستنداته من جديد،
-         * رغم أن المكتب يملكها أصلاً في bs_office_documents.
-         */
-        $imageRule = ['nullable', 'file', 'mimetypes:image/jpeg,image/png,application/pdf', 'max:5120'];
-        $docRule   = ['nullable', 'file', 'mimetypes:application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'max:5120'];
-
-        $rules['password']                    = ['nullable', 'string', 'min:8', 'confirmed'];
-        $rules['commercial_register_image']   = $imageRule;
-        $rules['license_image']               = $imageRule;
-        $rules['trademark_certificate']       = array_merge($imageRule, ['nullable']);
-        $rules['cv']                          = $docRule;
-
-        // الشهادات ملفات متعددة — كل عنصر اختياري داخل المصفوفة
-        $rules['certificates.*']              = $imageRule;
-        $rules['appreciation_certificates.*'] = $imageRule;
-
-        /*
-         * الشعار اختياري أيضاً (يبقى القديم إن لم يُرفع جديد).
-         */
-        if (isset($rules['logo'])) {
-            $rules['logo'] = ['nullable', 'image', 'max:5120'];
-        }
-
-        /*
-         * البريد يجب أن يبقى فريداً بين جدولي المكاتب ومستخدميها،
-         * مع استثناء بريد هذا المكتب نفسه (وإلا فشل التعديل على بريده).
-         */
-        $ownerId = OfficeUser::where('office_id', $office->id)->value('id');
-        $rules['email'] = [
-            'required', 'email', 'max:191',
-            \Illuminate\Validation\Rule::unique('business.bs_offices', 'email')->ignore($office->id),
-            \Illuminate\Validation\Rule::unique('business.bs_office_users', 'email')->ignore($ownerId),
-        ];
+        // في التعديل: كلمة المرور اختيارية (تبقى كما هي إن لم تُملأ)، والملفات تُستبدل فقط إذا أُرفقت.
+        $rules['password'] = ['nullable', 'string', 'min:8', 'confirmed'];
+        $rules['commercial_register_image'] = ['nullable', 'file', 'mimetypes:image/jpeg,image/png,application/pdf', 'max:5120'];
+        $rules['license_image']             = ['nullable', 'file', 'mimetypes:image/jpeg,image/png,application/pdf', 'max:5120'];
+        $rules['email'] = ['required', 'email', 'max:191', 'unique:business.bs_offices,email,' . $office->id];
 
         $request->validate($rules);
 
@@ -1672,30 +1635,6 @@ if ($isCommissionBased) {
             }
 
             $connection->commit();
-
-            /*
-             * ⚠️ هذه الدالة كانت مكتوبة لنموذج ويب تقليدي (redirect) ولم تكن
-             * موصولة بمسار إطلاقاً — لذلك لم يكن زر «تعديل» في لوحة الأدمن
-             * يفعل شيئاً: كان ينقل إلى edit-form وهو نفس مسار لوحة الأدمن
-             * بلا أي نموذج، ولم يكن هناك أي endpoint تعديل على الإطلاق.
-             *
-             * الآن تستدعيها النافذة المنبثقة أيضاً، وهي ترسل عبر fetch مع
-             * Accept: application/json. فلو أعدنا 302 لتجاهله الـ fetch
-             * وضاعت كل رسائل التحقق، وبدا للمستخدم «لا شيء حدث».
-             * لذلك نردّ JSON عند طلب JSON، و302 عند الطلب العادي.
-             */
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'isSuccess'  => true,
-                    'message'    => 'تم تحديث البيانات بنجاح',
-                    'redirect'   => null,
-                    'value'      => [
-                        'id'   => $office->id,
-                        'name' => $office->name_ar,
-                    ],
-                    'statusCode' => 200,
-                ], 200);
-            }
 
             return redirect(route('amrtm.admin.dashboard') . '#offices')
                 ->with('success', 'تم تحديث البيانات بنجاح');
@@ -2562,23 +2501,6 @@ if ($isCommissionBased) {
             'is_active'       => (bool) $office->is_active,
             'is_verified'     => (bool) $office->is_verified,
             'commission_rate' => $office->commission_rate,
-
-            /*
-             * الحقول التالية كانت مفقودة من استجابة التفاصيل، فلم يكن نموذج
-             * «تعديل» يقدر يملؤها رغم وجودها في قاعدة البيانات:
-             *   entity_type / business_activity / category / business_categories
-             *   subscription_type / account_types / office_code
-             * وهي كلها إلزامية في officeValidationRules() لـ entity_type تحديداً،
-             * فكان أي حفظ يفشل بـ 422 «حقل نوع الكيان مطلوب».
-             */
-            'entity_type'          => $office->entity_type,
-            'business_activity'    => $office->business_activity,
-            'category'             => $office->category,
-            'business_categories'  => $office->business_categories,
-            'subscription_type'    => $office->subscription_type,
-            'account_types'        => $office->account_types,
-            'office_code'          => $office->office_code,
-            'specialties'          => $office->specialties,
         ],
 
         /*

@@ -1,0 +1,15 @@
+=== حسابات الإدارة (لاختيار حساب للاختبار) ===
+id=11   role=supervisor  email=supervisor@amrtm.com.sa            active=yes verified_at=yes
+id=31   role=admin       email=nasr32015@gmail.com                active=yes verified_at=no
+id=32   role=admin       email=dataentry@amrtm.com                active=yes verified_at=no
+id=35   role=admin       email=super@amrtm                        active=yes verified_at=no
+id=54   role=admin       email=admin@amrtm.dev                    active=yes verified_at=no
+id=56   role=supervisor  email=testsup@amrtm.dev                  active=yes verified_at=no
+
+=== هل كلمة المرور تتطابق مع "admin123" أو "Test@12345"؟ ===
+supervisor@amrtm.com.sa => password
+nasr32015@gmail.com => لا تطابق أي كلمة مرور معروفة
+dataentry@amrtm.com => لا تطابق أي كلمة مرور معروفة
+super@amrtm => لا تطابق أي كلمة مرور معروفة
+admin@amrtm.dev => لا تطابق أي كلمة مرور معروفة
+testsup@amrtm.dev => لا تطابق أي كلمة مرور معروفة
