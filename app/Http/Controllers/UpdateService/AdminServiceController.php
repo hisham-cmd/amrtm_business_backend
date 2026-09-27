@@ -1536,8 +1536,51 @@ if ($isCommissionBased) {
         $connection = DB::connection('business');
         $storedFiles = [];
 
-        [$hasOther, $dbSpecialties, $specialtyError] = $this->resolveOfficeSpecialties($request, $connection);
+        /*
+         * ⚠️ التخصصات في التعديل:
+         * resolveOfficeSpecialties() ترفض الطلب كلياً إن لم يُرسَل تخصص واحد
+         * («يرجى اختيار تخصص واحد على الأقل») — وهي قاعدة صحيحة عند **الإنشاء**
+         * لكنها كانت تُسقط كل عملية **تعديل**، لأن النموذج المُعبّأ مسبقاً
+         * قد لا يرسل التخصص (خيار `<select>` يُملأ عبر JS من قائمةdynamique).
+         *
+         * السلوك الصحيح: إن أرسل النموذج حقل التخصصات نُعيد حفظها،
+         * وإن لم يرسله نترك تخصصات المكتب الحالية كما هي ولا نعتبرها خطأ.
+         *
+         * كما كان الفشل يرتدّ بـ back() (302) حتى للطلبات JSON، فيتبعه
+         * عميل HTTP ويقرأ الصفحة الرئيسية 200 → يظن Vander的成功.
+         * لذلك نردّ JSON عند طلب JSON.
+         */
+        $specialtiesSubmitted = $request->has('specialties') || $request->has('specialty');
+        $hasOther   = false;
+        $dbSpecialties = collect();
+        $specialtyError = null;
+
+        if ($specialtiesSubmitted) {
+            [$hasOther, $dbSpecialties, $specialtyError] = $this->resolveOfficeSpecialties($request, $connection);
+        } else {
+            // نحتفظ بالتخصصات الحالية: نقرأها من قاعدة البيانات كما هي
+            $dbSpecialties = $connection->table('bs_specialties')
+                ->whereIn('id', function ($q) use ($connection, $office) {
+                    $q->select('specialty_id')
+                        ->from('bs_office_specialties')
+                        ->where('office_id', $office->id);
+                })
+                ->get();
+        }
+
         if ($specialtyError) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'isSuccess'  => false,
+                    'value'      => null,
+                    'error'      => [
+                        'message' => implode(' • ', $specialtyError),
+                        'code'    => 'VALIDATION_FAILED',
+                    ],
+                    'statusCode' => 422,
+                ], 422);
+            }
+
             return back()->withErrors($specialtyError)->withInput();
         }
 
@@ -1631,22 +1674,30 @@ if ($isCommissionBased) {
                 ]));
             }
 
-            $connection->table('bs_office_specialties')->where('office_id', $office->id)->delete();
-            $specialtyNames = [];
-            foreach ($dbSpecialties as $spec) {
-                $connection->table('bs_office_specialties')->insert([
-                    'office_id'    => $office->id,
-                    'specialty_id' => $spec->id,
-                    'created_at'   => now(),
-                    'updated_at'   => now(),
-                ]);
-                $specialtyNames[] = $spec->name_ar;
+            /*
+             * لا نلمس ربط التخصصات إلا إذا أرسلها النموذج فعلاً.
+             * $dbSpecialties في وضع عدم الإرسال يحمل التخصصات الحالية
+             * (مقروءة أعلاه)، فإعادة كتابة الربط نفسه لا تضر — لكن التخطّي
+             * واضح وأأمن: لا مساس لربط لم يطلبه المستخدم.
+             */
+            if ($specialtiesSubmitted) {
+                $connection->table('bs_office_specialties')->where('office_id', $office->id)->delete();
+                $specialtyNames = [];
+                foreach ($dbSpecialties as $spec) {
+                    $connection->table('bs_office_specialties')->insert([
+                        'office_id'    => $office->id,
+                        'specialty_id' => $spec->id,
+                        'created_at'   => now(),
+                        'updated_at'   => now(),
+                    ]);
+                    $specialtyNames[] = $spec->name_ar;
+                }
+                if ($hasOther && trim((string) $request->manual_specialty)) {
+                    $specialtyNames[] = trim((string) $request->manual_specialty);
+                }
+                $office->specialties = $specialtyNames;
+                $office->save();
             }
-            if ($hasOther && trim((string) $request->manual_specialty)) {
-                $specialtyNames[] = trim((string) $request->manual_specialty);
-            }
-            $office->specialties = $specialtyNames;
-            $office->save();
 
             if ($request->hasFile('commercial_register_image')) {
                 $this->saveOfficeDocument($connection, $office, $request->file('commercial_register_image'), 'commercial_register', 'commercial-register', $storedFiles);

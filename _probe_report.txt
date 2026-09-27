@@ -1,0 +1,60 @@
+PUT يطابق → api/v1/admin/offices/{id}  [App\Http\Controllers\UpdateService\AdminServiceController@updateOffice]  methods=PUT|POST
+
+POST يطابق → api/v1/admin/offices/{id}  [App\Http\Controllers\UpdateService\AdminServiceController@updateOffice]  methods=PUT|POST
+
+=== كل مسارات api/v1 التي تحتوي "offices" أو "{id}" ===
+  GET|HEAD            api/v1/consultant-specialties/{id}
+  GET|HEAD            api/v1/offices/{type}
+  GET|HEAD            api/v1/offices/{type}/{specialtyId}
+  GET|HEAD            api/v1/offices/{type}/office/{officeId}
+  POST                api/v1/requests/{id}/messages
+  GET|HEAD            api/v1/requests/{id}
+  GET|HEAD            api/v1/requests/{id}/messages
+  POST                api/v1/notifications/{id}/read
+  PUT                 api/v1/admin/requests/{id}/status
+  GET|HEAD            api/v1/admin/requests/{id}/messages
+  POST                api/v1/admin/violations/{id}/disable
+  POST                api/v1/admin/requests/{id}/note
+  POST                api/v1/admin/requests/{id}/info
+  GET|HEAD            api/v1/admin/requests/assignable-offices
+  GET|HEAD            api/v1/admin/requests/{id}/eligible-offices
+  POST                api/v1/admin/requests/{id}/assign
+  POST                api/v1/admin/requests/{id}/take-internal
+  POST                api/v1/admin/requests/{id}/broadcast
+  PUT                 api/v1/admin/services/{id}/price
+  PUT                 api/v1/admin/services/{id}
+  PUT                 api/v1/admin/catalog/categories/{id}
+  DELETE              api/v1/admin/catalog/categories/{id}
+  PUT                 api/v1/admin/catalog/entities/{id}
+  DELETE              api/v1/admin/catalog/entities/{id}
+  DELETE              api/v1/admin/catalog/services/{id}
+  GET|HEAD            api/v1/admin/offices
+  GET|HEAD            api/v1/admin/offices/stats
+  GET|HEAD            api/v1/admin/offices/{id}/details
+  PUT|POST            api/v1/admin/offices/{id}
+  POST                api/v1/admin/offices/{id}/verify
+  POST                api/v1/admin/offices/{id}/toggle
+  DELETE              api/v1/admin/offices/{id}
+  POST                api/v1/admin/users/{id}/toggle
+  POST                api/v1/admin/users/{id}/balance
+  POST                api/v1/admin/settlements/{id}/pay
+  DELETE              api/v1/admin/specialties/{id}
+  PUT                 api/v1/supervisor/admins/{id}/permissions
+  POST                api/v1/supervisor/admins/{id}/toggle
+  GET|HEAD            api/v1/admin/contracts/{id}/pdf
+  GET|HEAD            api/v1/office/requests/{id}
+  PUT                 api/v1/office/requests/{id}/status
+  GET|HEAD            api/v1/office/requests/{id}/messages
+  POST                api/v1/office/requests/{id}/messages
+  PUT                 api/v1/office/services/{id}
+  DELETE              api/v1/office/services/{id}
+  PUT                 api/v1/office/direct-requests/{id}/status
+  POST                api/v1/office/requests/{id}/claim
+  GET|HEAD            api/v1/office/contracts/{id}
+  PUT                 api/v1/office/contracts/{id}/status
+  DELETE              api/v1/office/contracts/{id}
+  GET|HEAD            api/v1/contracts/{id}
+  PUT                 api/v1/admin/homepage/slides/{id}
+  POST                api/v1/admin/homepage/slides/{id}/toggle
+  DELETE              api/v1/admin/homepage/slides/{id}
+  GET|HEAD            payment/checkout/{id}

@@ -1,0 +1,16 @@
+=== office #55 بعد التعديل ===
+  bs_offices.name_ar          : مكتب مساند اختباري
+  bs_offices.phone            : 5747244567
+  bs_offices.city             : عرعر
+  bs_offices.type             : customs
+  bs_offices.entity_type      : company
+  bs_offices.subscription    : commission
+  bs_profiles.governorate     : منطقة الحدود الشمالية
+  bs_profiles.city            : عرعر
+  bs_profiles.license_number  : 525262532
+  bs_profiles.cr_number       : 564626235
+  owner email                 : office@gmail.com
+  owner name                  : مكتب مساند اختباري
+
+=== عدد المستندات المحفوظة (يجب ألا ينقص) ===
+  bs_office_documents rows    : 3
