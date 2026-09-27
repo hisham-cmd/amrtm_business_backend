@@ -28,29 +28,67 @@ class HomepageSlide extends Model
             return asset($this->image_path);
         }
 
-        // الملفات المخزنة على قرص public (homepage/slides/...) تُخدم عبر
-        // مسار /storage الذي يقرأ من storage/app/public مباشرة — دون الاعتماد
-        // على السيم لينك public/storage الذي قد يكون معطلاً على الاستضافة (403).
-        //
-        // اسم المسار الفعلي في Laravel هو 'storage.public' (لا public.storage)،
-        // لأن ملف storage/routes.php يُسجَّل بـ name('storage.') ثم 'public.'.
+        /*
+         * الملفات المخزنة على قرص public (homepage/slides/…).
+         *
+         * ⚠️ كان الكود هنا **يخترع** رابطاً بديلاً عند غياب الملف:
+         *      return asset('images/' . $cleanName);
+         * وهذا الرابط لا يقود إلى أي ملف حقيقي — فكانت صور السلايدر
+         * تُطلب من مسار غير موجود وتُظهر أيقونة بديلة.
+         *
+         * الصحيح: الملف يوجد فعلاً على القرص، إمّا في
+         * storage/app/public/homepage/slides/ أو في public/images/uploads/،
+         * فيُقدَّم عبر مسار /media/ الذي يقرأ الاثنين معاً.
+         * وإن لم يوجد في أيٍّ منهما فنُعيد null بدل رابط كاذب،
+         * فتخفي الواجهة الصورة بدل أن تطلب ملفاً ميتاً.
+         */
         if (str_starts_with($this->image_path, 'homepage/')) {
-            if (Storage::disk('public')->exists($this->image_path)) {
-                return route('storage.public', ['path' => $this->image_path]);
+            $relative = ltrim($this->image_path, '/');
+
+            $candidates = [
+                'homepage' => storage_path('app/public/' . $relative),
+                'uploads' => public_path('images/uploads/' . basename($relative)),
+            ];
+
+            foreach ($candidates as $prefix => $path) {
+                if (is_file($path)) {
+                    return route('media.show', [
+                        'bucket' => $prefix,
+                        // bucket=homepage يقابل storage/app/public/homepage،
+                        // فلا نكرّر بادئة 'homepage/' داخل path.
+                        'path' => $prefix === 'homepage'
+                            ? ltrim(substr($this->image_path, strlen('homepage/')), '/')
+                            : basename($relative),
+                    ]);
+                }
             }
 
-            // بديل: صورة بنفس الاسم (بدون البادئة الرقمية) داخل public/images
-            $cleanName = preg_replace('/^\d+_/', '', basename($this->image_path));
-            if (file_exists(public_path('images/' . $cleanName))) {
-                return asset('images/' . $cleanName);
-            }
-
-            // الملف غير موجود بعد — رابط بديل بدل مسار storage معطل
-            return asset('images/' . $cleanName);
+            return null;
         }
 
-        // أي مسار مخزن آخر (compat): عبر مسار /storage الذي يخدم من القرص أيضاً
-        return url('storage/' . ltrim($this->image_path, '/'));
+        /*
+         * أي مسار مخزن آخر: نحاول /media/ أولاً (يخدم قرص public)،
+         * ثم /storage/ كما كان، وإن لم يوجد الملف نُعيد null.
+         */
+        $clean = ltrim($this->image_path, '/');
+
+        foreach (['uploads' => public_path('images/uploads/' . basename($clean)),
+                  'homepage' => storage_path('app/public/' . $clean)] as $prefix => $path) {
+            if (is_file($path)) {
+                return route('media.show', [
+                    'bucket' => $prefix,
+                    'path'   => $prefix === 'homepage'
+                        ? ltrim(substr($clean, strlen('homepage/')), '/')
+                        : basename($clean),
+                ]);
+            }
+        }
+
+        if (Storage::disk('public')->exists($this->image_path)) {
+            return route('storage.public', ['path' => $this->image_path]);
+        }
+
+        return null;
     }
 
     public function scopeActive($query)

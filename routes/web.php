@@ -98,7 +98,31 @@ Route::post('/office/logout', fn () => redirect()->away($frontendUrl))
 | المسار: /media/uploads/{file}
 */
 
-Route::get('/media/{bucket}/{file}', [MediaController::class, 'show'])
+/*
+ | المسار يقبل الآن المجلدات الفرعية أيضاً:
+ |   /media/uploads/9a1c….webp
+ |   /media/uploads/office-logos/office_45_x.jpg
+ |   /media/public/office-logos/office_45_x.jpg
+ |   /media/homepage/slides/1788769877_88.jpeg
+ | والقيود الأمنية (منع '..' و review المسارات المطلقة) مطبَّقة داخل
+ | MediaController::resolveSafePath() — لا في نمط المسار، لأن النمط كان
+ | يمنع '/' فيرفض أي ملف داخل مجلد فرعي بـ 404.
+ */
+Route::get('/media/{bucket}/{path}', [MediaController::class, 'show'])
     ->where('bucket', '[A-Za-z0-9_-]+')
-    ->where('file', '[A-Za-z0-9._-]+')
+    ->where('path', '[A-Za-z0-9._\-/]+')
     ->name('media.show');
+
+/* صيغة مختصرة: /media/{file} لملفات uploads بلا مجلد فرعي */
+Route::get('/media/{file}', [MediaController::class, 'show'])
+    ->where('file', '[A-Za-z0-9._-]+')
+    ->name('media.file');
+
+/*
+ * بحث بالاسم المجرّد: يجد الملف الحقيقي عندما يكون الرابط المنشور
+ * قد خمّن الاسم (مثل 88.jpeg بدل 1788769877_88.jpeg).
+ * تستخدمه الواجهة كحل احتياطي حين يفشل المسار المباشر.
+ */
+Route::get('/media-resolve/{file}', [MediaController::class, 'resolveByName'])
+    ->where('file', '[A-Za-z0-9._-]+')
+    ->name('media.resolve');
