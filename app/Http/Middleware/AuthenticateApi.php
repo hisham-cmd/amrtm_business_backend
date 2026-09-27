@@ -25,8 +25,14 @@ class AuthenticateApi extends Authenticate
      */
     protected function authenticate($request, array $guards): void
     {
+        /*
+         | استضافة InfinityFree تحذف ترويسة Authorization — لذا يُقبل كذلك
+         | التوكن البديل في X-AMRTM-TOKEN (ترسله الواجهة دائماً).
+         */
+        $bearer = $request->bearerToken() ?: $request->header('X-AMRTM-TOKEN');
+
         // 1) محاولة المصادقة عبر التوكن أولاً (sanctum)
-        if ($request->bearerToken()) {
+        if ($bearer) {
             foreach ($guards as $guard) {
                 if ($guard === 'business' || $guard === 'office') {
                     $tokenGuard = $guard . '_token';

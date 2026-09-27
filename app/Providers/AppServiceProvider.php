@@ -21,6 +21,18 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        /*
+         | استضافة InfinityFree تحذف ترويسة Authorization تماماً قبل وصولها
+         | إلى PHP (تم التحقق مسباراً)، فلا يصل توكن Sanctum أبداً عبر Bearer.
+         | الحل: الواجهة ترسل التوكن في ترويسة مخصصة X-AMRTM-TOKEN، ونُعلّم
+         | Sanctum أن يقرأه من هناك (مع الإبقاء على Bearer للتوافق القياسي).
+         */
+        \Laravel\Sanctum\Sanctum::getAccessTokenFromRequestUsing(function (Request $request): ?string {
+            return $request->bearerToken()
+                ?: $request->header('X-AMRTM-TOKEN')
+                ?: null;
+        });
+
         // Force HTTPS in production or when running behind an SSL-terminating reverse proxy (Render, Cloudflare, etc.)
         if (
             $this->app->environment('production') ||
