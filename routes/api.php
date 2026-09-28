@@ -110,6 +110,53 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | إعدادات واجهات لوحات التحكم (bs_type_interfaces)
+    |--------------------------------------------------------------------------
+    | تحتاجها الواجهة لبناء قائمة التنقل، وكانت تقرأ الجدول مباشرةً من
+    | قاعدة البيانات — وهو ما يفشل على الاستضافة لأن اتصال MySQL الخارجي
+    | يُحجب (Connection timed out).
+    |
+    | نقدّمها هنا كـ API. بلا مصادقة لأنها إعدادات عرض (أي واجهة مفعّلة
+    | لأي نوع)، وليست بيانات شخصية. تُرشِّح المعاملات لتقليل الحِمل.
+    */
+    Route::get('type-interfaces', function (\Illuminate\Http\Request $request) {
+        $typeKeys      = array_values(array_filter(
+            explode(',', (string) $request->query('type_keys', ''))
+        ));
+        $interfaceKeys = array_values(array_filter(
+            explode(',', (string) $request->query('interface_keys', ''))
+        ));
+
+        $q = \App\Models\TypeInterface::query();
+
+        if ($typeKeys !== []) {
+            $q->whereIn('type_key', $typeKeys);
+        }
+        if ($interfaceKeys !== []) {
+            $q->whereIn('interface_key', $interfaceKeys);
+        }
+
+        $rows = $q->get(['type_key', 'interface_key', 'is_enabled', 'updated_at'])
+            ->map(static fn ($r) => [
+                'type_key'      => $r->type_key,
+                'interface_key' => $r->interface_key,
+                'is_enabled'    => (bool) $r->is_enabled,
+            ])
+            ->values();
+
+        return response()->json([
+            'isSuccess'  => true,
+            'value'      => [
+                'items'          => $rows,
+                'type_interfaces' => $rows,
+            ],
+            'error'      => null,
+            'statusCode' => 200,
+        ], 200);
+    })->name('type-interfaces');
+
+    /*
+    |--------------------------------------------------------------------------
     | Business auth (جلسة)
     |--------------------------------------------------------------------------
     | auth.api = AuthenticateApi: لا redirect للويب، وإنما 401 JSON موحّد.
